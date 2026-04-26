@@ -4,6 +4,7 @@ import gsap from 'gsap';
 const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
   const [show, setShow] = useState(true);
   const pathsRef = useRef<SVGGElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
     const failsafe = setTimeout(() => {
@@ -28,6 +29,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
         onComplete();
       },
     });
+    tlRef.current = tl;
 
     tl.fromTo('.intro-reliant', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' })
       .fromTo('.intro-ai', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' }, '-=0.2')
@@ -37,7 +39,10 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
       .to('.intro-content', { opacity: 0, y: -20, duration: 0.3 })
       .to('.intro-overlay', { yPercent: -100, duration: 0.4, ease: 'power3.inOut' });
 
-    return () => clearTimeout(failsafe);
+    return () => {
+      clearTimeout(failsafe);
+      tlRef.current?.kill();
+    };
   }, [onComplete]);
 
   if (!show) return null;

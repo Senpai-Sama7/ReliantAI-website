@@ -94,6 +94,7 @@ const SocialProofToast = () => {
   const startedRef = useRef(false);
   const cycleCountRef = useRef(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const exitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { canShow, markDismissed } = usePopupTrigger({ popupType: 'social' });
 
   const scheduleRef = useRef<() => void>(undefined);
@@ -108,14 +109,10 @@ const SocialProofToast = () => {
       setVisible(false);
       
       // Wait for exit animation, then show next
-      setTimeout(() => {
+      exitTimeoutRef.current = setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % toastSequence.length);
         setVisible(true);
-        
-        // Increment cycle count for next interval calculation
         cycleCountRef.current += 1;
-        
-        // Schedule the next one
         scheduleRef.current?.();
       }, 500); // Exit animation time
     }, interval + DISPLAY_DURATION); // Add display duration to interval
@@ -149,19 +146,16 @@ const SocialProofToast = () => {
 
     // Cleanup
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
     };
   }, [scheduleNextToast]);
 
   const handleDismiss = () => {
     setVisible(false);
     markDismissed();
-    // Clear any pending timeouts
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
   };
 
   const toast = toastSequence[currentIndex];
@@ -184,7 +178,7 @@ const SocialProofToast = () => {
         <button
           onClick={handleDismiss}
           className="absolute top-2 right-2 p-1 text-gray-300 hover:text-gray-500 dark:hover:text-white/60 transition-colors"
-          aria-label="Dismiss notifications"
+          aria-label="Dismiss notification"
         >
           <X size={14} />
         </button>

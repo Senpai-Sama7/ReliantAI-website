@@ -267,7 +267,7 @@
         'ad_storage':'denied',
         'ad_user_data':'denied',
         'ad_personalization':'denied',
-        'analytics_storage': document.cookie.indexOf('consent=1')!==-1 ? 'granted' : 'denied'
+        'analytics_storage': document.cookie.split(';').some(function(c){return c.trim()==='consent=1';}) ? 'granted' : 'denied'
       });
       gtag('set','ads_data_redaction',true);
     </script>
@@ -276,17 +276,15 @@
       gtag('js',new Date());
       gtag('config','G-LKDVCJP9DG');
 
-      // 2. Called when user clicks Accept
+      // 2. Called when user clicks Accept / Decline
       function grantConsent(){
-        gtag('consent','update',{
-          'analytics_storage':'granted'
-        });
-        document.cookie='consent=1;path=/;max-age=31536000';
-        document.getElementById('cb').remove();
+        gtag('consent','update',{'analytics_storage':'granted'});
+        document.cookie='consent=1;path=/;max-age=31536000;SameSite=Lax';
+        document.getElementById('cb')?.remove();
       }
       function denyConsent(){
-        document.cookie='consent=0;path=/;max-age=31536000';
-        document.getElementById('cb').remove();
+        document.cookie='consent=0;path=/;max-age=31536000;SameSite=Lax';
+        document.getElementById('cb')?.remove();
       }
     </script>
 
@@ -364,6 +362,6 @@
       <button onclick="denyConsent()" style="background:transparent;color:#999;border:1px solid #444;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:14px">Decline</button>
     </span>
   </div>
-  <script>if(document.cookie.indexOf('consent=')===-1){document.getElementById('cb').style.display='flex';}</script>
+  <script>if(!document.cookie.split(';').some(function(c){return c.trim().startsWith('consent=');})){var cb=document.getElementById('cb');if(cb)cb.style.display='flex';}</script>
   </body>
 </html>

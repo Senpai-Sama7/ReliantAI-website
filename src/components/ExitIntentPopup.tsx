@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
-import { X, Gift, Check, Shield, Clock, Zap } from 'lucide-react';
+import { X, Gift, Check, Shield, Clock, Zap, Loader2 } from 'lucide-react';
+import { z } from 'zod';
 import { toast } from 'sonner';
 import { usePopupTrigger } from '../hooks/usePopupTrigger';
+import { submitToWeb3Forms } from '../lib/web3forms';
+
+const emailSchema = z.string().email('Please enter a valid email address');
 
 const ExitIntentPopup = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { canShow, markDismissed } = usePopupTrigger({ popupType: 'exit' });
 
   useEffect(() => {
@@ -49,22 +55,25 @@ const ExitIntentPopup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const result = emailSchema.safeParse(email);
+    if (!result.success) {
+      setEmailError(result.error.issues[0].message);
+      return;
+    }
+    setEmailError('');
+    setIsSubmitting(true);
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: '2b257f48-fab5-45e2-abb5-11d6ba950f94',
-          subject: 'Exit Intent - Free Website Audit Request',
-          email,
-        }),
+      await submitToWeb3Forms({
+        subject: 'Exit Intent - Free Website Audit Request',
+        email,
       });
-      if (!res.ok) throw new Error();
       setSubmitted(true);
       markDismissed();
       setTimeout(() => setShow(false), 2000);
     } catch {
       toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -76,6 +85,7 @@ const ExitIntentPopup = () => {
         {/* Close button */}
         <button
           onClick={handleClose}
+          aria-label="Close popup"
           className="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors z-10"
         >
           <X size={20} />
@@ -133,19 +143,34 @@ const ExitIntentPopup = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:border-orange focus:outline-none transition-colors"
-                />
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (emailError) setEmailError('');
+                    }}
+                    required
+                    className={`w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:outline-none transition-colors ${
+                      emailError ? 'border-red-500 focus:border-red-500' : 'border-gray-200 dark:border-white/10 focus:border-orange'
+                    }`}
+                  />
+                  {emailError && (
+                    <p className="mt-1 text-xs text-red-500 font-opensans">{emailError}</p>
+                  )}
+                </div>
                 <button
                   type="submit"
-                  className="w-full py-3 bg-orange text-white font-opensans font-semibold rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-orange text-white font-opensans font-semibold rounded-lg hover:bg-orange-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Yes, Audit My Website
+                  {isSubmitting ? (
+                    <><Loader2 size={18} className="animate-spin" />Sending...</>
+                  ) : (
+                    'Yes, Audit My Website'
+                  )}
                 </button>
               </form>
 

@@ -1,74 +1,51 @@
-# React + TypeScript + Vite
+# Reliant AI Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Marketing SPA for Reliant AI — built with React 19, TypeScript, Vite, Tailwind CSS, GSAP animations, and Three.js 3D.
 
-Currently, two official plugins are available:
+## Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+cp .env.example .env.local   # add your Web3Forms key
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment Variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Variable | Required | Description |
+|---|---|---|
+| `VITE_WEB3FORMS_KEY` | Yes | Web3Forms API key for contact/audit forms. Get one at [web3forms.com](https://web3forms.com). |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start dev server with HMR |
+| `npm run build` | Type-check + production build |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build locally |
+
+## Stack
+
+- **Framework**: React 19 + TypeScript (strict mode)
+- **Build**: Vite 7 with manual chunk splitting (react, three, gsap, ui vendors)
+- **Styling**: Tailwind CSS + Shadcn/ui components
+- **Animations**: GSAP + ScrollTrigger, Three.js via React Three Fiber
+- **Forms**: React Hook Form + Zod validation → Web3Forms
+- **Deployment**: Vercel (SPA rewrites + security headers configured)
+
+## Project Structure
+
 ```
-# reliant-ai
+src/
+├── components/   # Reusable UI components (Navigation, popups, 3D, etc.)
+├── sections/     # Page sections composed in App.tsx
+├── hooks/        # Custom hooks (useTheme, useScrollReveal, usePopupTrigger)
+├── lib/          # Shared utilities (web3forms.ts)
+├── data/         # Static data (case study chapters)
+└── pages/        # Route pages (Privacy, ToS, 404)
+```
+
+## Deployment
+
+The site deploys automatically to Vercel on push to `main`. All security headers (HSTS, CSP, X-Frame-Options, etc.) are configured in `vercel.json`. Add `VITE_WEB3FORMS_KEY` as a Vercel environment variable before deploying.
