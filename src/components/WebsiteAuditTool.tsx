@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { CheckCircle, AlertCircle, ArrowRight, Loader2, Mail } from 'lucide-react';
+import { z } from 'zod';
 import { toast } from 'sonner';
+import { submitToWeb3Forms } from '../lib/web3forms';
+
+const emailSchema = z.string().email('Please enter a valid email address');
 
 interface AuditQuestion {
   id: number;
@@ -100,6 +104,7 @@ export const WebsiteAuditTool = () => {
   const [answers, setAnswers] = useState<string[]>([]);
   const [scores, setScores] = useState<number[]>([]);
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -124,21 +129,21 @@ export const WebsiteAuditTool = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const result = emailSchema.safeParse(email);
+    if (!result.success) {
+      setEmailError(result.error.issues[0].message);
+      return;
+    }
+    setEmailError('');
     setIsSubmitting(true);
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: '2b257f48-fab5-45e2-abb5-11d6ba950f94',
-          subject: 'Website Audit Report Request',
-          email,
-          audit_score: `${totalScore}/100`,
-          audit_result: analysis.title,
-          recommendations: recommendations.join('; '),
-        }),
+      await submitToWeb3Forms({
+        subject: 'Website Audit Report Request',
+        email,
+        audit_score: `${totalScore}/100`,
+        audit_result: analysis.title,
+        recommendations: recommendations.join('; '),
       });
-      if (!res.ok) throw new Error();
       setSubmitted(true);
     } catch {
       toast.error('Something went wrong. Please try again.');
@@ -235,10 +240,18 @@ export const WebsiteAuditTool = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (emailError) setEmailError('');
+                }}
                 required
-                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-black/50 text-gray-900 dark:text-white focus:border-orange focus:outline-none transition-colors"
+                className={`w-full pl-10 pr-4 py-3 rounded-lg border bg-white dark:bg-black/50 text-gray-900 dark:text-white focus:outline-none transition-colors ${
+                  emailError ? 'border-red-500' : 'border-gray-200 dark:border-white/10 focus:border-orange'
+                }`}
               />
+              {emailError && (
+                <p className="mt-1 text-xs text-red-500 font-opensans">{emailError}</p>
+              )}
             </div>
             <button
               type="submit"

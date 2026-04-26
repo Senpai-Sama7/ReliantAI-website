@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, Loader2, Shield, Award, Building2 } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { submitToWeb3Forms } from '../lib/web3forms';
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -139,16 +140,10 @@ const Contact = () => {
     }
     setIsSubmitting(true);
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: '2b257f48-fab5-45e2-abb5-11d6ba950f94',
-          subject: 'New Contact Form Submission - Reliant AI',
-          ...formData,
-        }),
+      await submitToWeb3Forms({
+        subject: 'New Contact Form Submission - Reliant AI',
+        ...formData,
       });
-      if (!res.ok) throw new Error();
       setIsSubmitted(true);
       toast.success('Message sent! We\'ll get back to you within 24 hours.');
       setTimeout(() => {
@@ -168,8 +163,12 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const emailUser = ['Douglas', 'Mitchell'].join('');
+  const emailDomain = ['Reliant', 'AI.org'].join('');
+  const emailAddress = `${emailUser}@${emailDomain}`;
+
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: 'DouglasMitchell@ReliantAI.org', href: 'mailto:DouglasMitchell@ReliantAI.org' },
+    { icon: Mail, label: 'Email', value: emailAddress, href: `mailto:${emailAddress}` },
     { icon: Phone, label: 'Phone', value: '(832) 947-7028', href: 'tel:+18329477028' },
     { icon: MapPin, label: 'Location', value: 'Houston, TX', href: '#' },
   ];
