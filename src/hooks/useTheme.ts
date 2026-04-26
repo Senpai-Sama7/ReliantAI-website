@@ -4,8 +4,8 @@ type Theme = 'light' | 'dark';
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'light';
-  const saved = localStorage.getItem('theme') as Theme | null;
-  return saved ?? 'light';
+  const saved = localStorage.getItem('theme');
+  return saved === 'dark' ? 'dark' : 'light';
 }
 
 export function useTheme() {

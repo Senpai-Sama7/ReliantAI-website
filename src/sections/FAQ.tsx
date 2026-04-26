@@ -122,6 +122,8 @@ const FAQ = () => {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                aria-expanded={openIndex === index}
+                aria-controls={`faq-answer-${index}`}
                 className="w-full px-6 py-5 flex items-center justify-between text-left group"
               >
                 <span
@@ -138,6 +140,7 @@ const FAQ = () => {
                 />
               </button>
               <div
+                id={`faq-answer-${index}`}
                 itemScope
                 itemProp="acceptedAnswer"
                 itemType="https://schema.org/Answer"

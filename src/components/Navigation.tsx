@@ -20,26 +20,16 @@ const Navigation = () => {
   ];
 
   useEffect(() => {
+    const sections = navItems.map(item => document.getElementById(item.id));
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
-    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Track active section based on scroll position
-  useEffect(() => {
-    const sections = navItems.map(item => document.getElementById(item.id));
-    
-    const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 3;
-      
       sections.forEach((section, index) => {
         if (section) {
           const top = section.offsetTop;
           const bottom = top + section.offsetHeight;
-          
           if (scrollPos >= top && scrollPos < bottom) {
             setActiveSection(navItems[index].id);
           }
@@ -134,6 +124,7 @@ const Navigation = () => {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2 text-gray-900 dark:text-white transition-transform duration-300"
                 aria-label="Toggle menu"
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
