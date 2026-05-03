@@ -362,15 +362,6 @@
       <button onclick="denyConsent()" style="background:transparent;color:#999;border:1px solid #444;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:14px">Decline</button>
     </span>
   </div>
-  <script>
-    if(!document.cookie.split(';').some(function(c){return c.trim().startsWith('consent=');})){
-      document.addEventListener('DOMContentLoaded', function(){
-        var cb=document.getElementById('cb');
-        if(cb){
-          cb.style.display='flex';
-        }
-      });
-    }
-  </script>
+  <script>if(!document.cookie.split(';').some(function(c){return c.trim().startsWith('consent=');})){var cb=document.getElementById('cb');if(cb)cb.style.display='flex';}</script>
   </body>
 </html>
