@@ -30,7 +30,7 @@ const MetallicObject = () => {
 
 const TorusKnot3D = () => {
   return (
-    <div 
+    <div
       className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[80%] z-[1] hidden lg:block"
       style={{ contain: 'layout paint' }}
     >
@@ -50,7 +50,9 @@ const TorusKnot3D = () => {
           />
           <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff6e00" />
           <MetallicObject />
-          <Environment preset="city" />
+          <Suspense fallback={null}>
+            <Environment preset="city" />
+          </Suspense>
         </Canvas>
       </Suspense>
     </div>
