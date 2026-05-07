@@ -42,8 +42,6 @@
     <!-- Preconnect & Preload -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://connect.facebook.net" />
-    <link rel="dns-prefetch" href="https://www.clarity.ms" />
     <link rel="preload" as="image" href="/hero-bg.webp" type="image/webp" />
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" /></noscript>
@@ -60,7 +58,9 @@
           "url": "https://reliantai.org",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://reliantai.org/logo.png"
+            "url": "https://reliantai.org/hero-bg.webp",
+            "width": 1400,
+            "height": 900
           },
           "description": "Houston's premier web design agency specializing in custom websites for small businesses including metal fabrication, oilfield services, home services, and medical practices.",
           "foundingDate": "2020",
@@ -147,7 +147,7 @@
           "description": "Houston web design agency building custom React and TypeScript websites for small businesses.",
           "publisher": {"@id": "https://reliantai.org/#organization"},
           "datePublished": "2026-02-01",
-          "dateModified": "2026-02-26",
+          "dateModified": "2026-05-07",
           "inLanguage": "en-US",
           "potentialAction": {
             "@type": "SearchAction",
@@ -279,11 +279,11 @@
       // 2. Called when user clicks Accept / Decline
       function grantConsent(){
         gtag('consent','update',{'analytics_storage':'granted'});
-        document.cookie='consent=1;path=/;max-age=31536000;SameSite=Lax';
+        document.cookie='consent=1;path=/;max-age=31536000;SameSite=Lax;Secure';
         document.getElementById('cb')?.remove();
       }
       function denyConsent(){
-        document.cookie='consent=0;path=/;max-age=31536000;SameSite=Lax';
+        document.cookie='consent=0;path=/;max-age=31536000;SameSite=Lax;Secure';
         document.getElementById('cb')?.remove();
       }
     </script>
