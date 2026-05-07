@@ -127,6 +127,7 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
   const activeRef = useRef(0);
   const chapterContentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const gsapCtxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -147,9 +148,15 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
   }, []);
 
   useEffect(() => {
-    // Clear any existing triggers
+    // Clear any existing triggers and context
     triggersRef.current.forEach(t => t.kill());
     triggersRef.current = [];
+    gsapCtxRef.current?.revert();
+    gsapCtxRef.current = null;
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const timer = setTimeout(() => {
       const root = rootRef.current;
@@ -163,7 +170,7 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
         if (chapterEls.length === 0 || stageVisuals.length === 0) return;
 
         // Set initial state
-        gsap.set(stageVisuals, { opacity: 0, scale: 1.05 });
+        gsap.set(stageVisuals, { opacity: 0, scale: prefersReduced ? 1 : 1.05 });
         gsap.set(stageVisuals[0], { opacity: 1, scale: 1 });
 
         // Only use pinning on desktop - NOT on mobile
@@ -194,22 +201,26 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
           const contentEl = chapterContentRefs.current[idx];
           if (contentEl) {
             const elements = contentEl.querySelectorAll('.reveal-item');
-            gsap.set(elements, { y: 30, opacity: 0 });
+            if (prefersReduced) {
+              gsap.set(elements, { y: 0, opacity: 1 });
+            } else {
+              gsap.set(elements, { y: 30, opacity: 0 });
 
-            const contentTrigger = ScrollTrigger.create({
-              trigger: el,
-              start: 'top 85%',
-              onEnter: () => {
-                gsap.to(elements, {
-                  y: 0,
-                  opacity: 1,
-                  duration: 0.6,
-                  stagger: 0.06,
-                  ease: 'power2.out',
-                });
-              },
-            });
-            triggersRef.current.push(contentTrigger);
+              const contentTrigger = ScrollTrigger.create({
+                trigger: el,
+                start: 'top 85%',
+                onEnter: () => {
+                  gsap.to(elements, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    stagger: 0.06,
+                    ease: 'power2.out',
+                  });
+                },
+              });
+              triggersRef.current.push(contentTrigger);
+            }
           }
         });
 
@@ -218,33 +229,36 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
           activeRef.current = idx;
           setActive(idx);
 
-          // Animate visual transition
-          gsap.to(stageVisuals, { 
-            opacity: 0, 
-            scale: 1.02,
-            duration: 0.3,
-            overwrite: true 
-          });
-          
-          gsap.to(stageVisuals[idx], {
-            opacity: 1,
-            scale: 1,
-            duration: 0.5,
-            delay: 0.1,
-            overwrite: true,
-          });
+          if (!prefersReduced) {
+            gsap.to(stageVisuals, {
+              opacity: 0,
+              scale: 1.02,
+              duration: 0.3,
+              overwrite: true,
+            });
+            gsap.to(stageVisuals[idx], {
+              opacity: 1,
+              scale: 1,
+              duration: 0.5,
+              delay: 0.1,
+              overwrite: true,
+            });
+          } else {
+            gsap.set(stageVisuals, { opacity: 0 });
+            gsap.set(stageVisuals[idx], { opacity: 1 });
+          }
         }
       }, root);
 
-      return () => {
-        ctx.revert();
-      };
+      gsapCtxRef.current = ctx;
     }, 100);
 
     return () => {
       clearTimeout(timer);
       triggersRef.current.forEach(t => t.kill());
       triggersRef.current = [];
+      gsapCtxRef.current?.revert();
+      gsapCtxRef.current = null;
     };
   }, [chapters.length, isMobile]);
 

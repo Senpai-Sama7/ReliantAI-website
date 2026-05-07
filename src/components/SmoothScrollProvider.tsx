@@ -33,10 +33,11 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     lenis.on('scroll', ScrollTrigger.update);
 
     // Use GSAP ticker for smooth animation frame updates
-    gsap.ticker.add((time) => {
+    const tickerCallback = (time: number) => {
       lenis.raf(time * 1000);
-    });
-    
+    };
+    gsap.ticker.add(tickerCallback);
+
     // Disable GSAP's lag smoothing for better sync
     gsap.ticker.lagSmoothing(0);
 
@@ -55,10 +56,8 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     return () => {
       clearTimeout(refreshTimer);
       window.removeEventListener('resize', handleResize);
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
-      gsap.ticker.remove((time) => {
-        lenis.raf(time * 1000);
-      });
     };
   }, []);
 

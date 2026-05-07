@@ -14,9 +14,13 @@ interface UsePopupTriggerOptions {
 export const usePopupTrigger = ({ popupType }: UsePopupTriggerOptions) => {
   const sessionKey = SESSION_KEYS[popupType === 'exit' ? 'exitPopup' : 'socialToast'];
   const [canShow, setCanShow] = useState(false);
-  const [dismissed, setDismissed] = useState(
-    () => sessionStorage.getItem(sessionKey) === 'true'
-  );
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return sessionStorage.getItem(sessionKey) === 'true';
+    } catch {
+      return false;
+    }
+  });
   const scrollTimeRef = useRef(0);
   const lastScrollTimeRef = useRef<number | null>(null);
   const rafIdRef = useRef<number | null>(null);
@@ -94,7 +98,11 @@ export const usePopupTrigger = ({ popupType }: UsePopupTriggerOptions) => {
   }, [dismissed, canShow, checkAndEnable]);
 
   const markDismissed = useCallback(() => {
-    sessionStorage.setItem(sessionKey, 'true');
+    try {
+      sessionStorage.setItem(sessionKey, 'true');
+    } catch {
+      // sessionStorage may be unavailable (private browsing, storage quota)
+    }
     setDismissed(true);
     setCanShow(false);
   }, [sessionKey]);
