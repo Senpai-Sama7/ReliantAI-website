@@ -36,16 +36,9 @@ function App() {
   const path = window.location.pathname;
   const isPrivacyPolicy = path === '/privacy-policy';
   const isTermsOfService = path === '/terms-of-service';
-  const isSitemap = path === '/sitemap.xml';
   const isShowcase = path === '/showcase';
-  const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isSitemap || isShowcase;
-  const isStandalonePage = isPrivacyPolicy || isTermsOfService || isSitemap || isShowcase;
-
-  useEffect(() => {
-    if (isSitemap) {
-      window.location.href = '/sitemap.xml';
-    }
-  }, [isSitemap]);
+  const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isShowcase;
+  const isStandalonePage = isPrivacyPolicy || isTermsOfService || isShowcase;
 
   useEffect(() => {
     if (isStandalonePage) return;
@@ -56,11 +49,6 @@ function App() {
 
     return () => clearTimeout(timer);
   }, [isStandalonePage]);
-
-  // Redirect sitemap.xml to the actual sitemap file
-  if (isSitemap) {
-    return null;
-  }
 
   // Render standalone pages without the main layout
   if (isPrivacyPolicy) {

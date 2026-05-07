@@ -10,13 +10,13 @@ function getInitialTheme(): Theme {
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
-  const [mounted, setMounted] = useState(false);
+  // Vite SPA has no SSR — the component is always mounted client-side.
+  // No useEffect needed to set mounted; derive it from window availability.
+  const mounted = typeof window !== 'undefined';
 
   useEffect(() => {
-    setMounted(true);
     document.documentElement.classList.toggle('dark', theme === 'dark');
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [theme]);
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {
