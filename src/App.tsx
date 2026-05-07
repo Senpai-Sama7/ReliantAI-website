@@ -9,6 +9,7 @@ import SocialProofToast from './components/SocialProofToast';
 import SmoothScrollProvider from './components/SmoothScrollProvider';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import VideoShowcase from './pages/VideoShowcase';
 import NotFound from './pages/NotFound';
 import { useTheme } from './hooks/useTheme';
 import { Toaster } from 'sonner';
@@ -36,8 +37,9 @@ function App() {
   const isPrivacyPolicy = path === '/privacy-policy';
   const isTermsOfService = path === '/terms-of-service';
   const isSitemap = path === '/sitemap.xml';
-  const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isSitemap;
-  const isStandalonePage = isPrivacyPolicy || isTermsOfService || isSitemap;
+  const isShowcase = path === '/showcase';
+  const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isSitemap || isShowcase;
+  const isStandalonePage = isPrivacyPolicy || isTermsOfService || isSitemap || isShowcase;
 
   useEffect(() => {
     if (isSitemap) {
@@ -67,6 +69,10 @@ function App() {
 
   if (isTermsOfService) {
     return <TermsOfService />;
+  }
+
+  if (isShowcase) {
+    return <VideoShowcase />;
   }
 
   if (!isKnownPath) {
