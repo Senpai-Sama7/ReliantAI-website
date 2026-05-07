@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useLayoutEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
 
 const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
@@ -6,7 +6,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
   const pathsRef = useRef<SVGGElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const failsafe = setTimeout(() => {
       setShow(false);
       onComplete();

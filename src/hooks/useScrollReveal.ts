@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -32,7 +32,7 @@ export const useScrollReveal = <T extends HTMLElement>(
   const ref = useRef<T>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = ref.current;
     if (!element) return;
 
@@ -88,7 +88,7 @@ export const useStaggerReveal = <T extends HTMLElement>(
   const containerRef = useRef<T>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 

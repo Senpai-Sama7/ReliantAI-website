@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown } from 'lucide-react';
@@ -39,7 +39,7 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // Header reveal
       const headerElements = headerRef.current?.querySelectorAll('.reveal-item');
