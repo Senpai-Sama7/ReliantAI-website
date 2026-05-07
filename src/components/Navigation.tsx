@@ -6,21 +6,21 @@ import ThemeToggle from './ThemeToggle';
 
 gsap.registerPlugin(ScrollToPlugin);
 
+const NAV_ITEMS = [
+  { label: 'Work', id: 'work' },
+  { label: 'Services', id: 'services' },
+  { label: 'About', id: 'about' },
+  { label: 'FAQ', id: 'faq' },
+  { label: 'Contact', id: 'contact' },
+];
+
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
-  const navItems = [
-    { label: 'Work', id: 'work' },
-    { label: 'Services', id: 'services' },
-    { label: 'About', id: 'about' },
-    { label: 'FAQ', id: 'faq' },
-    { label: 'Contact', id: 'contact' },
-  ];
-
   useEffect(() => {
-    const sections = navItems.map(item => document.getElementById(item.id));
+    const sections = NAV_ITEMS.map(item => document.getElementById(item.id));
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
@@ -31,7 +31,7 @@ const Navigation = () => {
           const top = section.offsetTop;
           const bottom = top + section.offsetHeight;
           if (scrollPos >= top && scrollPos < bottom) {
-            setActiveSection(navItems[index].id);
+            setActiveSection(NAV_ITEMS[index].id);
           }
         }
       });
@@ -39,7 +39,6 @@ const Navigation = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -80,7 +79,7 @@ const Navigation = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-8">
-              {navItems.map((item) => (
+              {NAV_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
@@ -140,7 +139,7 @@ const Navigation = () => {
         }`}
       >
         <div className="flex flex-col items-center justify-center h-full gap-8">
-          {navItems.map((item, index) => (
+          {NAV_ITEMS.map((item, index) => (
             <button
               key={item.id}
               onClick={() => scrollToSection(item.id)}
@@ -162,7 +161,7 @@ const Navigation = () => {
             onClick={() => scrollToSection('contact')}
             className="mt-8 px-8 py-3 bg-orange text-white font-opensans text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-orange/20"
             style={{
-              transitionDelay: isMobileMenuOpen ? `${navItems.length * 0.05}s` : '0s',
+              transitionDelay: isMobileMenuOpen ? `${NAV_ITEMS.length * 0.05}s` : '0s',
               transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
               opacity: isMobileMenuOpen ? 1 : 0,
             }}

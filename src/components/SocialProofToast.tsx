@@ -133,8 +133,8 @@ const SocialProofToast = () => {
   useEffect(() => {
     if (!canShow || startedRef.current) return;
     startedRef.current = true;
-    // Small delay before first toast appears
-    setTimeout(() => setVisible(true), 500);
+    const firstTimer = setTimeout(() => setVisible(true), 500);
+    return () => clearTimeout(firstTimer);
   }, [canShow]);
 
   // Start the cycling when component mounts
