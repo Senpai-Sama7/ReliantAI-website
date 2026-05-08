@@ -50,13 +50,13 @@ const CountUp = ({
     return { numericValue, displayPrefix, displaySuffix };
   }, [end, prefix, suffix]);
 
-  // Compute initial display value
+  // Compute initial display value (start at 0)
   const initialDisplay = useMemo(() => {
     const formatted = decimals > 0
-      ? numericValue.toFixed(decimals)
-      : Math.round(numericValue).toString();
+      ? (0).toFixed(decimals)
+      : "0";
     return `${displayPrefix}${formatted}${displaySuffix}`;
-  }, [numericValue, displayPrefix, displaySuffix, decimals]);
+  }, [displayPrefix, displaySuffix, decimals]);
 
   const [displayValue, setDisplayValue] = useState<string>(initialDisplay);
 

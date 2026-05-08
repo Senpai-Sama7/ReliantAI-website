@@ -11,7 +11,11 @@ const TorusKnot3D = lazy(() => import('../components/TorusKnot3D'));
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function HeroV2() {
+interface HeroV2Props {
+  introComplete?: boolean;
+}
+
+export default function HeroV2({ introComplete = true }: HeroV2Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadRef = useRef<HTMLParagraphElement>(null);
@@ -52,8 +56,9 @@ export default function HeroV2() {
     }
 
     const startAnimations = () => {
+      if (!introComplete) return;
       const ctx = gsap.context(() => {
-        const tl = gsap.timeline({ delay: 2.2 });
+        const tl = gsap.timeline({ delay: 0.2 });
 
         tl.fromTo(
           headlineRef.current,
@@ -109,30 +114,12 @@ export default function HeroV2() {
       return () => ctx.revert();
     };
 
-    let cleanup: (() => void) | undefined;
-    let idleId: number | undefined;
-    let timerId: ReturnType<typeof setTimeout> | undefined;
-
-    const triggerAnimations = () => {
-      cleanup = startAnimations();
-    };
-
-    if ('requestIdleCallback' in window) {
-      idleId = requestIdleCallback(triggerAnimations, { timeout: 200 });
-    } else {
-      timerId = setTimeout(triggerAnimations, 100);
-    }
+    const cleanup = startAnimations();
 
     return () => {
-      if (idleId && 'cancelIdleCallback' in window) {
-        cancelIdleCallback(idleId);
-      }
-      if (timerId) {
-        clearTimeout(timerId);
-      }
       cleanup?.();
     };
-  }, []);
+  }, [introComplete]);
 
   const scrollToWork = () => {
     const workSection = document.getElementById('work');
@@ -150,6 +137,7 @@ export default function HeroV2() {
   return (
     <section
       ref={sectionRef}
+      id="hero"
       className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#f7f7f7] dark:bg-[#0a0a0a] transition-colors duration-500 pt-32 lg:pt-40"
     >
       {/* Subtle gradient background */}
@@ -228,7 +216,7 @@ export default function HeroV2() {
         {/* Main Headline - Static */}
         <h1
           ref={headlineRef}
-          className="font-teko text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.85] mb-8"
+          className="font-teko text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.85] mb-8 opacity-0"
         >
           <span className="block text-gray-900 dark:text-white">
             LUXURY WEB
@@ -244,14 +232,14 @@ export default function HeroV2() {
         {/* Subheadline */}
         <p
           ref={subheadRef}
-          className="font-opensans text-lg sm:text-xl text-gray-600 dark:text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed"
+          className="font-opensans text-lg sm:text-xl text-gray-600 dark:text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed opacity-0"
         >
           We craft conversion-focused digital experiences for Houston's 
           most ambitious businesses. No templates. No compromises.
         </p>
 
         {/* CTA - subtle hover effects */}
-        <div ref={ctaRef}>
+        <div ref={ctaRef} className="opacity-0">
           <button
             onClick={scrollToWork}
             className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-opensans font-semibold rounded-full overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-orange/10"
@@ -274,7 +262,7 @@ export default function HeroV2() {
         <div className="mt-20 pt-12 border-t border-gray-200 dark:border-white/10">
           <div ref={statsRef} className="flex flex-wrap justify-center gap-12 sm:gap-16">
             {stats.map((stat, i) => (
-              <div key={i} className="text-center">
+              <div key={i} className="text-center opacity-0">
                 <div className="font-teko text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">
                   <CountUp 
                     end={stat.value} 
