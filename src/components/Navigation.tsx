@@ -86,6 +86,7 @@ const Navigation = () => {
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center gap-2 group"
+              aria-label="Reliant AI Logo"
             >
               <div className="w-10 h-10 bg-orange rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-lg group-hover:shadow-orange/30">
                 <span className="font-teko text-2xl font-bold text-white">N</span>
@@ -120,7 +121,7 @@ const Navigation = () => {
               <ThemeToggle />
               <button
                 onClick={() => scrollToSection('contact')}
-                className="group relative px-6 py-2.5 bg-orange text-white font-opensans text-sm font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-orange/20"
+                className="group relative px-6 py-2.5 bg-orange text-white font-opensans text-sm font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-orange/30"
               >
                 <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                 <span className="relative">Get Started</span>
@@ -132,14 +133,14 @@ const Navigation = () => {
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}
-                className="px-3 py-1.5 bg-orange text-white font-opensans text-xs font-semibold rounded-lg"
+                className="px-3 py-1.5 bg-orange text-white font-opensans text-xs font-semibold rounded-lg hover:shadow-lg hover:shadow-orange/30 transition-all duration-300"
               >
                 Get a Quote
               </a>
               <ThemeToggle />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 text-gray-900 dark:text-white transition-transform duration-300"
+                className="p-2 text-gray-900 dark:text-white transition-transform duration-300 hover:scale-110"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
               >
@@ -177,7 +178,7 @@ const Navigation = () => {
           ))}
           <button
             onClick={() => scrollToSection('contact')}
-            className="mt-8 px-8 py-3 bg-orange text-white font-opensans text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-orange/20"
+            className="mt-8 px-8 py-3 bg-orange text-white font-opensans text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-orange/20 hover:scale-105"
             style={{
               transitionDelay: isMobileMenuOpen ? `${NAV_ITEMS.length * 0.05}s` : '0s',
               transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
