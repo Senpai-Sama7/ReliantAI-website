@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
 
 const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
@@ -6,7 +6,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
   const pathsRef = useRef<SVGGElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const failsafe = setTimeout(() => {
       setShow(false);
       onComplete();
@@ -25,8 +25,9 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
     const tl = gsap.timeline({
       onComplete: () => {
         clearTimeout(failsafe);
-        setShow(false);
+        // Ensure state is updated before unmounting
         onComplete();
+        setShow(false);
       },
     });
     tlRef.current = tl;

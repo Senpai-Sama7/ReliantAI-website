@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Quote, Star, BadgeCheck } from 'lucide-react';
@@ -61,7 +61,7 @@ export default function TestimonialsV2() {
   const logosRef = useRef<HTMLDivElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const ctx = gsap.context(() => {
       // Header reveal
       const headerElements = headerRef.current?.querySelectorAll('.reveal-item');

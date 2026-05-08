@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Shield, Award, Zap, Users, TrendingUp, Clock } from 'lucide-react';
@@ -63,7 +63,7 @@ const CAPABILITIES = [
 function StatsBar() {
   const ref = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const items = el.querySelectorAll('.stat-item');
@@ -106,7 +106,7 @@ function StatsBar() {
 function CapabilitiesGrid() {
   const ref = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const cards = el.querySelectorAll('.cap-card');
@@ -200,7 +200,7 @@ function CapabilitiesGrid() {
 function TrustBar() {
   const ref = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const items = el.querySelectorAll('.trust-item');
@@ -236,7 +236,7 @@ function TrustBar() {
 function BrandStory() {
   const ref = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const items = el.querySelectorAll('.story-item');

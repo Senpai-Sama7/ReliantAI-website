@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navigation from './components/Navigation';
@@ -32,6 +32,19 @@ function App() {
   useTheme();
   const [introComplete, setIntroComplete] = useState(false);
 
+  // Memoize completion handler to prevent unnecessary re-renders of IntroOverlay
+  const handleIntroComplete = useCallback(() => {
+    setIntroComplete(true);
+  }, []);
+
+  // Failsafe: Ensure content is shown after a reasonable timeout
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIntroComplete(true);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Check current path for routing
   const path = window.location.pathname;
   const isPrivacyPolicy = path === '/privacy-policy';
@@ -42,13 +55,22 @@ function App() {
 
   useEffect(() => {
     if (isStandalonePage) return;
-    // Refresh ScrollTrigger after content loads
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
 
-    return () => clearTimeout(timer);
-  }, [isStandalonePage]);
+    // Refresh ScrollTrigger when intro completes or after a delay
+    const refresh = () => {
+      ScrollTrigger.refresh();
+    };
+
+    if (introComplete) {
+      refresh();
+      // Also refresh after a small delay to catch late-rendering elements
+      const timer = setTimeout(refresh, 500);
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(refresh, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isStandalonePage, introComplete]);
 
   // Render standalone pages without the main layout
   if (isPrivacyPolicy) {
@@ -74,7 +96,7 @@ function App() {
       <a href="#main" className="skip-link">
         Skip to main content
       </a>
-      {!introComplete && <IntroOverlay onComplete={() => setIntroComplete(true)} />}
+      {!introComplete && <IntroOverlay onComplete={handleIntroComplete} />}
       <FloatingCTA />
       <ExitIntentPopup />
       <SocialProofToast />
