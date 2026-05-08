@@ -22,39 +22,40 @@ export function FloatingProps({ props, className = '' }: FloatingPropsProps) {
     const el = ref.current;
     if (!el) return;
 
-    const items = gsap.utils.toArray<HTMLElement>('[data-float]', el);
+    const ctx = gsap.context(() => {
+      const items = gsap.utils.toArray<HTMLElement>('[data-float]', el);
 
-    items.forEach((node, i) => {
-      // Random starting position offset
-      const randomY = Math.random() * 20 - 10;
-      const randomRotate = Math.random() * 4 - 2;
-      
-      gsap.set(node, { y: randomY, rotate: randomRotate });
+      items.forEach((node, i) => {
+        const randomY = Math.random() * 20 - 10;
+        const randomRotate = Math.random() * 4 - 2;
 
-      // Parallax on scroll
-      gsap.to(node, {
-        y: i % 2 === 0 ? -40 : 30,
-        rotate: i % 2 === 0 ? -3 : 3,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.8,
-        },
+        gsap.set(node, { y: randomY, rotate: randomRotate });
+
+        gsap.to(node, {
+          y: i % 2 === 0 ? -40 : 30,
+          rotate: i % 2 === 0 ? -3 : 3,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.8,
+          },
+        });
+
+        gsap.to(node, {
+          y: `+=${Math.random() * 10 - 5}`,
+          x: `+=${Math.random() * 6 - 3}`,
+          rotation: `+=${Math.random() * 2 - 1}`,
+          duration: 3 + Math.random() * 2,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        });
       });
+    }, el);
 
-      // Gentle idle animation
-      gsap.to(node, {
-        y: `+=${Math.random() * 10 - 5}`,
-        x: `+=${Math.random() * 6 - 3}`,
-        rotation: `+=${Math.random() * 2 - 1}`,
-        duration: 3 + Math.random() * 2,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-      });
-    });
+    return () => ctx.revert();
   }, []);
 
   return (
