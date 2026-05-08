@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, useCallback, memo } from 'react';
+import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import gsap from 'gsap';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 
@@ -208,7 +208,7 @@ export default function VideoHero() {
   }, [actIndex, goToAct]);
 
   // ── Text entrance animation ──
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!textRef.current || reducedMotion.current) return;
     gsap.fromTo(
       Array.from(textRef.current.children),
@@ -218,7 +218,7 @@ export default function VideoHero() {
   }, [actIndex]);
 
   // ── Progress bar ──
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!progressRef.current) return;
     progressTweenRef.current?.kill();
     gsap.set(progressRef.current, { scaleX: 0 });

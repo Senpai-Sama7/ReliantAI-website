@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -18,7 +18,7 @@ interface FloatingPropsProps {
 export function FloatingProps({ props, className = '' }: FloatingPropsProps) {
   const ref = useRef<HTMLDivElement | null>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = ref.current;
     if (!el) return;
 

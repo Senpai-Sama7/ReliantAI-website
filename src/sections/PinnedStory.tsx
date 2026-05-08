@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
@@ -147,7 +147,7 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Clear any existing triggers and context
     triggersRef.current.forEach(t => t.kill());
     triggersRef.current = [];

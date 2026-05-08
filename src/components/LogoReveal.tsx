@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 // Different complete design styles for RELIANT AI
@@ -58,7 +58,7 @@ const LogoReveal = () => {
   const [currentStyleIndex, setCurrentStyleIndex] = useState(0);
   const fullText = 'RELIANT AI';
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
     let currentIndex = 0;
     let isDeleting = false;

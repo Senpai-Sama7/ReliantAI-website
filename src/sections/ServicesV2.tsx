@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Code2, Palette, TrendingUp, Box, ArrowRight } from 'lucide-react';
@@ -135,7 +135,7 @@ export default function ServicesV2() {
   const [activeService, setActiveService] = useState(0);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const ctx = gsap.context(() => {
       // Header reveal
       const headerElements = headerRef.current?.querySelectorAll('.reveal-item');

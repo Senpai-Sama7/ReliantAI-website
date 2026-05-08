@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, Loader2, Shield, Award, Building2 } from 'lucide-react';
@@ -33,7 +33,7 @@ const Contact = () => {
   });
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const ctx = gsap.context(() => {
       // Header reveal
       const headerElements = headingRef.current?.querySelectorAll('.reveal-item');

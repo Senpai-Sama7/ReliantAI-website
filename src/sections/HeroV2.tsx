@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowDown } from 'lucide-react';
@@ -24,7 +24,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
   const orbit1Ref = useRef<HTMLDivElement>(null);
   const orbit2Ref = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -55,44 +55,39 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
       return;
     }
 
-    const startAnimations = () => {
-      if (!introComplete) return;
+    // Start animations if introComplete is true
+    if (introComplete) {
       const ctx = gsap.context(() => {
-        const tl = gsap.timeline({ delay: 0.2 });
+        const tl = gsap.timeline({ delay: 0.1 });
 
-        tl.fromTo(
+        tl.from(
           headlineRef.current,
-          { y: 80, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }
+          { y: 80, opacity: 0, duration: 1.2, ease: 'power3.out' }
         )
-          .fromTo(
+          .from(
             subheadRef.current,
-            { y: 40, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' },
+            { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' },
             '-=0.7'
           )
-          .fromTo(
+          .from(
             ctaRef.current,
-            { y: 30, opacity: 0, scale: 0.98 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.7, ease: 'power2.out' },
+            { y: 30, opacity: 0, scale: 0.98, duration: 0.7, ease: 'power2.out' },
             '-=0.5'
           )
-          .fromTo(
-            statsRef.current?.children || [],
-            { y: 30, opacity: 0 },
+          .from(
+            gsap.utils.toArray(statsRef.current?.children || []),
             {
-              y: 0,
-              opacity: 1,
+              y: 30,
+              opacity: 0,
               duration: 0.6,
               stagger: 0.12,
               ease: 'power2.out',
             },
             '-=0.3'
           )
-          .fromTo(
+          .from(
             [orbit1Ref.current, orbit2Ref.current],
-            { opacity: 0, scale: 0.8 },
-            { opacity: 1, scale: 1, duration: 1, stagger: 0.2, ease: 'power2.out' },
+            { opacity: 0, scale: 0.8, duration: 1, stagger: 0.2, ease: 'power2.out' },
             '-=0.5'
           );
 
@@ -112,13 +107,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         }, sectionRef);
 
       return () => ctx.revert();
-    };
-
-    const cleanup = startAnimations();
-
-    return () => {
-      cleanup?.();
-    };
+    }
   }, [introComplete]);
 
   const scrollToWork = () => {
@@ -216,7 +205,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         {/* Main Headline - Static */}
         <h1
           ref={headlineRef}
-          className="font-teko text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.85] mb-8 opacity-0"
+          className="font-teko text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.85] mb-8"
         >
           <span className="block text-gray-900 dark:text-white">
             LUXURY WEB
@@ -232,14 +221,14 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         {/* Subheadline */}
         <p
           ref={subheadRef}
-          className="font-opensans text-lg sm:text-xl text-gray-600 dark:text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed opacity-0"
+          className="font-opensans text-lg sm:text-xl text-gray-600 dark:text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed"
         >
           We craft conversion-focused digital experiences for Houston's 
           most ambitious businesses. No templates. No compromises.
         </p>
 
         {/* CTA - subtle hover effects */}
-        <div ref={ctaRef} className="opacity-0">
+        <div ref={ctaRef}>
           <button
             onClick={scrollToWork}
             className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-opensans font-semibold rounded-full overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-orange/10"
@@ -262,7 +251,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         <div className="mt-20 pt-12 border-t border-gray-200 dark:border-white/10">
           <div ref={statsRef} className="flex flex-wrap justify-center gap-12 sm:gap-16">
             {stats.map((stat, i) => (
-              <div key={i} className="text-center opacity-0">
+              <div key={i} className="text-center">
                 <div className="font-teko text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">
                   <CountUp 
                     end={stat.value} 

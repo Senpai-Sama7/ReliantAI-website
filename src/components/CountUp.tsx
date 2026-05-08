@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -60,7 +60,7 @@ const CountUp = ({
 
   const [displayValue, setDisplayValue] = useState<string>(initialDisplay);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const element = elementRef.current;
     if (!element || hasAnimatedRef.current) return;
 

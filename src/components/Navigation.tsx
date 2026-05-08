@@ -24,6 +24,13 @@ const Navigation = () => {
     const heroSection = document.getElementById('hero');
 
     const handleScroll = () => {
+      // Check if we are at the very top of the page
+      if (window.scrollY < 50) {
+        setActiveSection('hero');
+        setIsScrolled(false);
+        return;
+      }
+
       setIsScrolled(window.scrollY > 100);
 
       const scrollPos = window.scrollY + window.innerHeight / 3;
