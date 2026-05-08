@@ -16,7 +16,7 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReduced) {
-      return;
+      return () => {};
     }
 
     // Initialize Lenis with conservative settings

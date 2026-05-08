@@ -21,10 +21,9 @@ function createParticleData(count: number) {
 }
 
 const PARTICLE_COUNT = 150;
-const initialData = createParticleData(PARTICLE_COUNT);
-
 const ParticleField = () => {
   const pointsRef = useRef<THREE.Points>(null);
+  const initialData = useMemo(() => createParticleData(PARTICLE_COUNT), []);
   const velocitiesRef = useRef(initialData.velocities);
 
   useFrame((state) => {

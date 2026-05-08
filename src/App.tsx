@@ -29,7 +29,7 @@ import { caseStudyChapters } from './data/chapters';
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  const { mounted } = useTheme();
+  useTheme();
   const [introComplete, setIntroComplete] = useState(false);
 
   // Check current path for routing
@@ -67,15 +67,7 @@ function App() {
     return <NotFound />;
   }
 
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[#f7f7f7] dark:bg-[#0a0a0a] flex items-center justify-center">
-        <div className="w-10 h-10 bg-orange rounded-lg flex items-center justify-center">
-          <span className="font-teko text-2xl font-bold text-white">N</span>
-        </div>
-      </div>
-    );
-  }
+  // No need for separate mounted check; we want it to render
 
   return (
     <SmoothScrollProvider>
@@ -95,7 +87,7 @@ function App() {
         {/* Main Content */}
         <main id="main" role="main" aria-label="Primary content">
           {/* Hero Section */}
-          <HeroV2 />
+          <HeroV2 introComplete={introComplete} />
           
           {/* Pinned Story / Case Studies */}
           <section id="work" aria-label="Case studies overview">

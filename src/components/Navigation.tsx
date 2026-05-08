@@ -21,11 +21,22 @@ const Navigation = () => {
 
   useEffect(() => {
     const sections = NAV_ITEMS.map(item => document.getElementById(item.id));
+    const heroSection = document.getElementById('hero');
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
 
       const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      if (heroSection) {
+        const top = heroSection.offsetTop;
+        const bottom = top + heroSection.offsetHeight;
+        if (scrollPos >= top && scrollPos < bottom) {
+          setActiveSection('hero');
+          return;
+        }
+      }
+
       sections.forEach((section, index) => {
         if (section) {
           const top = section.offsetTop;
