@@ -23,7 +23,7 @@ export const usePopupTrigger = ({ popupType }: UsePopupTriggerOptions) => {
   });
   const scrollTimeRef = useRef(0);
   const lastScrollTimeRef = useRef<number | null>(null);
-  const rafIdRef = useRef<number | null>(null);
+  const scrollEndTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const checkAndEnable = useCallback(() => {
     if (!dismissed && !canShow) {
@@ -58,30 +58,25 @@ export const usePopupTrigger = ({ popupType }: UsePopupTriggerOptions) => {
 
     const handleScroll = () => {
       handleScrollStart();
-      
-      // Clear existing timeout
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
+
+      if (scrollEndTimerRef.current) {
+        clearTimeout(scrollEndTimerRef.current);
       }
-      
-      // Set new timeout to detect scroll end
-      rafIdRef.current = requestAnimationFrame(() => {
-        // Wait a bit to confirm scroll has stopped
-        setTimeout(() => {
-          if (isActive) {
-            handleScrollEnd();
-          }
-        }, 150);
-      });
+
+      scrollEndTimerRef.current = setTimeout(() => {
+        if (isActive) {
+          handleScrollEnd();
+        }
+      }, 150);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
+
     return () => {
       isActive = false;
       window.removeEventListener('scroll', handleScroll);
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
+      if (scrollEndTimerRef.current) {
+        clearTimeout(scrollEndTimerRef.current);
       }
     };
   }, [dismissed, checkAndEnable]);

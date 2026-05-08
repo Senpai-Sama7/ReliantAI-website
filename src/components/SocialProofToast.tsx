@@ -129,27 +129,20 @@ const SocialProofToast = () => {
     return () => clearTimeout(hideTimer);
   }, [visible]);
 
-  // Start showing toasts when allowed
+  // Start showing toasts and cycling when allowed
   useEffect(() => {
     if (!canShow || startedRef.current) return;
     startedRef.current = true;
-    const firstTimer = setTimeout(() => setVisible(true), 500);
-    return () => clearTimeout(firstTimer);
-  }, [canShow]);
-
-  // Start the cycling when component mounts
-  useEffect(() => {
-    if (!startedRef.current) return;
-
-    // Schedule the first cycle
-    scheduleNextToast();
-
-    // Cleanup
+    const firstTimer = setTimeout(() => {
+      setVisible(true);
+      scheduleRef.current?.();
+    }, 500);
     return () => {
+      clearTimeout(firstTimer);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
     };
-  }, [scheduleNextToast]);
+  }, [canShow]);
 
   const handleDismiss = () => {
     setVisible(false);
