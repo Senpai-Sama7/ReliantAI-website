@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "reliant-ai-website",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false",
+    "quality:check": "bash ./scripts/quality-loop.sh",
+    "quality:fix": "eslint . --fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

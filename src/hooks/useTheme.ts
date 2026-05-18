@@ -2,36 +2,66 @@ import { useState, useEffect, useCallback } from 'react';
 
 type Theme = 'light' | 'dark';
 
+function canUseDOM() {
+  return typeof window !== 'undefined' && typeof document !== 'undefined';
+}
+
+function readStoredTheme(): Theme {
+  if (!canUseDOM()) return 'light';
+
+  try {
+    const saved = window.localStorage.getItem('theme');
+    return saved === 'dark' ? 'dark' : 'light';
+  } catch {
+    return 'light';
+  }
+}
+
+function storeTheme(theme: Theme) {
+  try {
+    window.localStorage.setItem('theme', theme);
+  } catch {
+    // localStorage can be unavailable in private browsing or hardened contexts.
+  }
+}
+
+function applyTheme(theme: Theme) {
+  if (!canUseDOM()) return;
+  document.documentElement.classList.toggle('dark', theme === 'dark');
+}
+
 function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'light';
-  const saved = localStorage.getItem('theme');
-  return saved === 'dark' ? 'dark' : 'light';
+  return readStoredTheme();
 }
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   // Vite SPA has no SSR — the component is always mounted client-side.
   // No useEffect needed to set mounted; derive it from window availability.
-  const mounted = typeof window !== 'undefined';
+  const mounted = canUseDOM();
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    applyTheme(theme);
   }, [theme]);
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {
       const newTheme = prev === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme', newTheme);
-      document.documentElement.classList.toggle('dark', newTheme === 'dark');
-      document.body.style.transition = 'background-color 0.5s ease';
+      storeTheme(newTheme);
+      applyTheme(newTheme);
+
+      if (canUseDOM()) {
+        document.body.style.transition = 'background-color 0.5s ease';
+      }
+
       return newTheme;
     });
   }, []);
 
   const setThemeValue = useCallback((newTheme: Theme) => {
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    storeTheme(newTheme);
+    applyTheme(newTheme);
   }, []);
 
   return {

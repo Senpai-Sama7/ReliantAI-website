@@ -606,9 +606,7 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
 }) {
-  // Random width between 50 to 90%.
-  // eslint-disable-next-line react-hooks/purity
-  const widthRef = React.useRef(`${Math.floor(Math.random() * 40) + 50}%`)
+  const skeletonWidth = "70%"
 
   return (
     <div
@@ -628,7 +626,7 @@ function SidebarMenuSkeleton({
         data-sidebar="menu-skeleton-text"
         style={
           {
-            "--skeleton-width": widthRef.current,
+            "--skeleton-width": skeletonWidth,
           } as React.CSSProperties
         }
       />

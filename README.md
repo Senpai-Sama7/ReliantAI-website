@@ -23,7 +23,10 @@ npm run dev
 | `npm run dev` | Start dev server with HMR |
 | `npm run build` | Type-check + production build |
 | `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run TypeScript project checks |
 | `npm run preview` | Preview production build locally |
+| `npm run quality:check` | Run recurring quality loop checks and generate `reports/quality/latest.md` |
+| `npm run quality:fix` | Apply safe lint autofixes |
 
 ## Stack
 
@@ -49,3 +52,17 @@ src/
 ## Deployment
 
 The site deploys automatically to Vercel on push to `main`. All security headers (HSTS, CSP, X-Frame-Options, etc.) are configured in `vercel.json`. Add `VITE_WEB3FORMS_KEY` as a Vercel environment variable before deploying.
+
+## Continuous Quality Loop
+
+- Automated workflow: `.github/workflows/quality-loop.yml`
+- Cadence:
+  - Daily quality checks (lint/build/audit/dependency drift)
+  - Weekly extended maintenance run
+- Local run:
+
+```bash
+npm run quality:check
+```
+
+Each run writes a report to `reports/quality/latest.md` and uploads it as a GitHub Actions artifact.

@@ -56,7 +56,7 @@ const ParticleField = () => {
 
   const positionAttribute = useMemo(() => {
     return new THREE.BufferAttribute(initialData.positions, 3);
-  }, []);
+  }, [initialData.positions]);
 
   return (
     <points ref={pointsRef}>
