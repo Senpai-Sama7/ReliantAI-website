@@ -105,7 +105,7 @@ const Navigation = () => {
                   className={`relative font-opensans text-sm transition-colors duration-300 group ${
                     activeSection === item.id
                       ? 'text-orange'
-                      : 'text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white'
+                      : 'text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   {item.label}

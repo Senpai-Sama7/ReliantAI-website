@@ -133,7 +133,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f7f7f7] dark:to-[#0a0a0a]" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-[55%] h-[85%] bg-gradient-to-l from-orange/10 via-orange/5 to-transparent dark:from-orange/20 dark:via-orange/10 rounded-full blur-3xl" />
       </div>
 
       {/* 3D TorusKnot - Lazy loaded to reduce TBT */}
@@ -213,7 +213,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
           <span className="block text-orange">
             DESIGN
           </span>
-          <span className="block text-gray-400 dark:text-white/30 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mt-2">
+          <span className="block text-gray-500 dark:text-white/40 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mt-2">
             REDEFINED
           </span>
         </h1>
@@ -221,7 +221,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         {/* Subheadline */}
         <p
           ref={subheadRef}
-          className="font-opensans text-lg sm:text-xl text-gray-600 dark:text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed"
+          className="font-opensans text-lg sm:text-xl text-gray-700 dark:text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed"
         >
           We craft conversion-focused digital experiences for Houston's 
           most ambitious businesses. No templates. No compromises.

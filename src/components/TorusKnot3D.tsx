@@ -1,6 +1,5 @@
-import { useRef, Suspense } from 'react';
+import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
 import type { Mesh } from 'three';
 
 // 3D Metallic Object Component - Optimized
@@ -16,13 +15,14 @@ const MetallicObject = () => {
   });
 
   return (
-    <mesh ref={meshRef} position={[2, 0, 0]} castShadow>
-      <torusKnotGeometry args={[1.5, 0.4, 100, 24]} />
+    <mesh ref={meshRef} position={[0.75, 0, 0]} castShadow>
+      <torusKnotGeometry args={[1.5, 0.4, 128, 32]} />
       <meshStandardMaterial
         color="#ff6e00"
-        metalness={1}
-        roughness={0.15}
-        envMapIntensity={1.5}
+        metalness={0.45}
+        roughness={0.35}
+        emissive="#ff6e00"
+        emissiveIntensity={0.28}
       />
     </mesh>
   );
@@ -30,31 +30,26 @@ const MetallicObject = () => {
 
 const TorusKnot3D = () => {
   return (
-    <div
-      className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[80%] z-[1] hidden lg:block"
-      style={{ contain: 'layout paint' }}
-    >
-      <Suspense fallback={null}>
-        <Canvas
-          camera={{ position: [0, 0, 8], fov: 50 }}
-          dpr={[1, 1.5]}
-          gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
-          frameloop="always"
-        >
-          <ambientLight intensity={0.3} />
-          <spotLight
-            position={[10, 10, 10]}
-            angle={0.3}
-            penumbra={1}
-            intensity={2}
-          />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff6e00" />
-          <MetallicObject />
-          <Suspense fallback={null}>
-            <Environment preset="city" />
-          </Suspense>
-        </Canvas>
-      </Suspense>
+    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[80%] z-[1] hidden lg:block pointer-events-none">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-l from-orange/15 via-orange/5 to-transparent dark:from-orange/25 dark:via-orange/10 rounded-full blur-2xl"
+      />
+      <Canvas
+        camera={{ position: [0, 0, 7], fov: 45 }}
+        dpr={[1, 2]}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        frameloop="always"
+        style={{ background: 'transparent' }}
+      >
+        <ambientLight intensity={0.7} />
+        <hemisphereLight args={['#ffffff', '#e8e8e8', 0.9]} />
+        <directionalLight position={[6, 8, 6]} intensity={1.6} color="#fffaf5" />
+        <directionalLight position={[-4, -1, -3]} intensity={0.55} color="#ff6e00" />
+        <spotLight position={[8, 10, 8]} angle={0.4} penumbra={1} intensity={3} color="#fff5eb" />
+        <pointLight position={[-6, 2, 5]} intensity={0.9} color="#ff6e00" />
+        <MetallicObject />
+      </Canvas>
     </div>
   );
 };

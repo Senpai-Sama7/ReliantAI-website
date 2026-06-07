@@ -22,6 +22,7 @@ npm run dev
 |---|---|
 | `npm run dev` | Start dev server with HMR |
 | `npm run build` | Type-check + production build |
+| `npm run build:verify` | Verify the production bundle does not contain dev JSX/runtime artifacts |
 | `npm run lint` | Run ESLint |
 | `npm run typecheck` | Run TypeScript project checks |
 | `npm run preview` | Preview production build locally |

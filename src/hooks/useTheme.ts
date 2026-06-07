@@ -35,7 +35,11 @@ function getInitialTheme(): Theme {
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = useState<Theme>(() => {
+    const initialTheme = getInitialTheme();
+    applyTheme(initialTheme);
+    return initialTheme;
+  });
   // Vite SPA has no SSR — the component is always mounted client-side.
   // No useEffect needed to set mounted; derive it from window availability.
   const mounted = canUseDOM();
