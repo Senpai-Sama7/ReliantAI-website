@@ -62,16 +62,15 @@ const LogoReveal = () => {
     let timeout: ReturnType<typeof setTimeout>;
     let currentIndex = 0;
     let isDeleting = false;
-    let isActive = false;
+    let isTypingActive = false;
 
-    // Defer typewriter start to reduce TBT
     const startTyping = () => {
-      isActive = true;
+      isTypingActive = true;
       typeEffect();
     };
 
     const typeEffect = () => {
-      if (!isActive) return;
+      if (!isTypingActive) return;
       if (!isDeleting) {
         // Typing
         if (currentIndex < fullText.length) {
@@ -100,18 +99,15 @@ const LogoReveal = () => {
       }
     };
 
-    // Defer to reduce TBT
-    timeout = setTimeout(startTyping, 1500);
+    timeout = setTimeout(startTyping, 400);
 
-    // Animate the underline
     const ctx = gsap.context(() => {
       gsap.fromTo(
         lineRef.current,
         { scaleX: 0, opacity: 0 },
-        { scaleX: 1, opacity: 1, duration: 0.8, ease: 'power3.inOut', delay: 0.5 }
+        { scaleX: 1, opacity: 1, duration: 0.8, ease: 'power3.inOut', delay: 0.35 }
       );
 
-      // Cursor blink
       gsap.to(cursorRef.current, {
         opacity: 0,
         duration: 0.5,
@@ -122,7 +118,7 @@ const LogoReveal = () => {
     }, containerRef);
 
     return () => {
-      isActive = false;
+      isTypingActive = false;
       clearTimeout(timeout);
       ctx.revert();
     };

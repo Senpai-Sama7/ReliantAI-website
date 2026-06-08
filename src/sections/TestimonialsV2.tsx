@@ -1,8 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Quote, Star, BadgeCheck } from 'lucide-react';
 import CountUp from '../components/CountUp';
+import { revealFrom } from '@/lib/reveal';
+import { isMobileViewport, prefersReducedMotion } from '@/lib/motion';
+import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,111 +57,119 @@ const clientLogos = [
   'Premier Services',
 ];
 
-export default function TestimonialsV2() {
+interface TestimonialsV2Props {
+  introComplete?: boolean;
+}
+
+export default function TestimonialsV2({ introComplete = true }: TestimonialsV2Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const logosRef = useRef<HTMLDivElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const ctxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header reveal
-      const headerElements = headerRef.current?.querySelectorAll('.reveal-item');
-      if (headerElements) {
-        gsap.set(headerElements, { y: 40, opacity: 0 });
-        
-        const headerTrigger = ScrollTrigger.create({
-          trigger: headerRef.current,
-          start: 'top 85%',
-          onEnter: () => {
-            gsap.to(headerElements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
-              ease: 'power3.out',
-            });
-          },
-        });
-        triggersRef.current.push(headerTrigger);
-      }
-
-      // Horizontal scroll
-      const track = trackRef.current;
-      if (!track) return;
-
-      const cards = gsap.utils.toArray<HTMLElement>('.testi-card', track);
-      if (cards.length === 0) return;
-
-      const scrollAmount = track.scrollWidth - window.innerWidth;
-
-      const pinTrigger = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: () => `+=${scrollAmount}`,
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          gsap.set(track, { x: -scrollAmount * self.progress });
-
-          // Parallax on inner elements
-          cards.forEach((card) => {
-            const quote = card.querySelector('.parallax-quote') as HTMLElement;
-            const metric = card.querySelector('.parallax-metric') as HTMLElement;
-            if (quote) gsap.set(quote, { y: -30 * self.progress });
-            if (metric) gsap.set(metric, { y: 20 * self.progress });
-          });
-        },
-      });
-      triggersRef.current.push(pinTrigger);
-
-      // Logos reveal
-      const logoElements = logosRef.current?.querySelectorAll('.logo-item');
-      if (logoElements) {
-        gsap.set(logoElements, { y: 20, opacity: 0 });
-
-        const logosTrigger = ScrollTrigger.create({
-          trigger: logosRef.current,
-          start: 'top 90%',
-          onEnter: () => {
-            gsap.to(logoElements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.5,
-              stagger: 0.08,
-              ease: 'power2.out',
-            });
-          },
-        });
-        triggersRef.current.push(logosTrigger);
-      }
-    }, sectionRef);
-
-    return () => {
-      ctx.revert();
-      triggersRef.current.forEach(t => t.kill());
+  useIntroAnimations(
+    introComplete,
+    () => {
+      triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
-    };
-  }, []);
+      ctxRef.current?.revert();
+      ctxRef.current = null;
+
+      const section = sectionRef.current;
+      const track = trackRef.current;
+      if (!section || !track) return;
+
+      const reduced = prefersReducedMotion();
+      const mobile = isMobileViewport();
+
+      ctxRef.current = gsap.context(() => {
+        const headerTween = revealFrom(headerRef.current, '.reveal-item', {
+          y: 40,
+          duration: 0.8,
+          stagger: 0.1,
+          start: 'top 88%',
+        });
+        if (headerTween) triggersRef.current.push(headerTween);
+
+        const cards = gsap.utils.toArray<HTMLElement>('.testi-card', track);
+        if (cards.length === 0) return;
+
+        if (reduced || mobile) {
+          gsap.set(track, { x: 0, clearProps: 'transform' });
+          cards.forEach((card) => gsap.set(card, { opacity: 1, rotateY: 0, scale: 1, clearProps: 'transform' }));
+        } else {
+          const scrollAmount = Math.max(0, track.scrollWidth - window.innerWidth);
+
+          const pinTrigger = ScrollTrigger.create({
+            trigger: section,
+            start: 'top top',
+            end: () => `+=${scrollAmount}`,
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const x = -scrollAmount * self.progress;
+              gsap.set(track, { x });
+
+              const viewportCenter = window.innerWidth * 0.5;
+              cards.forEach((card) => {
+                const rect = card.getBoundingClientRect();
+                const dist = (rect.left + rect.width * 0.5 - viewportCenter) / window.innerWidth;
+                const abs = Math.abs(dist);
+                gsap.set(card, {
+                  rotateY: dist * -18,
+                  scale: 1 - abs * 0.06,
+                  opacity: 1 - abs * 0.15,
+                  transformPerspective: 1000,
+                });
+
+                const quote = card.querySelector('.parallax-quote') as HTMLElement | null;
+                const metric = card.querySelector('.parallax-metric') as HTMLElement | null;
+                if (quote) gsap.set(quote, { y: -24 * self.progress });
+                if (metric) gsap.set(metric, { y: 16 * self.progress });
+              });
+            },
+          });
+          triggersRef.current.push(pinTrigger);
+        }
+
+        const logosTween = revealFrom(logosRef.current, '.logo-item', {
+          y: 20,
+          duration: 0.5,
+          stagger: 0.08,
+          start: 'top 92%',
+        });
+        if (logosTween) triggersRef.current.push(logosTween);
+      }, section);
+
+      return () => {
+        triggersRef.current.forEach((t) => t.kill());
+        triggersRef.current = [];
+        ctxRef.current?.revert();
+        ctxRef.current = null;
+      };
+    },
+    []
+  );
 
   return (
     <section
       id="testimonials"
       ref={sectionRef}
       className="relative bg-[#0a0a0a] text-white overflow-hidden"
+      aria-label="Client testimonials"
     >
-      {/* Background accent */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 h-screen flex flex-col justify-center">
-        {/* Section Header */}
         <div ref={headerRef} className="text-center mb-12 px-6 pt-16">
           <span className="reveal-item text-xs uppercase tracking-[0.3em] text-white/40 font-opensans block mb-4">
-            Client Success
+            Client Results
           </span>
           <h2 className="reveal-item font-teko text-5xl sm:text-6xl lg:text-7xl font-bold leading-[0.9]">
             PROVEN
@@ -166,34 +177,33 @@ export default function TestimonialsV2() {
           </h2>
         </div>
 
-        {/* Horizontal scroll track */}
-        <div ref={trackRef} className="flex gap-8 pl-[10vw] pr-[10vw] will-change-transform">
+        <div
+          ref={trackRef}
+          className="flex items-center gap-8 px-[10vw] will-change-transform"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
           {testimonials.map((t) => (
             <div
               key={t.id}
-              className="testi-card flex-shrink-0 w-[85vw] sm:w-[70vw] lg:w-[50vw] bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 lg:p-12 relative"
+              className="testi-card flex-shrink-0 w-[85vw] sm:w-[70vw] lg:w-[55vw] bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 lg:p-12 relative"
             >
-              {/* Quote Icon - parallax layer */}
-              <div className="parallax-quote absolute -top-6 left-8 lg:left-12 will-change-transform">
-                <div className="w-12 h-12 bg-orange rounded-xl flex items-center justify-center">
+              <div className="parallax-quote absolute -top-6 left-8 lg:left-12">
+                <div className="w-12 h-12 bg-orange rounded-xl flex items-center justify-center shadow-lg shadow-orange/30">
                   <Quote size={24} className="text-white" />
                 </div>
               </div>
 
               <div className="pt-4">
-                {/* Rating */}
                 <div className="flex gap-1 mb-6">
                   {[...Array(t.rating)].map((_, i) => (
                     <Star key={i} size={16} className="text-orange fill-orange" />
                   ))}
                 </div>
 
-                {/* Quote */}
                 <blockquote className="font-opensans text-xl lg:text-2xl text-white/90 leading-relaxed mb-8">
-                  "{t.quote}"
+                  &ldquo;{t.quote}&rdquo;
                 </blockquote>
 
-                {/* Author + Metric */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pt-8 border-t border-white/10">
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-orange to-orange-600 rounded-full flex items-center justify-center font-teko text-2xl font-bold">
@@ -211,8 +221,7 @@ export default function TestimonialsV2() {
                     </div>
                   </div>
 
-                  {/* Metric - parallax layer */}
-                  <div className="parallax-metric inline-flex flex-col items-start sm:items-end gap-1 px-4 py-3 bg-orange/10 border border-orange/30 rounded-xl min-w-[100px] will-change-transform">
+                  <div className="parallax-metric inline-flex flex-col items-start sm:items-end gap-1 px-4 py-3 bg-orange/10 border border-orange/30 rounded-xl min-w-[100px]">
                     <span className="text-2xl font-teko font-bold text-orange">
                       <CountUp end={t.metric} duration={1.5} />
                     </span>
@@ -223,37 +232,21 @@ export default function TestimonialsV2() {
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Scroll hint */}
-        <div className="text-center mt-8 px-6" tabIndex={0} onKeyDown={(e) => {
-          const track = trackRef.current;
-          if (!track) return;
-          const scrollAmount = track.scrollWidth - window.innerWidth;
-          const current = parseFloat(gsap.getProperty(track, 'x') as string) || 0;
-          const step = window.innerWidth * 0.5;
-          if (e.key === 'ArrowRight') gsap.to(track, { x: Math.max(-scrollAmount, current - step), duration: 0.5 });
-          if (e.key === 'ArrowLeft') gsap.to(track, { x: Math.min(0, current + step), duration: 0.5 });
-        }}>
-          <span className="text-xs uppercase tracking-[0.2em] text-white/20 font-opensans">
-            Scroll to explore
-          </span>
-        </div>
-
-        {/* Client Logos */}
-        <div ref={logosRef} className="mt-12 px-6">
-          <p className="text-center text-xs uppercase tracking-[0.2em] text-white/30 font-opensans mb-8">
-            Trusted by Industry Leaders
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 lg:gap-16">
-            {clientLogos.map((logo, i) => (
-              <div
-                key={i}
-                className="logo-item font-teko text-xl lg:text-2xl text-white/20 transition-all duration-300 hover:text-white/50 cursor-default"
-              >
-                {logo}
-              </div>
-            ))}
-          </div>
+      <div ref={logosRef} className="relative z-10 pb-24 px-6">
+        <p className="text-center text-xs uppercase tracking-[0.2em] text-white/30 font-opensans mb-8">
+          Trusted by Industry Leaders
+        </p>
+        <div className="flex flex-wrap justify-center items-center gap-8 lg:gap-16">
+          {clientLogos.map((logo, i) => (
+            <div
+              key={i}
+              className="logo-item font-teko text-xl lg:text-2xl text-white/20 transition-all duration-300 hover:text-white/50 cursor-default"
+            >
+              {logo}
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Brain, Shield, GitBranch, Building2, BookOpen, Cpu } from 'lucide-react';
+import { revealFrom } from '@/lib/reveal';
+import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,116 +27,83 @@ const projects = [
   },
 ];
 
-const About = () => {
+interface AboutProps {
+  introComplete?: boolean;
+}
+
+const About = ({ introComplete = true }: AboutProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
   const rightColRef = useRef<HTMLDivElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const ctxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header reveal
-      const headerElements = headerRef.current?.querySelectorAll('.reveal-item');
-      if (headerElements) {
-        gsap.set(headerElements, { y: 40, opacity: 0 });
-        
-        const headerTrigger = ScrollTrigger.create({
-          trigger: headerRef.current,
-          start: 'top 85%',
-          onEnter: () => {
-            gsap.to(headerElements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
-              ease: 'power3.out',
-            });
-          },
+  useIntroAnimations(
+    introComplete,
+    () => {
+      ctxRef.current?.revert();
+      triggersRef.current.forEach((t) => t.kill());
+      triggersRef.current = [];
+
+      const ctx = gsap.context(() => {
+        const headerTween = revealFrom(headerRef.current, '.reveal-item', {
+          y: 40,
+          duration: 0.8,
+          stagger: 0.1,
         });
-        triggersRef.current.push(headerTrigger);
-      }
+        if (headerTween) triggersRef.current.push(headerTween);
 
-      // Name character animation
-      const nameChars = headerRef.current?.querySelectorAll('.name-char');
-      if (nameChars && nameChars.length > 0) {
-        gsap.set(nameChars, { opacity: 0, y: 60, rotateX: -90 });
-
-        const nameTrigger = ScrollTrigger.create({
-          trigger: headerRef.current,
-          start: 'top 80%',
-          onEnter: () => {
-            gsap.to(nameChars, {
-              opacity: 1,
-              y: 0,
-              rotateX: 0,
-              duration: 0.6,
-              stagger: 0.04,
-              ease: 'back.out(1.7)',
-            });
-          },
-        });
-        triggersRef.current.push(nameTrigger);
-      }
-
-      // Left column (profile card)
-      if (leftColRef.current) {
-        gsap.set(leftColRef.current, { x: -40, opacity: 0 });
-        
-        const leftTrigger = ScrollTrigger.create({
-          trigger: leftColRef.current,
-          start: 'top 85%',
-          onEnter: () => {
-            gsap.to(leftColRef.current, {
-              x: 0,
-              opacity: 1,
-              duration: 0.9,
-              ease: 'power3.out',
-            });
-          },
-        });
-        triggersRef.current.push(leftTrigger);
-      }
-
-      // Right column sections - staggered reveal
-      const rightSections = rightColRef.current?.querySelectorAll('.right-section');
-      if (rightSections) {
-        rightSections.forEach((section) => {
-          const elements = section.querySelectorAll('.section-reveal');
-          gsap.set(section, { y: 40, opacity: 0 });
-          gsap.set(elements, { y: 20, opacity: 0 });
-
-          const sectionTrigger = ScrollTrigger.create({
-            trigger: section,
-            start: 'top 85%',
-            onEnter: () => {
-              gsap.to(section, {
-                y: 0,
-                opacity: 1,
-                duration: 0.7,
-                ease: 'power3.out',
-              });
-              gsap.to(elements, {
-                y: 0,
-                opacity: 1,
-                duration: 0.5,
-                stagger: 0.06,
-                delay: 0.15,
-                ease: 'power2.out',
-              });
+        const nameChars = headerRef.current?.querySelectorAll('.name-char');
+        if (nameChars && nameChars.length > 0) {
+          const nameTween = gsap.from(nameChars, {
+            opacity: 0,
+            y: 60,
+            rotateX: -90,
+            duration: 0.6,
+            stagger: 0.04,
+            ease: 'back.out(1.7)',
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+              invalidateOnRefresh: true,
             },
           });
-          triggersRef.current.push(sectionTrigger);
-        });
-      }
-    }, sectionRef);
+          if (nameTween.scrollTrigger) triggersRef.current.push(nameTween.scrollTrigger);
+        }
 
-    return () => {
-      ctx.revert();
-      triggersRef.current.forEach(t => t.kill());
-      triggersRef.current = [];
-    };
-  }, []);
+        const leftTween = revealFrom(leftColRef.current, leftColRef.current, {
+          x: -40,
+          duration: 0.9,
+        });
+        if (leftTween) triggersRef.current.push(leftTween);
+
+        const rightSections = rightColRef.current?.querySelectorAll('.right-section');
+        rightSections?.forEach((section) => {
+          const sectionTween = revealFrom(section, section, { y: 40, duration: 0.7 });
+          if (sectionTween) triggersRef.current.push(sectionTween);
+
+          const elementsTween = revealFrom(section, section.querySelectorAll('.section-reveal'), {
+            y: 20,
+            duration: 0.5,
+            stagger: 0.06,
+          });
+          if (elementsTween) triggersRef.current.push(elementsTween);
+        });
+      }, sectionRef);
+
+      ctxRef.current = ctx;
+
+      return () => {
+        ctx.revert();
+        triggersRef.current.forEach((t) => t.kill());
+        triggersRef.current = [];
+        ctxRef.current = null;
+      };
+    },
+    []
+  );
 
   return (
     <section

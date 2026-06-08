@@ -3,6 +3,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
 import CountUp from '../components/CountUp';
+import { scrollToSection } from '@/lib/scroll';
+import { revealFrom } from '@/lib/reveal';
+import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 // Interactive SVG overlays per industry
 const IndustryAnimation = ({ index, mousePos }: { index: number; mousePos: { x: number; y: number } }) => {
@@ -116,9 +119,10 @@ export interface Chapter {
 
 interface PinnedStoryProps {
   chapters: Chapter[];
+  introComplete?: boolean;
 }
 
-export default function PinnedStory({ chapters }: PinnedStoryProps) {
+export default function PinnedStory({ chapters, introComplete = true }: PinnedStoryProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
@@ -147,21 +151,21 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useEffect(() => {
-    // Clear any existing triggers and context
-    triggersRef.current.forEach(t => t.kill());
-    triggersRef.current = [];
-    gsapCtxRef.current?.revert();
-    gsapCtxRef.current = null;
+  useIntroAnimations(
+    introComplete,
+    () => {
+      triggersRef.current.forEach((t) => t.kill());
+      triggersRef.current = [];
+      gsapCtxRef.current?.revert();
+      gsapCtxRef.current = null;
 
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const timer = setTimeout(() => {
       const root = rootRef.current;
       const stage = stageRef.current;
       if (!root || !stage) return;
+
+      const prefersReduced =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       const ctx = gsap.context(() => {
         const chapterEls = gsap.utils.toArray<HTMLElement>('[data-chapter]');
@@ -170,7 +174,14 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
         if (chapterEls.length === 0 || stageVisuals.length === 0) return;
 
         // Set initial state
-        gsap.set(stageVisuals, { opacity: 0, scale: prefersReduced ? 1 : 1.05 });
+        gsap.set(stageVisuals, {
+          opacity: 0,
+          scale: prefersReduced ? 1 : 1.05,
+          x: 0,
+          rotateY: 0,
+          filter: 'blur(0px)',
+          transformPerspective: 900,
+        });
         gsap.set(stageVisuals[0], { opacity: 1, scale: 1 });
 
         // Only use pinning on desktop - NOT on mobile
@@ -178,7 +189,7 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
           const pinTrigger = ScrollTrigger.create({
             trigger: root,
             start: 'top top',
-            end: () => `+=${chapterEls.length * window.innerHeight * 0.8}`,
+            end: () => `+=${chapterEls.length * window.innerHeight * 0.65}`,
             pin: stage,
             pinSpacing: true,
             scrub: 0.5,
@@ -197,52 +208,65 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
           });
           triggersRef.current.push(trigger);
 
-          // Animate chapter content on entry
           const contentEl = chapterContentRefs.current[idx];
           if (contentEl) {
             const elements = contentEl.querySelectorAll('.reveal-item');
-            if (prefersReduced) {
-              gsap.set(elements, { y: 0, opacity: 1 });
-            } else {
-              gsap.set(elements, { y: 30, opacity: 0 });
-
-              const contentTrigger = ScrollTrigger.create({
-                trigger: el,
-                start: 'top 85%',
-                onEnter: () => {
-                  gsap.to(elements, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.6,
-                    stagger: 0.06,
-                    ease: 'power2.out',
-                  });
-                },
-              });
-              triggersRef.current.push(contentTrigger);
+            const revealSt = revealFrom(el, elements, {
+              y: 30,
+              duration: 0.6,
+              stagger: 0.06,
+              start: 'top 88%',
+            });
+            if (revealSt) {
+              triggersRef.current.push(revealSt);
             }
           }
         });
 
         function updateActive(idx: number) {
           if (idx === activeRef.current) return;
+          const prev = activeRef.current;
           activeRef.current = idx;
           setActive(idx);
 
           if (!prefersReduced) {
-            gsap.to(stageVisuals, {
+            const direction = idx > prev ? 1 : -1;
+            const outgoing = stageVisuals[prev];
+            const incoming = stageVisuals[idx];
+            if (!outgoing || !incoming) return;
+
+            gsap.to(outgoing, {
+              x: direction * -120,
+              rotateY: direction * -22,
               opacity: 0,
-              scale: 1.02,
-              duration: 0.3,
+              scale: 0.92,
+              filter: 'blur(6px)',
+              duration: 0.55,
+              ease: 'power3.in',
               overwrite: true,
             });
-            gsap.to(stageVisuals[idx], {
-              opacity: 1,
-              scale: 1,
-              duration: 0.5,
-              delay: 0.1,
-              overwrite: true,
-            });
+
+            gsap.fromTo(
+              incoming,
+              {
+                x: direction * 140,
+                rotateY: direction * 22,
+                opacity: 0,
+                scale: 1.08,
+                filter: 'blur(8px)',
+              },
+              {
+                x: 0,
+                rotateY: 0,
+                opacity: 1,
+                scale: 1,
+                filter: 'blur(0px)',
+                duration: 0.75,
+                ease: 'power3.out',
+                delay: 0.05,
+                overwrite: true,
+              }
+            );
           } else {
             gsap.set(stageVisuals, { opacity: 0 });
             gsap.set(stageVisuals[idx], { opacity: 1 });
@@ -251,16 +275,16 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
       }, root);
 
       gsapCtxRef.current = ctx;
-    }, 100);
 
-    return () => {
-      clearTimeout(timer);
-      triggersRef.current.forEach(t => t.kill());
-      triggersRef.current = [];
-      gsapCtxRef.current?.revert();
-      gsapCtxRef.current = null;
-    };
-  }, [chapters.length, isMobile]);
+      return () => {
+        triggersRef.current.forEach((t) => t.kill());
+        triggersRef.current = [];
+        ctx.revert();
+        gsapCtxRef.current = null;
+      };
+    },
+    [chapters.length, isMobile]
+  );
 
   const currentChapter = chapters[active];
 
@@ -287,13 +311,17 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
           />
 
           {/* Stage visuals */}
-          <div className="relative w-full max-w-md lg:max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl group" onMouseMove={handleMouseMove}>
+          <div
+            className="relative w-full max-w-md lg:max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl group perspective-1000"
+            onMouseMove={handleMouseMove}
+            style={{ transformStyle: 'preserve-3d' }}
+          >
             {chapters.map((chapter, i) => (
               <div
                 key={i}
                 data-stage-visual
                 className="absolute inset-0 will-change-transform"
-                style={{ opacity: i === 0 ? 1 : 0 }}
+                aria-hidden={active !== i}
               >
                 <img
                   src={chapter.visualSrc}
@@ -321,7 +349,7 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
             <article
               key={i}
               data-chapter
-              className={`${isMobile ? 'min-h-auto py-12' : 'min-h-screen'} flex items-center px-6 lg:px-16 py-12 lg:py-24 border-b border-gray-200 dark:border-white/10 last:border-b-0`}
+              className={`${isMobile ? '' : 'min-h-screen'} flex items-center px-6 lg:px-16 py-12 lg:py-24 border-b border-gray-200 dark:border-white/10 last:border-b-0`}
             >
               <div 
                 ref={(el) => { chapterContentRefs.current[i] = el; }}
@@ -395,7 +423,7 @@ export default function PinnedStory({ chapters }: PinnedStoryProps) {
                   href="#contact"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    scrollToSection('contact');
                   }}
                   className="reveal-item group inline-flex items-center gap-3 text-gray-900 dark:text-white font-opensans font-semibold transition-colors duration-300"
                 >

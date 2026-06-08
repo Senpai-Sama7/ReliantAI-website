@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, Loader2, Shield, Award, Building2 } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { submitToWeb3Forms } from '../lib/web3forms';
+import { revealFrom } from '@/lib/reveal';
+import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -16,7 +18,11 @@ const contactSchema = z.object({
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Contact = () => {
+interface ContactProps {
+  introComplete?: boolean;
+}
+
+const Contact = ({ introComplete = true }: ContactProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -33,103 +39,61 @@ const Contact = () => {
   });
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header reveal
-      const headerElements = headingRef.current?.querySelectorAll('.reveal-item');
-      if (headerElements) {
-        gsap.set(headerElements, { y: 40, opacity: 0 });
-        
-        const headerTrigger = ScrollTrigger.create({
-          trigger: headingRef.current,
-          start: 'top 85%',
-          onEnter: () => {
-            gsap.to(headerElements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
-              ease: 'power3.out',
-            });
-          },
-        });
-        triggersRef.current.push(headerTrigger);
-      }
+  const ctxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
-      // Form reveal - slide from left
-      if (formRef.current) {
-        gsap.set(formRef.current, { x: -40, opacity: 0 });
-        
-        const formTrigger = ScrollTrigger.create({
-          trigger: formRef.current,
-          start: 'top 85%',
-          onEnter: () => {
-            gsap.to(formRef.current, {
-              x: 0,
-              opacity: 1,
-              duration: 0.9,
-              ease: 'power3.out',
-            });
-          },
-        });
-        triggersRef.current.push(formTrigger);
-      }
-
-      // Info reveal - slide from right
-      const infoElements = infoRef.current?.querySelectorAll('.info-reveal');
-      if (infoRef.current && infoElements) {
-        gsap.set(infoRef.current, { x: 40, opacity: 0 });
-        gsap.set(infoElements, { y: 20, opacity: 0 });
-        
-        const infoTrigger = ScrollTrigger.create({
-          trigger: infoRef.current,
-          start: 'top 85%',
-          onEnter: () => {
-            gsap.to(infoRef.current, {
-              x: 0,
-              opacity: 1,
-              duration: 0.9,
-              ease: 'power3.out',
-            });
-            gsap.to(infoElements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.5,
-              stagger: 0.08,
-              delay: 0.2,
-              ease: 'power2.out',
-            });
-          },
-        });
-        triggersRef.current.push(infoTrigger);
-      }
-
-      // Footer reveal
-      if (footerRef.current) {
-        gsap.set(footerRef.current, { y: 30, opacity: 0 });
-        
-        const footerTrigger = ScrollTrigger.create({
-          trigger: footerRef.current,
-          start: 'top 95%',
-          onEnter: () => {
-            gsap.to(footerRef.current, {
-              y: 0,
-              opacity: 1,
-              duration: 0.7,
-              ease: 'power3.out',
-            });
-          },
-        });
-        triggersRef.current.push(footerTrigger);
-      }
-    }, sectionRef);
-
-    return () => {
-      triggersRef.current.forEach(st => st.kill());
+  useIntroAnimations(
+    introComplete,
+    () => {
+      ctxRef.current?.revert();
+      triggersRef.current.forEach((st) => st.kill());
       triggersRef.current = [];
-      ctx.revert();
-    };
-  }, []);
+
+      const ctx = gsap.context(() => {
+        const headerTween = revealFrom(headingRef.current, '.reveal-item', {
+          y: 40,
+          duration: 0.8,
+          stagger: 0.1,
+        });
+        if (headerTween) triggersRef.current.push(headerTween);
+
+        const formTween = revealFrom(formRef.current, formRef.current, {
+          x: -40,
+          duration: 0.9,
+        });
+        if (formTween) triggersRef.current.push(formTween);
+
+        const infoTween = revealFrom(infoRef.current, infoRef.current, {
+          x: 40,
+          duration: 0.9,
+        });
+        if (infoTween) triggersRef.current.push(infoTween);
+
+        const infoElementsTween = revealFrom(
+          infoRef.current,
+          infoRef.current?.querySelectorAll('.info-reveal') ?? [],
+          { y: 20, duration: 0.5, stagger: 0.08 }
+        );
+        if (infoElementsTween) triggersRef.current.push(infoElementsTween);
+
+        const footerTween = revealFrom(footerRef.current, footerRef.current, {
+          y: 30,
+          duration: 0.7,
+          start: 'top 95%',
+        });
+        if (footerTween) triggersRef.current.push(footerTween);
+      }, sectionRef);
+
+      ctxRef.current = ctx;
+
+      return () => {
+        triggersRef.current.forEach((st) => st.kill());
+        triggersRef.current = [];
+        ctx.revert();
+        ctxRef.current = null;
+      };
+    },
+    []
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

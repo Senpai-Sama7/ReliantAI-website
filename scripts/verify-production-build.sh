@@ -70,7 +70,8 @@ if grep -qE 'https://reliantai\.org' "$DIST_DIR/index.html"; then
   exit 1
 fi
 
-for asset in og-image.png logo.png favicon.svg manifest.webmanifest llms.txt llms-full.txt sitemap.xml robots.txt; do
+for asset in og-image.png logo.png favicon.svg manifest.webmanifest llms.txt llms-full.txt sitemap.xml robots.txt \
+  project-metalforge.webp project-oilfield.webp project-homeservices.webp project-medical.webp; do
   if [ ! -f "$DIST_DIR/$asset" ]; then
     echo "Production build verification failed: $DIST_DIR/$asset is missing."
     exit 1

@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Code2, Palette, TrendingUp, Box, ArrowRight } from 'lucide-react';
+import { revealFrom } from '@/lib/reveal';
+import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 // Animated background SVG per service
 const CardBackground = ({ index, mousePos }: { index: number; mousePos: { x: number; y: number } }) => {
@@ -129,83 +131,68 @@ const services = [
   },
 ];
 
-export default function ServicesV2() {
+interface ServicesV2Props {
+  introComplete?: boolean;
+}
+
+export default function ServicesV2({ introComplete = true }: ServicesV2Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const [activeService, setActiveService] = useState(0);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const ctxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header reveal
-      const headerElements = headerRef.current?.querySelectorAll('.reveal-item');
-      if (headerElements) {
-        gsap.set(headerElements, { y: 40, opacity: 0 });
-        
-        const headerTrigger = ScrollTrigger.create({
-          trigger: headerRef.current,
-          start: 'top 92%',
-          onEnter: () => {
-            gsap.to(headerElements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
-              ease: 'power3.out',
-            });
-          },
-        });
-        triggersRef.current.push(headerTrigger);
-      }
-
-      // Service items - staggered reveal
-      const items = gsap.utils.toArray<HTMLElement>('[data-service-item]');
-      
-      items.forEach((item, i) => {
-        const elements = item.querySelectorAll('.service-reveal');
-        gsap.set(elements, { y: 30, opacity: 0 });
-        gsap.set(item, { opacity: 0, y: 40 });
-
-        const trigger = ScrollTrigger.create({
-          trigger: item,
-          start: 'top 92%',
-          onEnter: () => {
-            gsap.to(item, {
-              opacity: 1,
-              y: 0,
-              duration: 0.6,
-              ease: 'power3.out',
-            });
-            gsap.to(elements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.5,
-              stagger: 0.06,
-              delay: 0.1,
-              ease: 'power2.out',
-            });
-          },
-        });
-        triggersRef.current.push(trigger);
-
-        // Set active on scroll
-        const activeTrigger = ScrollTrigger.create({
-          trigger: item,
-          start: 'top center',
-          end: 'bottom center',
-          onEnter: () => setActiveService(i),
-          onEnterBack: () => setActiveService(i),
-        });
-        triggersRef.current.push(activeTrigger);
-      });
-    }, sectionRef);
-
-    return () => {
-      ctx.revert();
-      triggersRef.current.forEach(t => t.kill());
+  useIntroAnimations(
+    introComplete,
+    () => {
+      ctxRef.current?.revert();
+      triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
-    };
-  }, []);
+
+      const ctx = gsap.context(() => {
+        const headerTween = revealFrom(headerRef.current, '.reveal-item', {
+          y: 40,
+          duration: 0.8,
+          stagger: 0.1,
+          start: 'top 88%',
+        });
+        if (headerTween) triggersRef.current.push(headerTween);
+
+        const items = gsap.utils.toArray<HTMLElement>('[data-service-item]');
+
+        items.forEach((item, i) => {
+          gsap.set(item, { opacity: 1, y: 0 });
+
+          const elementsTween = revealFrom(item, item.querySelectorAll('.service-reveal'), {
+            y: 30,
+            duration: 0.5,
+            stagger: 0.06,
+            start: 'top 88%',
+          });
+          if (elementsTween) triggersRef.current.push(elementsTween);
+
+          const activeTrigger = ScrollTrigger.create({
+            trigger: item,
+            start: 'top center',
+            end: 'bottom center',
+            onEnter: () => setActiveService(i),
+            onEnterBack: () => setActiveService(i),
+          });
+          triggersRef.current.push(activeTrigger);
+        });
+      }, sectionRef);
+
+      ctxRef.current = ctx;
+
+      return () => {
+        ctx.revert();
+        triggersRef.current.forEach((t) => t.kill());
+        triggersRef.current = [];
+        ctxRef.current = null;
+      };
+    },
+    []
+  );
 
   return (
     <section

@@ -5,6 +5,8 @@ import { ArrowDown } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import LogoReveal from '../components/LogoReveal';
 import CountUp from '../components/CountUp';
+import { prefersReducedMotion } from '@/lib/motion';
+import { scrollToSection } from '@/lib/scroll';
 
 // Lazy load 3D component to reduce initial bundle and TBT
 const TorusKnot3D = lazy(() => import('../components/TorusKnot3D'));
@@ -17,6 +19,8 @@ interface HeroV2Props {
 
 export default function HeroV2({ introComplete = true }: HeroV2Props) {
   const sectionRef = useRef<HTMLElement>(null);
+  const crownRef = useRef<HTMLElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -25,17 +29,15 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
   const orbit2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const prefersReducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion()) {
       const setVisible = (element: HTMLElement | null) => {
         if (element) {
           element.style.transform = 'translateY(0)';
           element.style.opacity = '1';
         }
       };
+      setVisible(crownRef.current);
+      setVisible(bodyRef.current);
       setVisible(headlineRef.current);
       setVisible(subheadRef.current);
       setVisible(ctaRef.current);
@@ -61,6 +63,9 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         const tl = gsap.timeline({ delay: 0.1 });
 
         tl.from(
+          crownRef.current,
+          { y: -24, opacity: 0, duration: 1, ease: 'power3.out' }
+        ).from(
           headlineRef.current,
           { y: 80, opacity: 0, duration: 1.2, ease: 'power3.out' }
         )
@@ -103,18 +108,54 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
           duration: 25,
           ease: 'none',
           repeat: -1,
-          });
-        }, sectionRef);
+        });
+
+        // Hero exit — fly toward the next world on scroll
+        const exitTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.2,
+          },
+        });
+
+        exitTl
+          .to(
+            bodyRef.current,
+            {
+              x: () => -window.innerWidth * 0.22,
+              rotateY: -12,
+              opacity: 0.35,
+              scale: 0.94,
+              ease: 'none',
+              transformPerspective: 1200,
+            },
+            0
+          )
+          .to(
+            crownRef.current,
+            { y: -40, opacity: 0.15, ease: 'none' },
+            0
+          )
+          .to(
+            orbit1Ref.current,
+            { x: 80, opacity: 0.2, ease: 'none' },
+            0
+          )
+          .to(
+            orbit2Ref.current,
+            { x: 120, opacity: 0.15, ease: 'none' },
+            0
+          );
+      }, sectionRef);
 
       return () => ctx.revert();
     }
   }, [introComplete]);
 
-  const scrollToWork = () => {
-    const workSection = document.getElementById('work');
-    if (workSection) {
-      workSection.scrollIntoView({ behavior: 'smooth' });
-    }
+  const scrollToWorlds = () => {
+    scrollToSection('worlds', 0);
   };
 
   const stats = [
@@ -127,7 +168,8 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#f7f7f7] dark:bg-[#0a0a0a] transition-colors duration-500 pt-32 lg:pt-40"
+      className="relative min-h-[100dvh] w-full flex flex-col overflow-hidden bg-[#f7f7f7] dark:bg-[#0a0a0a] transition-colors duration-500"
+      style={{ perspective: '1200px' }}
     >
       {/* Subtle gradient background */}
       <div className="absolute inset-0">
@@ -195,17 +237,38 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         />
       </div>
 
-      {/* Main Content - Centered - Higher z-index to stay above 3D */}
-      <div className="relative z-20 text-center px-6 max-w-5xl mx-auto py-16">
-        {/* Animated Logo */}
-        <div className="mb-8">
+      {/* Crown header — LogoReveal typewriter + style cycle after intro */}
+      {introComplete && (
+        <header
+          ref={crownRef}
+          className="relative z-30 w-full pt-28 sm:pt-32 lg:pt-36 pb-4 lg:pb-6 text-center px-6"
+        >
+          <div className="flex items-center justify-center gap-4 mb-6 lg:mb-8 opacity-80">
+            <span className="hidden sm:block w-10 lg:w-16 h-px bg-gradient-to-r from-transparent to-orange/60" />
+            <span className="font-opensans text-orange text-[10px] sm:text-xs uppercase tracking-[0.45em] sm:tracking-[0.55em]">
+              Boutique Digital Craftsmanship
+            </span>
+            <span className="hidden sm:block w-10 lg:w-16 h-px bg-gradient-to-l from-transparent to-orange/60" />
+          </div>
           <LogoReveal />
-        </div>
+        </header>
+      )}
 
-        {/* Main Headline - Static */}
-        <h1
+      {/* Main hero body — value prop one tier below the crown */}
+      <div
+        ref={bodyRef}
+        className="relative z-20 flex-1 flex flex-col items-center justify-center text-center px-6 max-w-5xl mx-auto pb-20 lg:pb-24"
+        style={{ transformStyle: 'preserve-3d' }}
+      >
+        <h1 className="sr-only">
+          Reliant AI — Luxury Web Design Redefined for Houston Businesses
+        </h1>
+
+        {/* Display headline (visual tier 2) */}
+        <h2
           ref={headlineRef}
           className="font-teko text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.85] mb-8"
+          aria-hidden="true"
         >
           <span className="block text-gray-900 dark:text-white">
             LUXURY WEB
@@ -216,7 +279,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
           <span className="block text-gray-500 dark:text-white/40 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mt-2">
             REDEFINED
           </span>
-        </h1>
+        </h2>
 
         {/* Subheadline */}
         <p
@@ -230,7 +293,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         {/* CTA - subtle hover effects */}
         <div ref={ctaRef}>
           <button
-            onClick={scrollToWork}
+            onClick={scrollToWorlds}
             className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-opensans font-semibold rounded-full overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-orange/10"
           >
             {/* Subtle shine effect on hover */}
@@ -239,7 +302,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
             {/* Glow effect */}
             <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-orange/0 via-orange/5 to-orange/0" />
             
-            <span className="relative transform group-hover:scale-[1.02] transition-transform duration-300">Explore Our Work</span>
+            <span className="relative transform group-hover:scale-[1.02] transition-transform duration-300">Enter The Worlds</span>
             <ArrowDown 
               size={18} 
               className="relative transform group-hover:translate-y-0.5 transition-transform duration-300" 

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import ThemeToggle from './ThemeToggle';
+import { scrollToSection } from '@/lib/scroll';
+import { onZoneChange } from '@/lib/experienceBus';
+import type { ExperienceZoneId } from '@/data/experienceZones';
 
-gsap.registerPlugin(ScrollToPlugin);
-
-const NAV_ITEMS = [
+const NAV_ITEMS: { label: string; id: ExperienceZoneId }[] = [
   { label: 'Work', id: 'work' },
   { label: 'Services', id: 'services' },
   { label: 'About', id: 'about' },
@@ -17,57 +16,24 @@ const NAV_ITEMS = [
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState<ExperienceZoneId>('hero');
 
   useEffect(() => {
-    const sections = NAV_ITEMS.map(item => document.getElementById(item.id));
-    const heroSection = document.getElementById('hero');
-
     const handleScroll = () => {
-      // Check if we are at the very top of the page
-      if (window.scrollY < 50) {
-        setActiveSection('hero');
-        setIsScrolled(false);
-        return;
-      }
-
       setIsScrolled(window.scrollY > 100);
-
-      const scrollPos = window.scrollY + window.innerHeight / 3;
-
-      if (heroSection) {
-        const top = heroSection.offsetTop;
-        const bottom = top + heroSection.offsetHeight;
-        if (scrollPos >= top && scrollPos < bottom) {
-          setActiveSection('hero');
-          return;
-        }
-      }
-
-      sections.forEach((section, index) => {
-        if (section) {
-          const top = section.offsetTop;
-          const bottom = top + section.offsetHeight;
-          if (scrollPos >= top && scrollPos < bottom) {
-            setActiveSection(NAV_ITEMS[index].id);
-          }
-        }
-      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const unsubZone = onZoneChange((zone) => setActiveSection(zone.id));
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      unsubZone();
+    };
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      gsap.to(window, {
-        duration: 1.2,
-        scrollTo: { y: section, offsetY: 80 },
-        ease: 'power3.inOut',
-      });
-    }
+  const handleSectionScroll = (sectionId: string, offsetY = 80) => {
+    scrollToSection(sectionId, offsetY);
     setIsMobileMenuOpen(false);
   };
 
@@ -84,12 +50,12 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => handleSectionScroll('hero', 0)}
               className="flex items-center gap-2 group"
               aria-label="Reliant AI Logo"
             >
               <div className="w-10 h-10 bg-orange rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-lg group-hover:shadow-orange/30">
-                <span className="font-teko text-2xl font-bold text-white">N</span>
+                <span className="font-teko text-2xl font-bold text-white">R</span>
               </div>
               <span className="font-teko text-2xl font-semibold tracking-wide hidden sm:block text-gray-900 dark:text-white transition-colors duration-300">
                 RELIANT AI
@@ -101,7 +67,7 @@ const Navigation = () => {
               {NAV_ITEMS.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => scrollToSection(item.id)}
+                  onClick={() => handleSectionScroll(item.id)}
                   className={`relative font-opensans text-sm transition-colors duration-300 group ${
                     activeSection === item.id
                       ? 'text-orange'
@@ -120,7 +86,7 @@ const Navigation = () => {
             <div className="hidden lg:flex items-center gap-4">
               <ThemeToggle />
               <button
-                onClick={() => scrollToSection('contact')}
+                onClick={() => handleSectionScroll('contact')}
                 className="group relative px-6 py-2.5 bg-orange text-white font-opensans text-sm font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-orange/30"
               >
                 <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -132,7 +98,7 @@ const Navigation = () => {
             <div className="flex items-center gap-3 lg:hidden">
               <a
                 href="#contact"
-                onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}
+                onClick={(e) => { e.preventDefault(); handleSectionScroll('contact'); }}
                 className="px-3 py-1.5 bg-orange text-white font-opensans text-xs font-semibold rounded-lg hover:shadow-lg hover:shadow-orange/30 transition-all duration-300"
               >
                 Get a Quote
@@ -161,7 +127,7 @@ const Navigation = () => {
           {NAV_ITEMS.map((item, index) => (
             <button
               key={item.id}
-              onClick={() => scrollToSection(item.id)}
+              onClick={() => handleSectionScroll(item.id)}
               className={`font-teko text-4xl transition-all duration-300 ${
                 activeSection === item.id
                   ? 'text-orange'
@@ -177,7 +143,7 @@ const Navigation = () => {
             </button>
           ))}
           <button
-            onClick={() => scrollToSection('contact')}
+            onClick={() => handleSectionScroll('contact')}
             className="mt-8 px-8 py-3 bg-orange text-white font-opensans text-lg font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-orange/20 hover:scale-105"
             style={{
               transitionDelay: isMobileMenuOpen ? `${NAV_ITEMS.length * 0.05}s` : '0s',

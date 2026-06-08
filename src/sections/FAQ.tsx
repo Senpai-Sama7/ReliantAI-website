@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown } from 'lucide-react';
+import { revealFrom } from '@/lib/reveal';
+import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,66 +34,55 @@ const faqs = [
   }
 ];
 
-const FAQ = () => {
+interface FAQProps {
+  introComplete?: boolean;
+}
+
+const FAQ = ({ introComplete = true }: FAQProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const faqsRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const ctxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header reveal
-      const headerElements = headerRef.current?.querySelectorAll('.reveal-item');
-      if (headerElements) {
-        gsap.set(headerElements, { y: 40, opacity: 0 });
-        
-        const headerTrigger = ScrollTrigger.create({
-          trigger: headerRef.current,
-          start: 'top 85%',
-          onEnter: () => {
-            gsap.to(headerElements, {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
-              ease: 'power3.out',
-            });
-          },
-        });
-        triggersRef.current.push(headerTrigger);
-      }
-
-      // FAQ items staggered reveal
-      const items = faqsRef.current?.querySelectorAll('.faq-item');
-      if (items) {
-        items.forEach((item, i) => {
-          gsap.set(item, { y: 30, opacity: 0 });
-          
-          const itemTrigger = ScrollTrigger.create({
-            trigger: item,
-            start: 'top 90%',
-            onEnter: () => {
-              gsap.to(item, {
-                y: 0,
-                opacity: 1,
-                duration: 0.6,
-                delay: i * 0.08,
-                ease: 'power3.out',
-              });
-            },
-          });
-          triggersRef.current.push(itemTrigger);
-        });
-      }
-    }, sectionRef);
-
-    return () => {
-      ctx.revert();
-      triggersRef.current.forEach(t => t.kill());
+  useIntroAnimations(
+    introComplete,
+    () => {
+      ctxRef.current?.revert();
+      triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
-    };
-  }, []);
+
+      const ctx = gsap.context(() => {
+        const headerTween = revealFrom(headerRef.current, '.reveal-item', {
+          y: 40,
+          duration: 0.8,
+          stagger: 0.1,
+        });
+        if (headerTween) triggersRef.current.push(headerTween);
+
+        const items = faqsRef.current?.querySelectorAll('.faq-item');
+        items?.forEach((item) => {
+          const itemTween = revealFrom(item, item, {
+            y: 30,
+            duration: 0.6,
+            start: 'top 90%',
+          });
+          if (itemTween) triggersRef.current.push(itemTween);
+        });
+      }, sectionRef);
+
+      ctxRef.current = ctx;
+
+      return () => {
+        ctx.revert();
+        triggersRef.current.forEach((t) => t.kill());
+        triggersRef.current = [];
+        ctxRef.current = null;
+      };
+    },
+    []
+  );
 
   return (
     <section

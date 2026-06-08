@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
+    "smoke:immersive": "node ./scripts/smoke-immersive.mjs",
     "quality:check": "bash ./scripts/quality-loop.sh",
     "quality:fix": "eslint . --fix"
   },

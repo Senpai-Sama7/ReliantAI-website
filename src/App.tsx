@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/Navigation';
 import IntroOverlay from './components/IntroOverlay';
+import CookieConsent from './components/CookieConsent';
 import FloatingCTA from './components/FloatingCTA';
 import ExitIntentPopup from './components/ExitIntentPopup';
 import SocialProofToast from './components/SocialProofToast';
@@ -16,8 +18,11 @@ import { applyRouteSeo } from './lib/seo';
 import { Toaster } from 'sonner';
 import './App.css';
 
-// Import sections
 import HeroV2 from './sections/HeroV2';
+import ScenePortal from './components/ScenePortal';
+import ExperienceZoneTracker from './components/immersive/ExperienceZoneTracker';
+import ImmersiveAtmosphere from './components/immersive/ImmersiveAtmosphere';
+import ZoneHud from './components/immersive/ZoneHud';
 import PinnedStory from './sections/PinnedStory';
 import ServicesV2 from './sections/ServicesV2';
 import TestimonialsV2 from './sections/TestimonialsV2';
@@ -33,12 +38,10 @@ function App() {
   useTheme();
   const [introComplete, setIntroComplete] = useState(false);
 
-  // Memoize completion handler to prevent unnecessary re-renders of IntroOverlay
   const handleIntroComplete = useCallback(() => {
     setIntroComplete(true);
   }, []);
 
-  // Failsafe: Ensure content is shown after a reasonable timeout
   useEffect(() => {
     const timer = setTimeout(() => {
       setIntroComplete(true);
@@ -46,7 +49,6 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Check current path for routing
   const path = window.location.pathname;
   const isPrivacyPolicy = path === '/privacy-policy';
   const isTermsOfService = path === '/terms-of-service';
@@ -54,31 +56,23 @@ function App() {
   const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isShowcase;
   const isStandalonePage = isPrivacyPolicy || isTermsOfService || isShowcase;
 
-  // Apply per-route SEO (title, description, canonical, Open Graph, robots).
   useEffect(() => {
     applyRouteSeo(window.location.pathname);
   }, []);
 
   useEffect(() => {
-    if (isStandalonePage) return;
+    if (isStandalonePage || !introComplete) return;
 
-    // Refresh ScrollTrigger when intro completes or after a delay
-    const refresh = () => {
-      ScrollTrigger.refresh();
+    const refresh = () => ScrollTrigger.refresh();
+    refresh();
+    const t1 = setTimeout(refresh, 500);
+    const t2 = setTimeout(refresh, 1200);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
-
-    if (introComplete) {
-      refresh();
-      // Also refresh after a small delay to catch late-rendering elements
-      const timer = setTimeout(refresh, 500);
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(refresh, 2000);
-      return () => clearTimeout(timer);
-    }
   }, [isStandalonePage, introComplete]);
 
-  // Render standalone pages without the main layout
   if (isPrivacyPolicy) {
     return <PrivacyPolicy />;
   }
@@ -95,8 +89,6 @@ function App() {
     return <NotFound />;
   }
 
-  // No need for separate mounted check; we want it to render
-
   return (
     <SmoothScrollProvider>
       <a href="#main" className="skip-link">
@@ -106,33 +98,33 @@ function App() {
       <FloatingCTA />
       <ExitIntentPopup />
       <SocialProofToast />
+      <CookieConsent ready={introComplete} />
       <Toaster position="top-right" richColors />
-      
+
+      {introComplete && <ImmersiveAtmosphere />}
+      {introComplete && <ZoneHud />}
+      <div id="zone-announcer" className="sr-only" aria-live="polite" aria-atomic="true" />
+      <ExperienceZoneTracker enabled={introComplete} />
+
       <div className="relative min-h-screen bg-[#f7f7f7] dark:bg-[#0a0a0a] text-gray-900 dark:text-white overflow-x-hidden">
-        {/* Navigation */}
         <Navigation />
 
-        {/* Main Content */}
-        <main id="main" role="main" aria-label="Primary content">
-          {/* Hero Section */}
-          <HeroV2 introComplete={introComplete} />
-          
-          {/* Pinned Story / Case Studies */}
-          <section id="work" aria-label="Case studies overview">
-            <PinnedStory chapters={caseStudyChapters} />
-          </section>
-          
-          {/* Services Section */}
-          <ServicesV2 />
-          
-          {/* Testimonials Section */}
-          <TestimonialsV2 />
-          
-          {/* About, FAQ, Contact */}
-          <About />
-          <FAQ />
-          <Contact />
-        </main>
+        <ErrorBoundary fallbackLabel="Scroll story modules will reload safely.">
+          <main id="main" role="main" aria-label="Primary content">
+            <HeroV2 introComplete={introComplete} />
+            <ScenePortal id="worlds" introComplete={introComplete} />
+
+            <section id="work" aria-label="Case studies overview">
+              <PinnedStory chapters={caseStudyChapters} introComplete={introComplete} />
+            </section>
+
+            <ServicesV2 introComplete={introComplete} />
+            <TestimonialsV2 introComplete={introComplete} />
+            <About introComplete={introComplete} />
+            <FAQ introComplete={introComplete} />
+            <Contact introComplete={introComplete} />
+          </main>
+        </ErrorBoundary>
       </div>
     </SmoothScrollProvider>
   );
