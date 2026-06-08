@@ -37,4 +37,24 @@ if find "$DIST_DIR" -type f -name '*.map' -print -quit | grep -q .; then
   exit 1
 fi
 
+if [ ! -f "$DIST_DIR/index.html" ]; then
+  echo "Production build verification failed: $DIST_DIR/index.html is missing."
+  exit 1
+fi
+
+if ! grep -q "localStorage.getItem('theme')" "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: theme boot script is missing from dist/index.html."
+  exit 1
+fi
+
+if ! grep -q '#f7f7f7' "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: light-mode critical CSS is missing from dist/index.html."
+  exit 1
+fi
+
+if ! grep -q 'html.dark body' "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: dark-mode critical CSS is missing from dist/index.html."
+  exit 1
+fi
+
 echo "Production build verification passed."

@@ -1,0 +1,28 @@
+# GitHub Pages uses Jekyll by default. This Vite SPA deploys to Vercel;
+# exclude dev/source artifacts so Pages builds do not fail on Liquid-like
+# syntax inside internal markdown documentation.
+exclude:
+  - AGENTS.md
+  - DIAGNOSTIC_REPORT.md
+  - INFLUENCE_MATRIX_IMPLEMENTATION.md
+  - README.md
+  - node_modules
+  - dist
+  - src
+  - public
+  - scripts
+  - reports
+  - .github
+  - .serena
+  - package.json
+  - package-lock.json
+  - vite.config.ts
+  - tsconfig.json
+  - tsconfig.app.json
+  - tsconfig.node.json
+  - tailwind.config.js
+  - postcss.config.js
+  - eslint.config.js
+  - components.json
+  - vercel.json
+  - index.html
