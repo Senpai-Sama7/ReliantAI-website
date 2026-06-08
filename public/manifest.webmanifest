@@ -1,0 +1,21 @@
+{
+  "name": "Reliant AI — Houston Web Design",
+  "short_name": "Reliant AI",
+  "description": "Houston's custom web design agency for small businesses. Hand-coded React and TypeScript websites for metal fabrication, oilfield, home services, and medical practices.",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ff6e00",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["business", "design", "productivity"],
+  "icons": [
+    { "src": "/favicon-16.png", "sizes": "16x16", "type": "image/png" },
+    { "src": "/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

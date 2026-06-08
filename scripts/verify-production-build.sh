@@ -57,4 +57,35 @@ if ! grep -q 'html.dark body' "$DIST_DIR/index.html"; then
   exit 1
 fi
 
+# --- SEO / GEO / AEO guards ---
+
+if ! grep -q 'rel="canonical" href="https://www.reliantai.org/"' "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: www canonical is missing from dist/index.html."
+  exit 1
+fi
+
+if grep -qE 'https://reliantai\.org' "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: bare-apex URL found in dist/index.html (must use https://www.reliantai.org)."
+  grep -nE 'https://reliantai\.org' "$DIST_DIR/index.html" | head -n 5
+  exit 1
+fi
+
+for asset in og-image.png logo.png favicon.svg manifest.webmanifest llms.txt llms-full.txt sitemap.xml robots.txt; do
+  if [ ! -f "$DIST_DIR/$asset" ]; then
+    echo "Production build verification failed: $DIST_DIR/$asset is missing."
+    exit 1
+  fi
+done
+
+if ! grep -q 'og:image" content="https://www.reliantai.org/og-image.png"' "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: og:image does not reference the generated og-image.png."
+  exit 1
+fi
+
+# Validate every JSON-LD block parses as valid JSON.
+if ! node "$ROOT_DIR/scripts/validate-jsonld.mjs" "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: invalid JSON-LD structured data."
+  exit 1
+fi
+
 echo "Production build verification passed."

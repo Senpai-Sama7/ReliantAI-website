@@ -11,7 +11,7 @@
 - Set category: **Web Designer**
 - Add address: Houston, TX 77002
 - Add phone: (832) 947-7028
-- Add website: https://reliantai.org
+- Add website: https://www.reliantai.org
 - Upload photos of your work (screenshots of client sites)
 - Once created, add the profile URL to the `sameAs` array in `index.html` JSON-LD schema
 
@@ -20,9 +20,10 @@
 ## 2. Google Search Console
 
 - Go to https://search.google.com/search-console
-- Add property: `https://reliantai.org`
-- Verify via DNS or HTML file upload
-- Submit sitemap: `https://reliantai.org/sitemap.xml`
+- Add a **Domain** property: `reliantai.org` (covers both apex and www)
+- Verify via DNS TXT record
+- Submit sitemap: `https://www.reliantai.org/sitemap.xml`
+- Note: the canonical host is `https://www.reliantai.org` (apex 301/307-redirects to www)
 - Click "Request Indexing" on the main URL
 - Monitor for crawl errors weekly
 

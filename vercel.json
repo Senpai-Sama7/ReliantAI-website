@@ -100,6 +100,14 @@
       "destination": "/llms.txt"
     },
     {
+      "source": "/llms-full.txt",
+      "destination": "/llms-full.txt"
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "destination": "/manifest.webmanifest"
+    },
+    {
       "source": "/robots.txt",
       "destination": "/robots.txt"
     },

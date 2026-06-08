@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://reliantai.org/</loc>
-    <lastmod>2026-02-26</lastmod>
+    <loc>https://www.reliantai.org/</loc>
+    <lastmod>2026-06-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.reliantai.org/og-image.png</image:loc>
+      <image:title>Reliant AI — Houston Web Design</image:title>
+      <image:caption>Luxury web design redefined. Custom React and TypeScript websites for Houston small businesses.</image:caption>
+    </image:image>
   </url>
   <url>
-    <loc>https://reliantai.org/privacy-policy</loc>
-    <lastmod>2026-02-26</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://reliantai.org/terms-of-service</loc>
-    <lastmod>2026-02-26</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://reliantai.org/showcase</loc>
-    <lastmod>2026-05-07</lastmod>
+    <loc>https://www.reliantai.org/showcase</loc>
+    <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.reliantai.org/privacy-policy</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.reliantai.org/terms-of-service</loc>
+    <lastmod>2026-06-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

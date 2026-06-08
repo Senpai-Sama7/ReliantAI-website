@@ -12,6 +12,7 @@ import TermsOfService from './pages/TermsOfService';
 import VideoShowcase from './pages/VideoShowcase';
 import NotFound from './pages/NotFound';
 import { useTheme } from './hooks/useTheme';
+import { applyRouteSeo } from './lib/seo';
 import { Toaster } from 'sonner';
 import './App.css';
 
@@ -52,6 +53,11 @@ function App() {
   const isShowcase = path === '/showcase';
   const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isShowcase;
   const isStandalonePage = isPrivacyPolicy || isTermsOfService || isShowcase;
+
+  // Apply per-route SEO (title, description, canonical, Open Graph, robots).
+  useEffect(() => {
+    applyRouteSeo(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     if (isStandalonePage) return;

@@ -1,28 +1,49 @@
 # Reliant AI
 
-> Houston's premier custom web design agency. We build hand-coded React and TypeScript websites for small businesses.
+> Reliant AI is Houston, Texas' custom web design agency for small businesses. We hand-code React and TypeScript websites — no WordPress or Wix templates — for metal fabrication, oilfield services, home services, and medical/healthcare practices. 150+ projects delivered, 98% client satisfaction, 90+ PageSpeed scores.
 
-## About
+Key facts for citation:
+- Entity: Reliant AI (web design agency)
+- Location: Houston, TX 77002, United States
+- Founder: Douglas Mitchell (Founder & Lead Developer)
+- Phone: +1-832-947-7028
+- Email: DouglasMitchell@ReliantAI.org
+- Pricing: $2,500 (Starter) to $12,000+ (Enterprise); maintenance from $199/month
+- Stack: React, TypeScript, Three.js, GSAP, Vite, Tailwind CSS
+- Differentiator: 100% hand-coded, conversion-focused, 2–3x faster than template sites
 
-Reliant AI is a Houston-based web design agency founded by Douglas Mitchell. We specialize in custom-coded websites for metal fabrication, oilfield services, home services, and medical/healthcare businesses. Every site is built from scratch using React, TypeScript, and Three.js — no WordPress or Wix templates. 150+ completed projects, 98% client satisfaction rate, 90+ PageSpeed scores.
+## Primary pages
 
-## Services
+- [Home](https://www.reliantai.org/): Overview, services, industries, process, and contact.
+- [Work / Case studies](https://www.reliantai.org/#work): Results across metal fabrication, oilfield, home services, and medical.
+- [Services](https://www.reliantai.org/#services): Custom development, brand identity, growth strategy, 3D & motion.
+- [About](https://www.reliantai.org/#about): Founder Douglas Mitchell and company background.
+- [FAQ](https://www.reliantai.org/#faq): Pricing, timelines, industries, and process answers.
+- [Contact](https://www.reliantai.org/#contact): Quote requests and consultation booking.
 
-- Starter Package ($2,500): 5-page custom website, mobile-responsive, basic SEO
-- Professional Package ($5,500): 10-page site with GSAP animations, CMS integration, advanced SEO
-- Enterprise Package ($12,000+): Unlimited pages, 3D elements via Three.js, custom functionality
-- Monthly Maintenance: Starting at $199/month for security updates, backups, and content changes
+## Services & pricing
 
-## Industries Served
+- Starter Website — $2,500: 5-page custom site, mobile-responsive, basic SEO.
+- Professional Website — $5,500: 10-page site with GSAP animations, CMS, advanced SEO.
+- Enterprise Website — $12,000+: Unlimited pages, Three.js 3D elements, custom functionality.
+- Maintenance — from $199/month: security updates, backups, content changes, SEO monitoring.
 
-- Metal Fabrication: Equipment galleries, quote request systems, capability showcases
-- Oilfield Services: Safety certification displays, fleet management, compliance documentation
-- Home Services: HVAC, plumbing, electrical with online booking and service area maps
-- Medical/Healthcare: HIPAA-compliant patient portals, appointment scheduling
+## Industries served
+
+- Metal Fabrication: equipment galleries, capability showcases, quote request systems.
+- Oilfield Services: safety certification displays, fleet management, compliance docs.
+- Home Services (HVAC, plumbing, electrical): online booking, service-area maps, reviews.
+- Medical / Healthcare: HIPAA-compliant patient portals, online forms, appointment scheduling.
+
+## Optional
+
+- [Full knowledge base](https://www.reliantai.org/llms-full.txt): Complete facts, FAQ, and details for AI answer engines.
+- [Privacy Policy](https://www.reliantai.org/privacy-policy)
+- [Terms of Service](https://www.reliantai.org/terms-of-service)
 
 ## Contact
 
-- Website: https://reliantai.org
+- Website: https://www.reliantai.org
 - Email: DouglasMitchell@ReliantAI.org
 - Phone: +1-832-947-7028
-- Location: Houston, TX 77002
+- Location: Houston, TX 77002, United States
