@@ -1,25 +1,25 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { setLenisInstance } from '@/lib/lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true
+  );
+}
+
 export default function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<Lenis | null>(null);
-
   useEffect(() => {
-    // Check for reduced motion preference
-    const prefersReduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReduced) {
-      return () => {};
+    if (prefersReducedMotion()) {
+      setLenisInstance(null);
+      return () => setLenisInstance(null);
     }
 
-    // Initialize Lenis with conservative settings
     const lenis = new Lenis({
       duration: 1.0,
       smoothWheel: true,
@@ -27,7 +27,7 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
       touchMultiplier: 1.0,
     });
 
-    lenisRef.current = lenis;
+    setLenisInstance(lenis);
 
     // Sync Lenis with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
@@ -53,11 +53,23 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
       ScrollTrigger.refresh();
     }, 100);
 
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleMotionChange = () => {
+      if (motionQuery.matches) {
+        gsap.ticker.remove(tickerCallback);
+        lenis.destroy();
+        setLenisInstance(null);
+      }
+    };
+    motionQuery.addEventListener('change', handleMotionChange);
+
     return () => {
       clearTimeout(refreshTimer);
+      motionQuery.removeEventListener('change', handleMotionChange);
       window.removeEventListener('resize', handleResize);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
+      setLenisInstance(null);
     };
   }, []);
 

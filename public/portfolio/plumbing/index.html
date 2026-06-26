@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AquaGuard Plumbing Services — Trusted Flow. Premium Service.</title>
+<meta name="description" content="24/7 emergency plumbing services. Licensed, insured, and trusted since 2009. Same-day service across the metro area.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f7f5f0;color:#1a1a2e;line-height:1.6;overflow-x:hidden}
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+:root{
+ --navy:#0b1a2e;
+ --teal:#1a7a7a;
+ --teal-light:#219b9b;
+ --gold:#c9953c;
+ --gold-light:#dfa84a;
+ --off-white:#f7f5f0;
+ --cream:#f0ece4;
+ --dark:#1a1a2e;
+ --text:#2d2d44;
+ --text-light:#6b6b80;
+ --white:#ffffff;
+ --shadow-sm:0 2px 8px rgba(11,26,46,.08);
+ --shadow-md:0 8px 32px rgba(11,26,46,.12);
+ --shadow-lg:0 20px 60px rgba(11,26,46,.16);
+ --radius:12px;
+ --radius-lg:20px;
+ --transition:all .3s cubic-bezier(.4,0,.2,1);
+ --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+ --container:1200px;
+ --nav-height:72px;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1{font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:800;line-height:1.08;letter-spacing:-.03em}
+h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.15;letter-spacing:-.02em}
+h3{font-size:clamp(1.2rem,2vw,1.5rem);font-weight:600;line-height:1.3}
+h4{font-size:1.125rem;font-weight:600}
+p{font-size:1rem;color:var(--text-light);line-height:1.7}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+ul{list-style:none}
+.container{width:100%;max-width:var(--container);margin:0 auto;padding:0 24px}
+
+/* ===== SECTION HEADERS ===== */
+.section-header{text-align:center;margin-bottom:56px}
+.section-header h2{color:var(--navy);margin-bottom:12px}
+.section-header p{max-width:580px;margin:0 auto;font-size:1.1rem}
+.section-badge{display:inline-block;background:rgba(26,122,122,.1);color:var(--teal);font-size:.8rem;font-weight:600;padding:6px 16px;border-radius:100px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px}
+
+/* ===== NAVIGATION ===== */
+.top-bar{background:var(--navy);color:var(--white);padding:8px 0;font-size:.85rem;position:relative;z-index:1001}
+.top-bar .container{display:flex;justify-content:space-between;align-items:center}
+.top-bar .phone{font-weight:600;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.top-bar .phone i{color:var(--gold)}
+.top-bar .availability{color:rgba(255,255,255,.7);font-size:.8rem;display:flex;align-items:center;gap:6px}
+.top-bar .availability i{color:#4ade80;font-size:.55rem}
+nav{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:var(--transition);border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(255,255,255,.98);border-bottom-color:rgba(11,26,46,.08);box-shadow:var(--shadow-sm)}
+nav .container{display:flex;justify-content:space-between;align-items:center;height:var(--nav-height)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;color:var(--navy)}
+.nav-logo i{color:var(--teal);font-size:1.5rem}
+.nav-logo span span{color:var(--gold)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:.875rem;font-weight:500;color:var(--text);transition:var(--transition);position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--teal);transition:var(--transition)}
+.nav-links a:hover{color:var(--teal)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{background:var(--gold);color:var(--white)!important;padding:10px 20px!important;border-radius:8px;font-weight:600!important;font-size:.85rem!important;transition:var(--transition)}
+.nav-cta::after{display:none!important}
+.nav-cta:hover{background:var(--gold-light)!important;transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:1002;background:none;border:none}
+.hamburger span{display:block;width:26px;height:2.5px;background:var(--navy);border-radius:2px;transition:var(--transition)}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* ===== MOBILE NAV OVERLAY ===== */
+.mobile-overlay{position:fixed;inset:0;background:rgba(11,26,46,.97);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;opacity:0;pointer-events:none;transition:opacity .4s ease}
+.mobile-overlay.open{opacity:1;pointer-events:all}
+.mobile-overlay a{color:var(--white);font-size:1.4rem;font-weight:500;transition:var(--transition)}
+.mobile-overlay a:hover{color:var(--gold)}
+
+/* ===== HERO ===== */
+.hero{position:relative;min-height:calc(100vh - 96px);display:flex;align-items:center;overflow:hidden;background:var(--navy)}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0b1a2e 0%,#114444 40%,#1a7a7a 100%);background-size:400% 400%;animation:heroGradient 12s ease infinite;z-index:0}
+@keyframes heroGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero-overlay{position:absolute;inset:0;z-index:1}
+.hero-overlay .wave{position:absolute;bottom:0;left:0;width:200%;height:120px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%23f7f5f0' fill-opacity='1' d='M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z'/%3E%3C/svg%3E") repeat-x bottom;animation:waveMove 8s linear infinite;z-index:2}
+@keyframes waveMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.hero-particles{position:absolute;inset:0;overflow:hidden;z-index:1}
+.hero-particle{position:absolute;width:6px;height:6px;background:rgba(255,255,255,.12);border-radius:50%;animation:particleFloat 20s infinite linear}
+.hero-particle:nth-child(1){left:10%;top:20%;animation-delay:0s;width:8px;height:8px}
+.hero-particle:nth-child(2){left:25%;top:60%;animation-delay:-3s;width:5px;height:5px;background:rgba(201,149,60,.2)}
+.hero-particle:nth-child(3){left:45%;top:15%;animation-delay:-6s;width:10px;height:10px;background:rgba(26,122,122,.2)}
+.hero-particle:nth-child(4){left:60%;top:70%;animation-delay:-9s;width:6px;height:6px}
+.hero-particle:nth-child(5){left:75%;top:30%;animation-delay:-12s;width:4px;height:4px;background:rgba(201,149,60,.15)}
+.hero-particle:nth-child(6){left:90%;top:55%;animation-delay:-15s;width:7px;height:7px}
+.hero-particle:nth-child(7){left:35%;top:85%;animation-delay:-4s;width:5px;height:5px}
+.hero-particle:nth-child(8){left:80%;top:10%;animation-delay:-10s;width:9px;height:9px;background:rgba(26,122,122,.15)}
+.hero-particle:nth-child(9){left:5%;top:45%;animation-delay:-7s;width:4px;height:4px}
+.hero-particle:nth-child(10){left:55%;top:45%;animation-delay:-14s;width:6px;height:6px;background:rgba(201,149,60,.1)}
+@keyframes particleFloat{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh) translateX(100px);opacity:0}}
+.hero-content{position:relative;z-index:3;padding:80px 0 100px}
+.hero-content .container{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-text{max-width:620px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:8px 20px;border-radius:100px;font-size:.8rem;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:28px;backdrop-filter:blur(8px)}
+.hero-badge i{color:var(--gold);font-size:.7rem}
+.hero h1{color:var(--white);margin-bottom:20px}
+.hero h1 .highlight{background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:rgba(255,255,255,.7);font-size:1.15rem;max-width:500px;margin-bottom:36px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;border-radius:10px;font-weight:600;font-size:.95rem;border:none;cursor:pointer;transition:var(--transition);font-family:var(--font-sans)}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn-primary{background:var(--gold);color:var(--white);box-shadow:0 4px 20px rgba(201,149,60,.35)}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,149,60,.4)}
+.btn-primary i{font-size:.85rem}
+.btn-outline{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.3)}
+.btn-outline:hover{background:rgba(255,255,255,.1);border-color:var(--white);transform:translateY(-2px)}
+.btn-outline-light{border-color:var(--teal);color:var(--teal)}
+.btn-outline-light:hover{background:var(--teal);color:var(--white)}
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:center}
+.hero-card{background:rgba(255,255,255,.06);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:36px;width:100%;max-width:400px}
+.hero-card-stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.hero-stat{text-align:center}
+.hero-stat .number{font-size:2rem;font-weight:800;color:var(--gold);display:block}
+.hero-stat .label{font-size:.8rem;color:rgba(255,255,255,.6);margin-top:4px}
+.hero-stat-divider{grid-column:1/-1;height:1px;background:rgba(255,255,255,.1);margin:4px 0}
+.hero-review{display:flex;align-items:center;gap:12px;padding:12px 0;color:rgba(255,255,255,.8)}
+.hero-review i{color:var(--gold);font-size:.8rem}
+
+/* ===== TRUST BAR ===== */
+.trust-bar{background:var(--white);padding:60px 0;border-bottom:1px solid rgba(11,26,46,.06)}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
+.trust-item{padding:16px}
+.trust-number{font-size:clamp(2rem,3vw,2.8rem);font-weight:800;color:var(--navy);display:block;line-height:1.1}
+.trust-number .suffix{font-size:clamp(1.2rem,2vw,1.6rem)}
+.trust-label{font-size:.9rem;color:var(--text-light);margin-top:6px;font-weight:500}
+
+/* ===== SERVICES ===== */
+.services{padding:100px 0;background:var(--off-white)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.service-card{background:var(--white);border-radius:var(--radius-lg);padding:32px 28px;transition:var(--transition);border:1px solid rgba(11,26,46,.06);cursor:default;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--gold));opacity:0;transition:var(--transition)}
+.service-card:hover{transform:translateY(-8px) rotateX(2deg) rotateY(-1deg);box-shadow:var(--shadow-lg);border-color:rgba(26,122,122,.15)}
+.service-card:hover::before{opacity:1}
+.service-icon{width:56px;height:56px;background:rgba(26,122,122,.1);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--teal);margin-bottom:20px;transition:var(--transition)}
+.service-card:hover .service-icon{background:var(--teal);color:var(--white);transform:scale(1.05)}
+.service-card h3{color:var(--navy);margin-bottom:10px}
+.service-card p{font-size:.9rem;margin-bottom:0}
+
+/* ===== ABOUT ===== */
+.about{padding:100px 0;background:var(--white)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.about-text h2{color:var(--navy);margin-bottom:20px}
+.about-text>p{font-size:1.05rem;margin-bottom:32px}
+.about-points{display:flex;flex-direction:column;gap:20px}
+.about-point{display:flex;gap:16px;align-items:flex-start}
+.about-point-icon{flex-shrink:0;width:48px;height:48px;background:rgba(26,122,122,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--teal)}
+.about-point h4{color:var(--navy);margin-bottom:4px}
+.about-point p{font-size:.9rem;margin:0}
+.about-visual{position:relative;display:flex;justify-content:center;align-items:center;min-height:400px}
+.about-decoration{width:100%;max-width:420px;aspect-ratio:1;background:linear-gradient(135deg,rgba(26,122,122,.08),rgba(201,149,60,.06));border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
+.about-decoration-inner{width:75%;height:75%;background:linear-gradient(135deg,rgba(26,122,122,.12),rgba(201,149,60,.08));border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px}
+.about-decoration-inner i{font-size:3rem;color:var(--teal);margin-bottom:16px}
+.about-decoration-inner strong{font-size:1.3rem;color:var(--navy);display:block;margin-bottom:8px}
+.about-decoration-inner span{font-size:.9rem;color:var(--text-light)}
+.about-ring{position:absolute;inset:-20px;border:2px dashed rgba(26,122,122,.15);border-radius:50%;animation:spinSlow 30s linear infinite}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.about-ring-2{position:absolute;inset:-40px;border:1px solid rgba(201,149,60,.1);border-radius:50%;animation:spinSlow 40s linear infinite reverse}
+
+/* ===== TESTIMONIALS ===== */
+.testimonials{padding:100px 0;background:var(--navy);color:var(--white)}
+.testimonials .section-header h2{color:var(--white)}
+.testimonials .section-header p{color:rgba(255,255,255,.6)}
+.testimonials .section-badge{background:rgba(255,255,255,.08);color:var(--gold)}
+.testimonial-carousel{max-width:700px;margin:0 auto;position:relative}
+.testimonial-slides{position:relative;overflow:hidden;min-height:280px}
+.testimonial-slide{position:absolute;top:0;left:0;width:100%;opacity:0;transform:translateX(40px);transition:all .5s ease;padding:8px}
+.testimonial-slide.active{opacity:1;transform:translateX(0);position:relative}
+.testimonial-content{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:40px;text-align:center}
+.testimonial-stars{margin-bottom:16px}
+.testimonial-stars i{color:var(--gold);margin:0 2px;font-size:.9rem}
+.testimonial-text{font-size:1.05rem;line-height:1.7;color:rgba(255,255,255,.85);margin-bottom:24px;font-style:italic}
+.testimonial-author{display:flex;align-items:center;justify-content:center;gap:16px}
+.testimonial-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--white)}
+.testimonial-info strong{display:block;font-size:.95rem;color:var(--white)}
+.testimonial-info span{font-size:.85rem;color:rgba(255,255,255,.5)}
+.testimonial-nav{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:32px}
+.testimonial-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;transition:var(--transition);padding:0}
+.testimonial-dot.active{background:var(--gold);width:32px;border-radius:5px}
+.testimonial-dot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.testimonial-arrow{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--white);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);font-size:1rem}
+.testimonial-arrow:hover{background:rgba(255,255,255,.15)}
+
+/* ===== PRICING ===== */
+.pricing{padding:100px 0;background:var(--off-white)}
+.pricing-toggle{display:flex;justify-content:center;align-items:center;gap:16px;margin-bottom:56px}
+.pricing-toggle-label{font-size:.9rem;font-weight:500;color:var(--text-light);cursor:pointer;transition:var(--transition)}
+.pricing-toggle-label.active{color:var(--navy)}
+.toggle-switch{position:relative;width:52px;height:28px;background:var(--teal);border-radius:14px;cursor:pointer;transition:var(--transition);border:none;padding:0}
+.toggle-switch::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;background:var(--white);border-radius:50%;transition:var(--transition)}
+.toggle-switch.monthly::after{transform:translateX(24px)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start}
+.pricing-card{background:var(--white);border-radius:var(--radius-lg);padding:40px 32px;border:2px solid rgba(11,26,46,.06);transition:var(--transition);position:relative}
+.pricing-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pricing-card.featured{border-color:var(--gold);box-shadow:0 8px 40px rgba(201,149,60,.15);transform:scale(1.03)}
+.pricing-card.featured:hover{transform:scale(1.03) translateY(-4px)}
+.pricing-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--white);padding:6px 20px;border-radius:100px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.pricing-name{font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.pricing-desc{font-size:.85rem;color:var(--text-light);margin-bottom:24px}
+.pricing-amount{font-size:2.8rem;font-weight:800;color:var(--navy);line-height:1}
+.pricing-amount .currency{font-size:1.4rem;vertical-align:super;margin-right:2px}
+.pricing-amount .period{font-size:.9rem;font-weight:500;color:var(--text-light)}
+.pricing-features{margin:28px 0;display:flex;flex-direction:column;gap:12px}
+.pricing-features li{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--text)}
+.pricing-features li i{color:var(--teal);font-size:.75rem;width:18px;height:18px;background:rgba(26,122,122,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pricing-features li i.fa-xmark{color:#ef4444;background:rgba(239,68,68,.1)}
+.pricing .btn{width:100%;justify-content:center}
+
+/* ===== SERVICE AREA + CONTACT ===== */
+.contact-area{background:var(--navy);padding:100px 0;position:relative;overflow:hidden}
+.contact-area::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='rgba(255,255,255,.03)' stroke-width='1'/%3E%3C/svg%3E");opacity:.5;z-index:0}
+.contact-area .container{position:relative;z-index:1}
+.contact-area .section-header h2{color:var(--white)}
+.contact-area .section-header p{color:rgba(255,255,255,.6)}
+.contact-area .section-badge{background:rgba(255,255,255,.08);color:var(--gold)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.contact-info{padding:0}
+.contact-info h3{color:var(--white);font-size:1.3rem;margin-bottom:24px}
+.area-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+.area-list li{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.7);font-size:.9rem}
+.area-list li i{color:var(--gold);font-size:.75rem}
+.guarantee-badge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:20px 24px;display:flex;align-items:center;gap:16px}
+.guarantee-badge i{font-size:2rem;color:var(--gold)}
+.guarantee-badge strong{display:block;color:var(--white);font-size:1rem;margin-bottom:2px}
+.guarantee-badge span{color:rgba(255,255,255,.6);font-size:.85rem}
+.contact-form{background:var(--white);border-radius:var(--radius-lg);padding:40px;box-shadow:var(--shadow-lg)}
+.contact-form h3{color:var(--navy);font-size:1.2rem;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;border:2px solid rgba(11,26,46,.1);border-radius:8px;font-size:.95rem;font-family:var(--font-sans);transition:var(--transition);background:var(--white);color:var(--text)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(26,122,122,.1)}
+.form-group textarea{resize:vertical;min-height:100px}
+.form-group .error{color:#ef4444;font-size:.8rem;margin-top:4px;display:none}
+.form-group.error input,.form-group.error select,.form-group.error textarea{border-color:#ef4444;box-shadow:0 0 0 4px rgba(239,68,68,.08)}
+.form-group.error .error{display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.contact-form .btn-primary{width:100%;justify-content:center;padding:16px;font-size:1rem}
+
+/* ===== FOOTER ===== */
+footer{background:var(--navy);color:var(--white);padding:60px 0 0;border-top:1px solid rgba(255,255,255,.06)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px}
+.footer-brand .nav-logo{color:var(--white);margin-bottom:12px}
+.footer-brand p{font-size:.9rem;color:rgba(255,255,255,.55);max-width:300px;line-height:1.7}
+.footer-social{display:flex;gap:12px;margin-top:20px}
+.footer-social a{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);transition:var(--transition);font-size:1rem}
+.footer-social a:hover{background:var(--teal);color:var(--white);transform:translateY(-2px)}
+.footer-col h4{color:var(--white);margin-bottom:20px;font-size:.95rem;text-transform:uppercase;letter-spacing:.05em}
+.footer-col a{display:block;color:rgba(255,255,255,.55);font-size:.9rem;margin-bottom:10px;transition:var(--transition)}
+.footer-col a:hover{color:var(--gold);padding-left:4px}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:rgba(255,255,255,.4);flex-wrap:wrap;gap:12px}
+.footer-bottom .license{color:rgba(255,255,255,.5)}
+
+/* ===== FLOATING EMERGENCY BUTTON ===== */
+.floating-emergency{position:fixed;bottom:28px;right:28px;z-index:998;display:flex;align-items:center;gap:0}
+.floating-emergency a{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:var(--white);padding:16px 28px;border-radius:50px;font-weight:700;font-size:.95rem;box-shadow:0 8px 30px rgba(220,38,38,.4);transition:var(--transition);text-decoration:none}
+.floating-emergency a:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(220,38,38,.5)}
+.floating-emergency a i{font-size:1.1rem}
+.floating-emergency .pulse-ring{position:absolute;inset:-4px;border-radius:50px;border:3px solid rgba(220,38,38,.3);animation:pulseRing 2s ease infinite}
+@keyframes pulseRing{0%{transform:scale(1);opacity:1}100%{transform:scale(1.15);opacity:0}}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(30px);transition:all .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+ .hero-content .container{grid-template-columns:1fr;gap:40px}
+ .hero-text{max-width:100%;text-align:center}
+ .hero p{margin-left:auto;margin-right:auto}
+ .hero-actions{justify-content:center}
+ .services-grid{grid-template-columns:repeat(2,1fr)}
+ .pricing-grid{grid-template-columns:1fr;max-width:480px;margin:0 auto}
+ .pricing-card.featured{transform:none}
+ .pricing-card.featured:hover{transform:translateY(-4px)}
+ .footer-grid{grid-template-columns:1fr 1fr}
+ .contact-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+ :root{--nav-height:64px}
+ .top-bar .availability{display:none}
+ .nav-links{display:none}
+ .hamburger{display:flex}
+ .hero{min-height:calc(100vh - 80px)}
+ .hero-visual{display:none}
+ .hero-content{padding:60px 0 80px}
+ .hero-actions{flex-direction:column;align-items:stretch}
+ .hero-actions .btn{justify-content:center}
+ .trust-grid{grid-template-columns:repeat(2,1fr);gap:24px}
+ .services-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+ .about-grid{grid-template-columns:1fr;gap:40px}
+ .about-visual{min-height:300px}
+ .pricing-grid{max-width:400px}
+ .pricing-card{padding:32px 24px}
+ .contact-form{padding:28px 20px}
+ .form-row{grid-template-columns:1fr}
+ .footer-grid{grid-template-columns:1fr}
+ .footer-bottom{flex-direction:column;text-align:center}
+ .floating-emergency{bottom:16px;right:16px}
+ .floating-emergency a{padding:14px 20px;font-size:.85rem}
+ .floating-emergency a span{display:none}
+ .floating-emergency a i{margin:0}
+ .testimonial-content{padding:28px 20px}
+}
+@media(max-width:480px){
+ .trust-grid{grid-template-columns:repeat(2,1fr);gap:16px}
+ .area-list{grid-template-columns:1fr}
+}
+
+/* ===== SKIP LINK ===== */
+.skip-link{position:absolute;top:-100%;left:0;background:var(--gold);color:var(--white);padding:8px 16px;z-index:10000;font-weight:600;border-radius:0 0 8px 0}
+.skip-link:focus{top:0}
+</style>
+</head>
+<body>
+
+<!-- SKIP LINK -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- TOP BAR -->
+<div class="top-bar" role="banner">
+  <div class="container">
+    <div class="phone"><i class="fa-solid fa-phone"></i> +(555) 987-6543</div>
+    <div class="availability"><i class="fa-solid fa-circle" style="font-size:.55rem"></i> Available 24/7 — Emergency Response</div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <a href="#" class="nav-logo" aria-label="AquaGuard Plumbing Home">
+      <i class="fa-solid fa-droplet"></i> Aqua<span>Guard</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta">Get a Quote</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE OVERLAY -->
+<div class="mobile-overlay" id="mobileOverlay" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <a href="#services" class="mobile-link">Services</a>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#testimonials" class="mobile-link">Testimonials</a>
+  <a href="#pricing" class="mobile-link">Pricing</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+  <a href="#contact" class="mobile-link" style="color:var(--gold)">Get a Quote</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="main" aria-label="Hero banner">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay">
+    <div class="wave"></div>
+  </div>
+  <div class="hero-particles" aria-hidden="true">
+    <div class="hero-particle"></div><div class="hero-particle"></div>
+    <div class="hero-particle"></div><div class="hero-particle"></div>
+    <div class="hero-particle"></div><div class="hero-particle"></div>
+    <div class="hero-particle"></div><div class="hero-particle"></div>
+    <div class="hero-particle"></div><div class="hero-particle"></div>
+  </div>
+  <div class="hero-content">
+    <div class="container">
+      <div class="hero-text">
+        <div class="hero-badge"><i class="fa-solid fa-bolt"></i> 24/7 Emergency Service Available</div>
+        <h1>When Every <span class="highlight">Drop</span> Counts</h1>
+        <p>From burst pipes at midnight to full-system installations, our licensed experts arrive within 60 minutes. Premium plumbing you can trust, any hour, any day.</p>
+        <div class="hero-actions">
+          <a href="tel:+15559876543" class="btn btn-primary"><i class="fa-solid fa-shield"></i> Emergency Service</a>
+          <a href="#contact" class="btn btn-outline">Schedule Appointment</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hero-card-stats">
+            <div class="hero-stat"><span class="number">99%</span><span class="label">Satisfaction</span></div>
+            <div class="hero-stat"><span class="number">60m</span><span class="label">Avg. Response</span></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><span class="number">4.9</span><span class="label">Google Rating</span></div>
+            <div class="hero-stat"><span class="number">8,500+</span><span class="label">Jobs Done</span></div>
+          </div>
+          <div class="hero-review">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            <span style="margin-left:6px">"Fixed our main line in under 2 hours. Incredible."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<section class="trust-bar" aria-label="Company statistics">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-item reveal"><span class="trust-number" data-target="15"><span class="counter">0</span><span class="suffix">+</span></span><span class="trust-label">Years of Experience</span></div>
+      <div class="trust-item reveal reveal-delay-1"><span class="trust-number" data-target="8500"><span class="counter">0</span><span class="suffix">+</span></span><span class="trust-label">Jobs Completed</span></div>
+      <div class="trust-item reveal reveal-delay-2"><span class="trust-number" data-target="4900"><span class="counter">0</span><span class="suffix">+</span></span><span class="trust-label">Happy Customers</span></div>
+      <div class="trust-item reveal reveal-delay-3"><span class="trust-number" data-target="99"><span class="counter">0</span><span class="suffix">%</span></span><span class="trust-label">Satisfaction Rate</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services" aria-label="Our services">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-badge">What We Do</span>
+      <h2>Premium Plumbing Services</h2>
+      <p>Every job backed by our 100% satisfaction guarantee and up-front pricing — no surprises, ever.</p>
+    </div>
+    <div class="services-grid">
+      <article class="service-card reveal">
+        <div class="service-icon"><i class="fa-solid fa-wrench"></i></div>
+        <h3>Emergency Repairs</h3>
+        <p>24/7 rapid response for burst pipes, severe leaks, gas line issues, and any plumbing emergency. Arrival within 60 minutes, guaranteed.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-1">
+        <div class="service-icon"><i class="fa-solid fa-broom"></i></div>
+        <h3>Drain Cleaning</h3>
+        <p>Hydro-jetting and auger services that clear even the toughest blockages. Preventative maintenance plans keep drains flowing year-round.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-2">
+        <div class="service-icon"><i class="fa-solid fa-temperature-high"></i></div>
+        <h3>Water Heater Installation</h3>
+        <p>Tankless, hybrid, and traditional water heaters from Rheem, Navien, and Bradford White. Expert sizing, installation, and lifetime support.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-3">
+        <div class="service-icon"><i class="fa-solid fa-pipe-valve"></i></div>
+        <h3>Pipe Repair &amp; Replacement</h3>
+        <p>Leak detection, slab leak repair, and full re-piping using PEX, copper, and CPVC. We diagnose with thermal imaging for precision.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-4">
+        <div class="service-icon"><i class="fa-solid fa-sink"></i></div>
+        <h3>Fixture Installation</h3>
+        <p>Faucets, toilets, garbage disposals, shower systems — we install top brands with precision. Supply and labor included in every quote.</p>
+      </article>
+      <article class="service-card reveal reveal-delay-4">
+        <div class="service-icon"><i class="fa-solid fa-road"></i></div>
+        <h3>Sewer Line Services</h3>
+        <p>Camera inspections, trenchless repair, and full sewer line replacement. We locate problems without destroying your landscape.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about" aria-label="About AquaGuard">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <span class="section-badge">Why AquaGuard</span>
+        <h2>Your Plumbing Partner for Life</h2>
+        <p>Founded in 2009, AquaGuard has grown from a two-person operation into the metro area's most trusted plumbing service. We've built our reputation one satisfied customer at a time — not through aggressive sales, but through honest work and transparent pricing. Every plumber on our team is licensed, background-checked, and trained in the latest techniques.</p>
+        <div class="about-points">
+          <div class="about-point">
+            <div class="about-point-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div><h4>Licensed &amp; Insured</h4>
+            <p>Fully bonded with $2M liability coverage and state-licensed plumbing professionals on every job.</p></div>
+          </div>
+          <div class="about-point">
+            <div class="about-point-icon"><i class="fa-solid fa-clock"></i></div>
+            <div><h4>Same-Day Service</h4>
+            <p>Call before 2 PM and a technician will be at your door today. No extra charge for priority scheduling.</p></div>
+          </div>
+          <div class="about-point">
+            <div class="about-point-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+            <div><h4>Upfront Pricing</h4>
+            <p>You'll know the full cost before we start any work. No hourly surprises, no hidden fees — ever.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual reveal reveal-delay-2">
+        <div class="about-decoration">
+          <div class="about-ring"></div>
+          <div class="about-ring-2"></div>
+          <div class="about-decoration-inner">
+            <i class="fa-solid fa-droplet"></i>
+            <strong>AquaGuard</strong>
+            <span>Trusted since 2009</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials" aria-label="Customer testimonials">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-badge">Testimonials</span>
+      <h2>What Our Customers Say</h2>
+      <p>Real feedback from real homeowners and businesses across the metro area.</p>
+    </div>
+    <div class="testimonial-carousel reveal" role="region" aria-roledescription="carousel" aria-label="Customer testimonials">
+      <div class="testimonial-slides" id="testimonialSlides">
+        <div class="testimonial-slide active" role="group" aria-roledescription="slide" aria-label="Testimonial 1 of 3">
+          <div class="testimonial-content">
+            <div class="testimonial-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <p class="testimonial-text">"Called AquaGuard at 11 PM for a burst pipe. They arrived in 40 minutes, had it repaired by midnight, and even helped clean up the water damage. Absolutely stellar service."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">MR</div>
+              <div class="testimonial-info"><strong>Michael Rodriguez</strong><span>Homeowner, Oakwood Hills</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-slide" role="group" aria-roledescription="slide" aria-label="Testimonial 2 of 3">
+          <div class="testimonial-content">
+            <div class="testimonial-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <p class="testimonial-text">"We used AquaGuard for a full re-pipe on our 1920s home. The team was meticulous, respectful of our property, and finished ahead of schedule. Old-house owners — these are your people."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">SK</div>
+              <div class="testimonial-info"><strong>Sarah Kim</strong><span>Homeowner, Heritage District</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-slide" role="group" aria-roledescription="slide" aria-label="Testimonial 3 of 3">
+          <div class="testimonial-content">
+            <div class="testimonial-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+            <p class="testimonial-text">"We run a restaurant and can't afford downtime. AquaGuard installed a full commercial water system over a weekend without disrupting a single service. That's professionalism."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">JC</div>
+              <div class="testimonial-info"><strong>James Chen</strong><span>Owner, Riverbend Bistro</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-nav">
+        <button class="testimonial-arrow" id="testPrev" aria-label="Previous testimonial"><i class="fa-solid fa-chevron-left"></i></button>
+        <div style="display:flex;gap:8px">
+          <button class="testimonial-dot active" data-index="0" aria-label="Go to testimonial 1"></button>
+          <button class="testimonial-dot" data-index="1" aria-label="Go to testimonial 2"></button>
+          <button class="testimonial-dot" data-index="2" aria-label="Go to testimonial 3"></button>
+        </div>
+        <button class="testimonial-arrow" id="testNext" aria-label="Next testimonial"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing" aria-label="Pricing plans">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-badge">Pricing</span>
+      <h2>Straightforward Plans</h2>
+      <p>One-time service or maintenance protection — pick the plan that fits your home.</p>
+    </div>
+    <div class="pricing-toggle reveal">
+      <span class="pricing-toggle-label active" data-plan="onetime">One-Time Service</span>
+      <button class="toggle-switch" id="pricingToggle" aria-label="Toggle pricing plan" role="switch" aria-checked="false"></button>
+      <span class="pricing-toggle-label" data-plan="maintenance">Maintenance Plan</span>
+    </div>
+    <div class="pricing-grid" id="pricingGrid">
+      <!-- Essential -->
+      <div class="pricing-card reveal" data-type="onetime">
+        <div class="pricing-name">Essential</div>
+        <div class="pricing-desc">Perfect for minor repairs and basic service calls.</div>
+        <div class="pricing-amount"><span class="currency">$</span>89<span class="period">/visit</span></div>
+        <ul class="pricing-features">
+          <li><i class="fa-solid fa-check"></i> Diagnostic inspection</li>
+          <li><i class="fa-solid fa-check"></i> Minor repair labor (1 hr)</li>
+          <li><i class="fa-solid fa-check"></i> 30-day workmanship warranty</li>
+          <li><i class="fa-solid fa-xmark"></i> Emergency callout</li>
+          <li><i class="fa-solid fa-xmark"></i> Parts &amp; materials included</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline-light">Choose Essential</a>
+      </div>
+      <!-- Professional (featured) -->
+      <div class="pricing-card featured reveal reveal-delay-1" data-type="onetime">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-name">Professional</div>
+        <div class="pricing-desc">Our best value for comprehensive service and peace of mind.</div>
+        <div class="pricing-amount"><span class="currency">$</span>189<span class="period">/visit</span></div>
+        <ul class="pricing-features">
+          <li><i class="fa-solid fa-check"></i> Full diagnostic + thermal scan</li>
+          <li><i class="fa-solid fa-check"></i> Up to 3 hrs repair labor</li>
+          <li><i class="fa-solid fa-check"></i> Parts &amp; materials covered</li>
+          <li><i class="fa-solid fa-check"></i> Priority emergency dispatch</li>
+          <li><i class="fa-solid fa-check"></i> 1-year workmanship warranty</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Choose Professional</a>
+      </div>
+      <!-- Premium -->
+      <div class="pricing-card reveal reveal-delay-2" data-type="onetime">
+        <div class="pricing-name">Premium</div>
+        <div class="pricing-desc">Full-service coverage for larger properties and complex systems.</div>
+        <div class="pricing-amount"><span class="currency">$</span>349<span class="period">/visit</span></div>
+        <ul class="pricing-features">
+          <li><i class="fa-solid fa-check"></i> Complete system evaluation</li>
+          <li><i class="fa-solid fa-check"></i> Unlimited repair labor (1 day)</li>
+          <li><i class="fa-solid fa-check"></i> All parts &amp; materials included</li>
+          <li><i class="fa-solid fa-check"></i> Priority emergency dispatch</li>
+          <li><i class="fa-solid fa-check"></i> 2-year workmanship + parts warranty</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline-light">Choose Premium</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT + SERVICE AREA -->
+<section class="contact-area" id="contact" aria-label="Contact and service area">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-badge">Get In Touch</span>
+      <h2>We're Here to Help</h2>
+      <p>Same-day service available across the entire metro area. Call or fill out the form below.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <h3>Service Areas</h3>
+        <ul class="area-list">
+          <li><i class="fa-solid fa-location-dot"></i> Downtown Metro</li>
+          <li><i class="fa-solid fa-location-dot"></i> Oakwood Hills</li>
+          <li><i class="fa-solid fa-location-dot"></i> Heritage District</li>
+          <li><i class="fa-solid fa-location-dot"></i> Riverbend &amp; Eastside</li>
+          <li><i class="fa-solid fa-location-dot"></i> North Gate Estates</li>
+          <li><i class="fa-solid fa-location-dot"></i> West Lake Corridor</li>
+        </ul>
+        <div class="guarantee-badge">
+          <i class="fa-solid fa-medal"></i>
+          <div><strong>100% Satisfaction Guarantee</strong>
+          <span>If you're not happy, we make it right — no questions asked. That's the AquaGuard promise.</span></div>
+        </div>
+      </div>
+      <form class="contact-form reveal reveal-delay-1" id="contactForm" novalidate>
+        <h3>Request a Service</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="formName">Full Name</label>
+            <input type="text" id="formName" name="name" placeholder="e.g. John Smith" required>
+            <div class="error">Please enter your name.</div>
+          </div>
+          <div class="form-group">
+            <label for="formPhone">Phone Number</label>
+            <input type="tel" id="formPhone" name="phone" placeholder="(555) 123-4567" required>
+            <div class="error">Please enter a valid phone number.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="formEmail">Email Address</label>
+          <input type="email" id="formEmail" name="email" placeholder="you@example.com" required>
+          <div class="error">Please enter a valid email address.</div>
+        </div>
+        <div class="form-group">
+          <label for="formService">Service Needed</label>
+          <select id="formService" name="service" required>
+            <option value="">Select a service...</option>
+            <option value="emergency">Emergency Repair</option>
+            <option value="drain">Drain Cleaning</option>
+            <option value="heater">Water Heater</option>
+            <option value="pipe">Pipe Repair / Replacement</option>
+            <option value="fixture">Fixture Installation</option>
+            <option value="sewer">Sewer Line</option>
+            <option value="other">Other</option>
+          </select>
+          <div class="error">Please select a service type.</div>
+        </div>
+        <div class="form-group">
+          <label for="formMessage">Describe the Issue</label>
+          <textarea id="formMessage" name="message" placeholder="Tell us what's going on — include any relevant details like how long it's been happening..." required></textarea>
+          <div class="error">Please describe the issue briefly.</div>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Request</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo"><i class="fa-solid fa-droplet"></i> Aqua<span>Guard</span></a>
+        <p>Premium plumbing services you can count on — 24 hours a day, 7 days a week. Licensed, insured, and built on trust since 2009.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Yelp"><i class="fa-brands fa-yelp"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#services">Emergency Repairs</a>
+        <a href="#services">Drain Cleaning</a>
+        <a href="#services">Water Heaters</a>
+        <a href="#services">Pipe Repair</a>
+        <a href="#services">Sewer Lines</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#about">About Us</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="tel:+15559876543"><i class="fa-solid fa-phone" style="margin-right:8px"></i>+(555) 987-6543</a>
+        <a href="mailto:hello@aguaguardplumbing.com"><i class="fa-solid fa-envelope" style="margin-right:8px"></i>hello@aguaguardplumbing.com</a>
+        <a href="#"><i class="fa-solid fa-location-dot" style="margin-right:8px"></i>942 Industrial Blvd, Metro City</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 AquaGuard Plumbing Services LLC. All rights reserved.</span>
+      <span class="license">Licensed &amp; Insured | State License #PLC-88492</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING EMERGENCY BUTTON -->
+<div class="floating-emergency">
+  <a href="tel:+15559876543" aria-label="Call for emergency plumbing service">
+    <i class="fa-solid fa-phone-volume"></i>
+    <span>Emergency? Call Now</span>
+  </a>
+  <div class="pulse-ring"></div>
+</div>
+
+<script>
+/* ===== MOBILE NAV ===== */
+const hamburger = document.getElementById('hamburger');
+const overlay = document.getElementById('mobileOverlay');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+
+function toggleMenu(open) {
+  hamburger.classList.toggle('active', open);
+  overlay.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+  hamburger.setAttribute('aria-expanded', open);
+}
+
+hamburger.addEventListener('click', () => toggleMenu(!overlay.classList.contains('open')));
+mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+
+/* ===== NAV SCROLL EFFECT ===== */
+const navbar = document.getElementById('navbar');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  navbar.classList.toggle('scrolled', y > 40);
+  lastScroll = y;
+}, { passive: true });
+
+/* ===== REVEAL ON SCROLL ===== */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ===== COUNTER ANIMATION ===== */
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
+      if (isNaN(target)) return;
+      const counter = el.querySelector('.counter');
+      if (!counter) return;
+      const suffix = el.querySelector('.suffix');
+      const isPercent = suffix && suffix.textContent.trim() === '%';
+      const duration = 2000;
+      const start = performance.now();
+
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(eased * target);
+        counter.textContent = isPercent ? current : current.toLocaleString();
+        if (progress < 1) requestAnimationFrame(update);
+        else {
+          counter.textContent = target.toLocaleString();
+          counterObserver.unobserve(el);
+        }
+      }
+      requestAnimationFrame(update);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.trust-number').forEach(el => counterObserver.observe(el));
+
+/* ===== TESTIMONIALS CAROUSEL ===== */
+let currentSlide = 0;
+const slides = document.querySelectorAll('.testimonial-slide');
+const dots = document.querySelectorAll('.testimonial-dot');
+const prevBtn = document.getElementById('testPrev');
+const nextBtn = document.getElementById('testNext');
+let autoRotate;
+
+function goToSlide(index) {
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === index);
+    s.style.transform = i === index ? 'translateX(0)' : (i > index ? 'translateX(40px)' : 'translateX(-40px)');
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === index));
+  currentSlide = index;
+  resetAutoRotate();
+}
+
+function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
+function prevSlide() { goToSlide((currentSlide - 1 + slides.length) % slides.length); }
+
+dots.forEach(dot => dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index))));
+nextBtn.addEventListener('click', nextSlide);
+prevBtn.addEventListener('click', prevSlide);
+
+function resetAutoRotate() {
+  clearInterval(autoRotate);
+  autoRotate = setInterval(nextSlide, 5000);
+}
+resetAutoRotate();
+
+/* ===== PRICING TOGGLE ===== */
+const toggleBtn = document.getElementById('pricingToggle');
+const toggleLabels = document.querySelectorAll('.pricing-toggle-label');
+const pricingCards = document.querySelectorAll('.pricing-card');
+let isMaintenance = false;
+
+const pricingData = {
+  onetime: {
+    Essential: { amount: '89', period: '/visit' },
+    Professional: { amount: '189', period: '/visit' },
+    Premium: { amount: '349', period: '/visit' }
+  },
+  maintenance: {
+    Essential: { amount: '29', period: '/month' },
+    Professional: { amount: '59', period: '/month' },
+    Premium: { amount: '99', period: '/month' }
+  }
+};
+
+toggleBtn.addEventListener('click', () => {
+  isMaintenance = !isMaintenance;
+  toggleBtn.classList.toggle('monthly', isMaintenance);
+  toggleLabels.forEach(l => l.classList.toggle('active', l.dataset.plan === (isMaintenance ? 'maintenance' : 'onetime')));
+
+  const plan = isMaintenance ? 'maintenance' : 'onetime';
+  pricingCards.forEach(card => {
+    const nameEl = card.querySelector('.pricing-name');
+    const name = nameEl.textContent.trim();
+    const amount = card.querySelector('.pricing-amount');
+    if (pricingData[plan][name]) {
+      const d = pricingData[plan][name];
+      amount.innerHTML = `<span class="currency">$</span>${d.amount}<span class="period">${d.period}</span>`;
+    }
+    card.dataset.type = plan;
+  });
+});
+
+/* ===== FORM VALIDATION ===== */
+const contactForm = document.getElementById('contactForm');
+
+contactForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let valid = true;
+
+  const fields = [
+    { id: 'formName', test: v => v.trim().length >= 2 },
+    { id: 'formPhone', test: v => /^[\d\s\-\+\(\)]{7,20}$/.test(v.trim()) },
+    { id: 'formEmail', test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+    { id: 'formService', test: v => v !== '' },
+    { id: 'formMessage', test: v => v.trim().length >= 5 }
+  ];
+
+  fields.forEach(f => {
+    const input = document.getElementById(f.id);
+    const group = input.closest('.form-group');
+    const passed = f.test(input.value);
+    group.classList.toggle('error', !passed);
+    if (!passed) valid = false;
+  });
+
+  if (valid) {
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> Request Sent!';
+      btn.style.background = '#16a34a';
+      setTimeout(() => {
+        btn.innerHTML = original;
+        btn.disabled = false;
+        btn.style.background = '';
+        contactForm.reset();
+      }, 2500);
+    }, 1200);
+  } else {
+    const firstError = contactForm.querySelector('.form-group.error input, .form-group.error select, .form-group.error textarea');
+    if (firstError) firstError.focus();
+  }
+});
+
+/* ===== LIVE INPUT CLEANUP ===== */
+document.querySelectorAll('.form-group input, .form-group select, .form-group textarea').forEach(el => {
+  el.addEventListener('input', () => {
+    const group = el.closest('.form-group');
+    if (group.classList.contains('error')) group.classList.remove('error');
+  });
+});
+</script>
+</body>
+</html>

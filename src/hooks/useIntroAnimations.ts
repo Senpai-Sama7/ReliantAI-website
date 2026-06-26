@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { flushVisibleReveals } from '@/lib/reveal';
+
+const LAYOUT_SETTLE_MS = 450;
 
 /**
  * Run GSAP setup once the intro overlay has finished and layout is stable.
@@ -12,7 +14,10 @@ export function useIntroAnimations(
   deps: React.DependencyList = []
 ): void {
   const setupRef = useRef(setup);
-  setupRef.current = setup;
+
+  useLayoutEffect(() => {
+    setupRef.current = setup;
+  });
 
   useEffect(() => {
     if (!introComplete) return;
@@ -26,10 +31,11 @@ export function useIntroAnimations(
       ScrollTrigger.refresh();
       flushVisibleReveals();
       window.requestAnimationFrame(() => {
+        if (disposed) return;
         ScrollTrigger.refresh();
         flushVisibleReveals();
       });
-    }, 450);
+    }, LAYOUT_SETTLE_MS);
 
     return () => {
       disposed = true;
@@ -39,3 +45,5 @@ export function useIntroAnimations(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [introComplete, ...deps]);
 }
+
+export const INTRO_LAYOUT_SETTLE_MS = LAYOUT_SETTLE_MS;

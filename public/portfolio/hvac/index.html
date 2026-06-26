@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClimateCraft HVAC — Your Perfect Climate, Every Season.</title>
+<meta name="description" content="Expert heating, cooling, and air quality services. Premium HVAC for your home. Schedule service or get a free estimate today.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --teal-dark: #0d3b3b;
+  --teal-mid: #1a6b6b;
+  --teal-light: #2a8b8b;
+  --warm-dark: #d4692b;
+  --warm-mid: #e8883c;
+  --warm-light: #f5a555;
+  --cream: #f8f4ef;
+  --cream-dark: #efe8df;
+  --white: #ffffff;
+  --black: #1a1a1a;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e5e5e5;
+  --gray-300: #d4d4d4;
+  --gray-500: #737373;
+  --gray-700: #404040;
+  --gray-900: #171717;
+  --font-display: 'Inter', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --max-width: 1200px;
+  --nav-height: 72px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 14px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.12);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--font-body);
+  color: var(--gray-900);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+button { border: none; background: none; cursor: pointer; font-family: inherit; }
+ul { list-style: none; }
+.container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+.section { padding: 100px 0; }
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-label {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  color: var(--teal-dark);
+}
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--gray-500);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+.gradient-cool {
+  background: linear-gradient(135deg, var(--teal-dark), var(--teal-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-warm {
+  background: linear-gradient(135deg, var(--warm-dark), var(--warm-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-split {
+  background: linear-gradient(135deg, var(--warm-dark) 0%, var(--warm-mid) 30%, var(--teal-mid) 70%, var(--teal-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.top-bar {
+  background: var(--teal-dark);
+  color: var(--cream);
+  padding: 8px 0;
+  font-size: 0.875rem;
+  position: relative;
+  z-index: 1001;
+}
+.top-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.top-bar-phone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  transition: color var(--transition);
+}
+.top-bar-phone:hover { color: var(--warm-light); }
+.top-bar-phone i { color: var(--warm-mid); font-size: 0.75rem; }
+.top-bar-greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  opacity: 0.9;
+}
+.top-bar-greeting i { color: var(--warm-light); font-size: 0.75rem; }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--cream);
+  transition: background var(--transition), box-shadow var(--transition);
+  height: var(--nav-height);
+}
+nav.scrolled {
+  background: rgba(248, 244, 239, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+}
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.375rem;
+  color: var(--teal-dark);
+  z-index: 1002;
+}
+.nav-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--warm-dark), var(--teal-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+}
+.nav-logo span { color: var(--warm-dark); }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--gray-700);
+  position: relative;
+  padding: 4px 0;
+  transition: color var(--transition);
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--warm-dark), var(--teal-mid));
+  transition: width var(--transition);
+}
+.nav-links a:hover { color: var(--teal-dark); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  background: var(--warm-dark);
+  color: white !important;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 600 !important;
+  transition: background var(--transition), transform var(--transition);
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: #c05e26 !important; transform: translateY(-1px); }
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+  z-index: 1002;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: var(--teal-dark);
+  border-radius: 2px;
+  transition: var(--transition);
+  transform-origin: center;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.hero {
+  min-height: calc(100vh - var(--nav-height) - 38px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #fdf0e8 0%, #fce4d4 20%, #e8f0ee 50%, #d4e5e5 65%, #c4dcdc 80%, #b8d0d0 100%);
+  z-index: 0;
+}
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(212,105,43,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 50%, rgba(13,59,59,0.08) 0%, transparent 70%);
+}
+.hero-shapes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+}
+.hero-shape-1 {
+  width: 500px; height: 500px;
+  background: var(--warm-dark);
+  top: -100px; left: -100px;
+  animation: float-slow 8s ease-in-out infinite alternate;
+}
+.hero-shape-2 {
+  width: 400px; height: 400px;
+  background: var(--teal-dark);
+  bottom: -80px; right: -80px;
+  animation: float-slow 10s ease-in-out infinite alternate-reverse;
+}
+.hero-shape-3 {
+  width: 300px; height: 300px;
+  background: var(--teal-mid);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float-slow 12s ease-in-out infinite alternate;
+}
+@keyframes float-slow {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px,-20px) scale(1.05); }
+}
+.hero-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 1;
+  overflow: hidden;
+}
+.hero-waves svg { position: absolute; bottom: 0; width: 200%; height: 100%; }
+.hero-waves svg:nth-child(1) {
+  animation: wave-drift 6s ease-in-out infinite alternate;
+  opacity: 0.3;
+}
+.hero-waves svg:nth-child(2) {
+  animation: wave-drift 8s ease-in-out infinite alternate-reverse;
+  opacity: 0.15;
+}
+@keyframes wave-drift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
+}
+.hero-content { position: relative; z-index: 2; width: 100%; padding: 60px 0; }
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-text { max-width: 600px; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(13,59,59,0.08);
+  color: var(--teal-dark);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+.hero-badge i { font-size: 0.7rem; }
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1.08;
+  margin-bottom: 20px;
+  color: var(--black);
+}
+.hero h1 .highlight-cool { color: var(--teal-dark); }
+.hero h1 .highlight-warm { color: var(--warm-dark); }
+.hero p {
+  font-size: 1.125rem;
+  color: var(--gray-500);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 520px;
+}
+.hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all var(--transition);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.btn-primary {
+  background: var(--teal-dark);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--teal-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(13,59,59,0.25);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--warm-dark);
+  border-color: var(--warm-dark);
+}
+.btn-secondary:hover {
+  background: var(--warm-dark);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212,105,43,0.2);
+}
+.btn-accent {
+  background: var(--warm-mid);
+  color: white;
+  box-shadow: 0 4px 20px rgba(232,136,60,0.3);
+}
+.btn-accent:hover {
+  background: var(--warm-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212,105,43,0.35);
+}
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.hero-split-ring {
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  position: relative;
+  background: conic-gradient(from 0deg, var(--warm-dark) 0deg, var(--warm-mid) 90deg, var(--cream) 180deg, var(--teal-light) 270deg, var(--teal-dark) 360deg);
+  opacity: 0.2;
+  animation: spin-slow 20s linear infinite;
+}
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.hero-split-ring-inner {
+  position: absolute;
+  inset: 30px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 0 60px rgba(13,59,59,0.06);
+}
+.hero-split-ring-inner .temp-icon {
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, var(--warm-dark), var(--teal-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-split-ring-inner .temp-value {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--teal-dark);
+  line-height: 1;
+}
+.hero-split-ring-inner .temp-label { font-size: 0.875rem; color: var(--gray-500); }
+.hero-stats { display: flex; gap: 24px; margin-top: 40px; flex-wrap: wrap; }
+.hero-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9375rem;
+  color: var(--gray-500);
+}
+.hero-stat i {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+.hero-stat.cool i { background: rgba(13,59,59,0.1); color: var(--teal-dark); }
+.hero-stat.warm i { background: rgba(212,105,43,0.1); color: var(--warm-dark); }
+.seasonal-banner { position: relative; padding: 0; margin-top: -2px; }
+.seasonal-banner-inner {
+  background: linear-gradient(135deg, #fce4d4 0%, #fdf0e8 30%, #fef7ed 60%, #fce4d4 100%);
+  padding: 48px 0;
+  position: relative;
+  overflow: hidden;
+}
+.seasonal-banner-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 120px at 10% 30%, rgba(212,105,43,0.06) 0%, transparent 70%),
+    radial-gradient(circle 80px at 90% 60%, rgba(26,107,107,0.04) 0%, transparent 70%);
+}
+.seasonal-decoration {
+  position: absolute;
+  font-size: 6rem;
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
+}
+.seasonal-decoration-1 { top: -10px; left: 5%; transform: rotate(-15deg); color: var(--warm-dark); }
+.seasonal-decoration-2 { bottom: -10px; right: 8%; transform: rotate(20deg); color: var(--teal-dark); }
+.seasonal-decoration-3 { top: 20%; right: 15%; font-size: 3rem; color: var(--warm-light); opacity: 0.03; }
+.seasonal-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.seasonal-text h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--teal-dark);
+  margin-bottom: 6px;
+}
+.seasonal-text p { color: var(--gray-500); font-size: 1rem; }
+.seasonal-timer { display: flex; align-items: center; gap: 20px; }
+.timer-item { text-align: center; }
+.timer-item .num {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--warm-dark);
+  line-height: 1;
+  display: block;
+}
+.timer-item .label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gray-500);
+  font-weight: 600;
+}
+.timer-sep { font-size: 1.5rem; font-weight: 300; color: var(--gray-300); }
+.seasonal-cta { flex-shrink: 0; }
+.services { background: var(--cream); }
+.services .section-label { background: rgba(13,59,59,0.08); color: var(--teal-dark); }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.service-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 36px 28px;
+  transition: all var(--transition);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+.service-card:nth-child(-n+3)::before { background: linear-gradient(90deg, var(--teal-mid), var(--teal-light)); }
+.service-card:nth-child(n+4)::before { background: linear-gradient(90deg, var(--warm-mid), var(--warm-light)); }
+.service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--gray-200); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  transition: all var(--transition);
+}
+.service-card:nth-child(-n+3) .service-icon { background: rgba(13,59,59,0.08); color: var(--teal-dark); }
+.service-card:nth-child(n+4) .service-icon { background: rgba(212,105,43,0.08); color: var(--warm-dark); }
+.service-card:hover:nth-child(-n+3) .service-icon { background: var(--teal-dark); color: white; box-shadow: 0 4px 16px rgba(13,59,59,0.2); }
+.service-card:hover:nth-child(n+4) .service-icon { background: var(--warm-dark); color: white; box-shadow: 0 4px 16px rgba(212,105,43,0.2); }
+.service-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  color: var(--teal-dark);
+  margin-bottom: 10px;
+}
+.service-card p { font-size: 0.9375rem; color: var(--gray-500); line-height: 1.65; margin-bottom: 16px; }
+.service-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap var(--transition);
+}
+.service-card:nth-child(-n+3) .service-link { color: var(--teal-dark); }
+.service-card:nth-child(n+4) .service-link { color: var(--warm-dark); }
+.service-link:hover { gap: 10px; }
+.energy { background: var(--white); }
+.energy .section-label { background: rgba(13,59,59,0.06); color: var(--teal-dark); }
+.energy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.energy-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--teal-dark);
+  margin-bottom: 20px;
+}
+.energy-info p { color: var(--gray-500); line-height: 1.7; margin-bottom: 24px; }
+.energy-highlight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: rgba(13,59,59,0.04);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--teal-dark);
+  margin-bottom: 24px;
+}
+.energy-highlight i { font-size: 2rem; color: var(--teal-dark); }
+.energy-highlight strong { display: block; font-family: var(--font-display); font-size: 1.25rem; color: var(--teal-dark); }
+.energy-highlight span { font-size: 0.9375rem; color: var(--gray-500); }
+.energy-badges { display: flex; gap: 16px; flex-wrap: wrap; }
+.energy-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--teal-dark);
+}
+.energy-badge i { font-size: 1.25rem; color: var(--teal-mid); }
+.energy-visual { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.energy-gauge {
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  position: relative;
+  background: conic-gradient(var(--teal-dark) 0deg 144deg, var(--teal-mid) 144deg 198deg, var(--warm-mid) 198deg 252deg, var(--warm-dark) 252deg 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.energy-gauge::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  background: var(--white);
+}
+.energy-gauge-inner { position: relative; z-index: 1; text-align: center; }
+.energy-gauge-inner .value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--teal-dark);
+  line-height: 1;
+}
+.energy-gauge-inner .label { font-size: 0.8125rem; color: var(--gray-500); font-weight: 500; }
+.energy-gauge-arrow {
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  transform: rotate(130deg);
+  transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.energy-gauge-arrow.animate { transform: rotate(160deg); }
+.energy-gauge-arrow::after {
+  content: '';
+  width: 4px;
+  height: 50%;
+  background: var(--warm-dark);
+  border-radius: 2px;
+  transform-origin: bottom;
+}
+.energy-savings {
+  text-align: center;
+  padding: 20px 32px;
+  background: linear-gradient(135deg, rgba(13,59,59,0.04), rgba(212,105,43,0.04));
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(13,59,59,0.06);
+}
+.energy-savings .big { font-family: var(--font-display); font-size: 2.25rem; font-weight: 800; color: var(--warm-dark); }
+.energy-savings p { color: var(--gray-500); font-size: 0.9375rem; }
+.plans { background: var(--cream); }
+.plans .section-label { background: rgba(212,105,43,0.08); color: var(--warm-dark); }
+.plan-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 48px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--gray-500);
+}
+.plan-toggle .active { color: var(--gray-900); }
+.toggle-switch {
+  width: 48px; height: 26px;
+  background: var(--gray-300);
+  border-radius: 13px;
+  position: relative;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.toggle-switch.active { background: var(--teal-dark); }
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: white;
+  transition: transform var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.toggle-switch.active::after { transform: translateX(22px); }
+.plan-save { font-size: 0.75rem; background: rgba(212,105,43,0.1); color: var(--warm-dark); padding: 2px 10px; border-radius: 100px; font-weight: 600; }
+.plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.plan-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  border: 1px solid var(--gray-200);
+  position: relative;
+  transition: all var(--transition);
+}
+.plan-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.plan-card.featured {
+  border-color: var(--teal-dark);
+  box-shadow: 0 0 0 1px var(--teal-dark), var(--shadow-lg);
+  transform: scale(1.03);
+}
+.plan-card.featured:hover { transform: scale(1.03) translateY(-4px); }
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--teal-dark);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 18px;
+  border-radius: 100px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.plan-card h3 { font-family: var(--font-display); font-size: 1.375rem; font-weight: 700; color: var(--teal-dark); margin-bottom: 8px; }
+.plan-price { margin-bottom: 24px; }
+.plan-price .amount { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; color: var(--warm-dark); }
+.plan-price .period { font-size: 0.9375rem; color: var(--gray-500); }
+.plan-features { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+.plan-features li { display: flex; align-items: center; gap: 10px; font-size: 0.9375rem; color: var(--gray-700); }
+.plan-features li i { font-size: 0.75rem; color: var(--teal-mid); flex-shrink: 0; }
+.plan-btn {
+  width: 100%;
+  text-align: center;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border: 2px solid var(--gray-200);
+  color: var(--gray-700);
+  transition: all var(--transition);
+}
+.plan-btn:hover { border-color: var(--teal-dark); color: var(--teal-dark); }
+.plan-card.featured .plan-btn { background: var(--teal-dark); color: white; border-color: var(--teal-dark); }
+.plan-card.featured .plan-btn:hover { background: var(--teal-mid); border-color: var(--teal-mid); }
+.testimonials { background: var(--white); position: relative; overflow: hidden; }
+.testimonials::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 300px at 10% 20%, rgba(212,105,43,0.03) 0%, transparent 70%),
+    radial-gradient(circle 200px at 90% 80%, rgba(13,59,59,0.03) 0%, transparent 70%);
+}
+.testimonials .section-label { background: rgba(212,105,43,0.08); color: var(--warm-dark); }
+.testimonial-carousel { position: relative; z-index: 1; overflow: hidden; }
+.testimonial-track { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.testimonial-card { min-width: 100%; padding: 0 40px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.testimonial-stars { display: flex; gap: 4px; margin-bottom: 20px; color: #f5b342; font-size: 1rem; }
+.testimonial-text {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--gray-700);
+  max-width: 700px;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+.testimonial-text::before {
+  content: '\\201C';
+  display: block;
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--warm-dark);
+  opacity: 0.2;
+  margin-bottom: -16px;
+}
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: white;
+}
+.testimonial-avatar.warm { background: linear-gradient(135deg, var(--warm-dark), var(--warm-mid)); }
+.testimonial-avatar.cool { background: linear-gradient(135deg, var(--teal-dark), var(--teal-mid)); }
+.testimonial-name { font-weight: 700; color: var(--teal-dark); }
+.testimonial-location { font-size: 0.875rem; color: var(--gray-500); }
+.testimonial-controls { display: flex; justify-content: center; gap: 12px; margin-top: 32px; }
+.testimonial-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gray-300);
+  transition: all var(--transition);
+  cursor: pointer;
+}
+.testimonial-dot.active { width: 32px; border-radius: 5px; background: var(--warm-dark); }
+.testimonial-dot:hover { background: var(--gray-500); }
+.financing { background: var(--cream); }
+.financing .section-label { background: rgba(13,59,59,0.06); color: var(--teal-dark); }
+.financing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.financing-info h3 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--teal-dark); margin-bottom: 16px; }
+.financing-info p { color: var(--gray-500); line-height: 1.7; margin-bottom: 24px; }
+.financing-highlight {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 24px 28px;
+  border: 1px solid var(--gray-200);
+  margin-bottom: 20px;
+}
+.financing-highlight .apr { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--warm-dark); }
+.financing-highlight .apr-sub { font-size: 0.9375rem; color: var(--gray-500); }
+.financing-badges { display: flex; gap: 12px; flex-wrap: wrap; }
+.financing-badge {
+  padding: 10px 20px;
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+.financing-badge i { color: var(--teal-mid); }
+.financing-benefits { display: flex; flex-direction: column; gap: 16px; }
+.financing-benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  transition: all var(--transition);
+}
+.financing-benefit:hover { border-color: var(--teal-dark); box-shadow: var(--shadow-sm); }
+.financing-benefit i { font-size: 1.25rem; margin-top: 2px; flex-shrink: 0; }
+.financing-benefit:nth-child(1) i { color: var(--teal-light); }
+.financing-benefit:nth-child(2) i { color: var(--warm-mid); }
+.financing-benefit:nth-child(3) i { color: var(--teal-dark); }
+.financing-benefit strong { display: block; font-size: 1rem; color: var(--teal-dark); }
+.financing-benefit span { font-size: 0.875rem; color: var(--gray-500); }
+.contact { background: var(--white); }
+.contact .section-label { background: rgba(212,105,43,0.08); color: var(--warm-dark); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.contact-form-wrap {
+  background: var(--cream);
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--cream-dark);
+}
+.form-group { margin-bottom: 20px; }
+.form-group label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--gray-900);
+  background: var(--white);
+  transition: all var(--transition);
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--teal-dark);
+  box-shadow: 0 0 0 3px rgba(13,59,59,0.1);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-group .error-input { border-color: #dc3545; }
+.form-error { font-size: 0.8125rem; color: #dc3545; margin-top: 4px; display: none; }
+.form-error.show { display: block; }
+.form-submit {
+  width: 100%;
+  padding: 16px;
+  background: var(--teal-dark);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+.form-submit:hover {
+  background: var(--teal-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(13,59,59,0.2);
+}
+.form-success { display: none; text-align: center; padding: 40px 20px; }
+.form-success i { font-size: 3rem; color: var(--teal-mid); margin-bottom: 16px; }
+.form-success h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--teal-dark); margin-bottom: 8px; }
+.form-success p { color: var(--gray-500); }
+.contact-info { display: flex; flex-direction: column; gap: 24px; }
+.contact-info-card {
+  padding: 24px;
+  background: var(--cream);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cream-dark);
+}
+.contact-info-card h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--teal-dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.contact-info-card h4 i { color: var(--warm-mid); }
+.contact-info-card p, .contact-info-card li { font-size: 0.9375rem; color: var(--gray-500); line-height: 1.7; }
+.contact-info-card ul { display: flex; flex-wrap: wrap; gap: 8px; }
+.contact-info-card ul li { padding: 4px 12px; background: white; border-radius: 100px; font-size: 0.8125rem; border: 1px solid var(--gray-200); }
+.badge-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+.badge-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 100px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--teal-dark);
+}
+.badge-tag i { color: var(--teal-mid); font-size: 0.75rem; }
+footer {
+  background: var(--teal-dark);
+  color: var(--cream);
+  padding: 60px 0 0;
+}
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+footer .nav-logo { color: var(--cream); }
+footer .nav-logo span { color: var(--warm-light); }
+.footer-brand p { font-size: 0.9375rem; line-height: 1.7; opacity: 0.7; margin: 16px 0 20px; max-width: 320px; }
+.footer-social { display: flex; gap: 12px; }
+.footer-social a {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cream);
+  font-size: 0.9375rem;
+  transition: all var(--transition);
+}
+.footer-social a:hover { background: var(--warm-dark); border-color: var(--warm-dark); transform: translateY(-2px); }
+.footer-col h4 { font-family: var(--font-display); font-size: 0.9375rem; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.02em; }
+.footer-col ul { display: flex; flex-direction: column; gap: 12px; }
+.footer-col a { font-size: 0.875rem; opacity: 0.7; transition: all var(--transition); }
+.footer-col a:hover { opacity: 1; color: var(--warm-light); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8125rem;
+  opacity: 0.6;
+}
+.floating-cta {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  background: linear-gradient(135deg, var(--warm-mid), var(--warm-dark));
+  color: white;
+  border-radius: 50px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  box-shadow: 0 8px 32px rgba(212,105,43,0.35);
+  transition: all var(--transition);
+  animation: pulse-cta 2.5s ease-in-out infinite;
+}
+.floating-cta:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(212,105,43,0.45);
+  animation-play-state: paused;
+}
+@keyframes pulse-cta {
+  0%, 100% { box-shadow: 0 8px 32px rgba(212,105,43,0.35); }
+  50% { box-shadow: 0 8px 48px rgba(212,105,43,0.55); }
+}
+.floating-cta i { font-size: 1rem; }
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+@media (max-width: 1024px) {
+  .hero .container { grid-template-columns: 1fr; text-align: center; }
+  .hero-text { max-width: 100%; }
+  .hero p { max-width: 100%; }
+  .hero-buttons { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-visual { display: none; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .energy-grid { grid-template-columns: 1fr; gap: 40px; }
+  .plans-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .plan-card.featured { transform: none; }
+  .plan-card.featured:hover { transform: translateY(-4px); }
+  .financing-grid { grid-template-columns: 1fr; gap: 40px; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .top-bar-greeting { display: none; }
+  .nav-links {
+    position: fixed;
+    inset: 0;
+    background: var(--cream);
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    font-size: 1.25rem;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+  }
+  .nav-links.open { transform: translateX(0); }
+  .nav-links a { font-size: 1.125rem; }
+  .nav-cta { display: inline-flex !important; }
+  .hamburger { display: flex; }
+  .services-grid { grid-template-columns: 1fr; }
+  .seasonal-content { flex-direction: column; text-align: center; }
+  .seasonal-timer { justify-content: center; }
+  .section { padding: 60px 0; }
+  .contact-form-wrap { padding: 24px; }
+  .floating-cta { bottom: 20px; right: 20px; padding: 14px 22px; font-size: 0.875rem; }
+  .floating-cta span { display: none; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .hero h1 { font-size: clamp(2rem, 8vw, 2.75rem); }
+}
+@media (max-width: 480px) {
+  .top-bar { font-size: 0.75rem; }
+  .hero-buttons { flex-direction: column; align-items: center; }
+  .btn { width: 100%; justify-content: center; }
+  .hero-stat { font-size: 0.8125rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="container">
+    <a href="tel:+15553456789" class="top-bar-phone">
+      <i class="fa-solid fa-phone"></i>
+      24/7 Emergency HVAC: (555) 345-6789
+    </a>
+    <span class="top-bar-greeting">
+      <i class="fa-solid fa-sun"></i>
+      <span id="seasonal-greeting">Summer is here — stay cool with ClimateCraft</span>
+    </span>
+  </div>
+</div>
+
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-icon"><i class="fa-solid fa-wind"></i></span>
+      Climate<span>Craft</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#services">Services</a>
+      <a href="#energy">Efficiency</a>
+      <a href="#plans">Plans</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta">Get Estimate</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-shapes">
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+  </div>
+  <div class="hero-waves">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1350,60 1440,40 L1440,80 L0,80 Z" fill="rgba(13,59,59,0.04)"/>
+    </svg>
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0,60 C320,20 680,80 1080,40 C1240,20 1340,20 1440,40 L1440,80 L0,80 Z" fill="rgba(212,105,43,0.03)"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="container">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <i class="fa-solid fa-certificate"></i>
+          NATE-Certified Technicians
+        </div>
+        <h1>
+          Bringing <span class="highlight-warm">Balance</span><br>
+          to Your <span class="highlight-cool">Home</span>
+        </h1>
+        <p>Expert heating, cooling, and air quality services designed to keep your family comfortable every season. Trusted by homeowners across the region since 1988.</p>
+        <div class="hero-buttons">
+          <a href="#contact" class="btn btn-primary"><i class="fa-solid fa-calendar-check"></i> Schedule Service</a>
+          <a href="#contact" class="btn btn-secondary"><i class="fa-solid fa-calculator"></i> Get Free Estimate</a>
+        </div>
+        <div class="hero-stats">
+          <span class="hero-stat cool"><i class="fa-solid fa-snowflake"></i> 3,200+ Coolings Installed</span>
+          <span class="hero-stat warm"><i class="fa-solid fa-fire"></i> 2,800+ Furnaces Serviced</span>
+          <span class="hero-stat cool"><i class="fa-solid fa-star"></i> 4.9 Average Rating</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-split-ring">
+          <div class="hero-split-ring-inner">
+            <div class="temp-icon"><i class="fa-solid fa-temperature-half"></i></div>
+            <div class="temp-value">72&deg;</div>
+            <div class="temp-label">Perfect Balance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="seasonal-banner">
+  <div class="seasonal-banner-inner">
+    <div class="seasonal-decoration seasonal-decoration-1"><i class="fa-solid fa-sun"></i></div>
+    <div class="seasonal-decoration seasonal-decoration-2"><i class="fa-solid fa-snowflake"></i></div>
+    <div class="seasonal-decoration seasonal-decoration-3"><i class="fa-solid fa-leaf"></i></div>
+    <div class="container">
+      <div class="seasonal-content">
+        <div class="seasonal-text">
+          <h3><i class="fa-solid fa-tag" style="color:var(--warm-dark);margin-right:8px;"></i> Summer Tune-Up Special &mdash; Save $150</h3>
+          <p>Full AC inspection, filter replacement, and priority service. Offer ends soon!</p>
+        </div>
+        <div class="seasonal-timer" id="countdown">
+          <div class="timer-item"><span class="num" id="timer-days">07</span><span class="label">Days</span></div>
+          <span class="timer-sep">:</span>
+          <div class="timer-item"><span class="num" id="timer-hours">24</span><span class="label">Hours</span></div>
+          <span class="timer-sep">:</span>
+          <div class="timer-item"><span class="num" id="timer-minutes">60</span><span class="label">Mins</span></div>
+          <span class="timer-sep">:</span>
+          <div class="timer-item"><span class="num" id="timer-seconds">00</span><span class="label">Secs</span></div>
+        </div>
+        <a href="#contact" class="btn btn-accent seasonal-cta">Claim This Offer <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section services" id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Our Services</span>
+      <h2 class="section-title">Complete <span class="gradient-split">Climate Control</span></h2>
+      <p class="section-subtitle">From emergency repairs to full system installations, we handle every aspect of your home's comfort.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon"><i class="fa-solid fa-snowflake"></i></div>
+        <h3>AC Repair &amp; Installation</h3>
+        <p>Central air, ductless mini-splits, and heat pumps. Expert installation and 24/7 emergency repair when you need it most.</p>
+        <a href="#contact" class="service-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon"><i class="fa-solid fa-fire"></i></div>
+        <h3>Furnace &amp; Heating</h3>
+        <p>Gas, electric, and oil furnaces. System diagnostics, repairs, and high-efficiency replacements with worry-free warranties.</p>
+        <a href="#contact" class="service-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon"><i class="fa-solid fa-repeat"></i></div>
+        <h3>Heat Pump Services</h3>
+        <p>Year-round efficiency with modern heat pump technology. Installation, maintenance, and performance optimization for any climate.</p>
+        <a href="#contact" class="service-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon"><i class="fa-solid fa-wind"></i></div>
+        <h3>Indoor Air Quality</h3>
+        <p>HEPA filtration, UV air purifiers, humidifiers, and dehumidifiers. Breathe cleaner, healthier air all year round.</p>
+        <a href="#contact" class="service-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon"><i class="fa-solid fa-pipe-valve"></i></div>
+        <h3>Ductwork &amp; Ventilation</h3>
+        <p>Duct cleaning, sealing, and replacement. Improve airflow, reduce energy loss, and eliminate hot and cold spots in your home.</p>
+        <a href="#contact" class="service-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal reveal-delay-4">
+        <div class="service-icon"><i class="fa-solid fa-building"></i></div>
+        <h3>Commercial HVAC</h3>
+        <p>Rooftop units, VRF systems, and building automation. Tailored solutions for offices, retail spaces, and multi-tenant properties.</p>
+        <a href="#contact" class="service-link">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section energy" id="energy">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Energy Efficiency</span>
+      <h2 class="section-title">Save Energy. <span class="gradient-cool">Save Money.</span></h2>
+      <p class="section-subtitle">High-efficiency systems that pay for themselves through lower utility bills and available tax credits.</p>
+    </div>
+    <div class="energy-grid">
+      <div class="energy-info reveal">
+        <h3>Upgrade to a Higher SEER Rating</h3>
+        <p>SEER (Seasonal Energy Efficiency Ratio) measures your cooling system's efficiency. The higher the SEER rating, the less energy you use. Most older systems operate at SEER 10&ndash;12. Modern systems achieve SEER 16&ndash;26.</p>
+        <div class="energy-highlight">
+          <i class="fa-solid fa-bolt"></i>
+          <div>
+            <strong>Save up to 40% on energy bills</strong>
+            <span>with a qualifying high-efficiency system upgrade</span>
+          </div>
+        </div>
+        <div class="energy-badges">
+          <span class="energy-badge"><i class="fa-regular fa-star"></i> ENERGY STAR Certified</span>
+          <span class="energy-badge"><i class="fa-solid fa-file-invoice"></i> Up to $2,000 Tax Credit</span>
+          <span class="energy-badge"><i class="fa-solid fa-receipt"></i> Rebate Eligible</span>
+        </div>
+      </div>
+      <div class="energy-visual reveal reveal-delay-2">
+        <div class="energy-gauge">
+          <div class="energy-gauge-arrow" id="gaugeArrow"></div>
+          <div class="energy-gauge-inner">
+            <div class="value">SEER 18</div>
+            <div class="label">High Efficiency</div>
+          </div>
+        </div>
+        <div class="energy-savings">
+          <div class="big">$580/yr</div>
+          <p>estimated average savings vs. SEER 10 system</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section plans" id="plans">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Maintenance Plans</span>
+      <h2 class="section-title">Peace of Mind, <span class="gradient-warm">Every Season</span></h2>
+      <p class="section-subtitle">Protect your investment with a maintenance plan that fits your home and budget.</p>
+    </div>
+    <div class="plan-toggle reveal">
+      <span class="active" id="toggleMonthlyLabel">Monthly</span>
+      <div class="toggle-switch" id="pricingToggle"></div>
+      <span id="toggleAnnualLabel">Annual <span class="plan-save">Save 15%</span></span>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card reveal reveal-delay-1">
+        <h3>Basic Care</h3>
+        <div class="plan-price">
+          <span class="amount" id="price1">$19</span>
+          <span class="period" id="period1">/month</span>
+        </div>
+        <ul class="plan-features">
+          <li><i class="fa-solid fa-check"></i> Annual HVAC inspection</li>
+          <li><i class="fa-solid fa-check"></i> Filter replacement (2 per year)</li>
+          <li><i class="fa-solid fa-check"></i> 10% repair discount</li>
+          <li><i class="fa-solid fa-check"></i> Priority scheduling</li>
+          <li><i class="fa-solid fa-check"></i> Seasonal maintenance tips</li>
+        </ul>
+        <button class="plan-btn">Choose Plan</button>
+      </div>
+      <div class="plan-card featured reveal reveal-delay-2">
+        <span class="plan-badge">Best Value</span>
+        <h3>Comfort Plus</h3>
+        <div class="plan-price">
+          <span class="amount" id="price2">$34</span>
+          <span class="period" id="period2">/month</span>
+        </div>
+        <ul class="plan-features">
+          <li><i class="fa-solid fa-check"></i> Bi-annual HVAC inspections</li>
+          <li><i class="fa-solid fa-check"></i> Filter replacement (4 per year)</li>
+          <li><i class="fa-solid fa-check"></i> 20% repair discount</li>
+          <li><i class="fa-solid fa-check"></i> Priority scheduling</li>
+          <li><i class="fa-solid fa-check"></i> No overtime labor charges</li>
+          <li><i class="fa-solid fa-check"></i> Annual duct inspection</li>
+        </ul>
+        <button class="plan-btn">Choose Plan</button>
+      </div>
+      <div class="plan-card reveal reveal-delay-3">
+        <h3>Premium Protection</h3>
+        <div class="plan-price">
+          <span class="amount" id="price3">$59</span>
+          <span class="period" id="period3">/month</span>
+        </div>
+        <ul class="plan-features">
+          <li><i class="fa-solid fa-check"></i> Quarterly HVAC inspections</li>
+          <li><i class="fa-solid fa-check"></i> Filter replacement (6 per year)</li>
+          <li><i class="fa-solid fa-check"></i> 30% repair discount</li>
+          <li><i class="fa-solid fa-check"></i> Priority 24/7 scheduling</li>
+          <li><i class="fa-solid fa-check"></i> No overtime or trip charges</li>
+          <li><i class="fa-solid fa-check"></i> Annual duct &amp; IAQ test</li>
+          <li><i class="fa-solid fa-check"></i> Two free tune-ups per year</li>
+        </ul>
+        <button class="plan-btn">Choose Plan</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Testimonials</span>
+      <h2 class="section-title">Trusted by <span class="gradient-warm">Thousands</span></h2>
+      <p class="section-subtitle">Real stories from homeowners who trust ClimateCraft with their family's comfort.</p>
+    </div>
+    <div class="testimonial-carousel reveal">
+      <div class="testimonial-track" id="testimonialTrack">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <div class="testimonial-text">
+            ClimateCraft installed a new heat pump and ductwork in our 1920s home. The team was meticulous, respectful, and the system is whisper-quiet. Our energy bills dropped by 35% in the first month.
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar warm">MR</div>
+            <div>
+              <div class="testimonial-name">Margaret R.</div>
+              <div class="testimonial-location">Portland, OR</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <div class="testimonial-text">
+            Our furnace died on the coldest night of the year. I called at 10 PM and a technician was at our door by 11. Temporary heat set up in 20 minutes, new furnace installed the next morning. Unreal service.
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar cool">DK</div>
+            <div>
+              <div class="testimonial-name">David K.</div>
+              <div class="testimonial-location">Salem, OR</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          </div>
+          <div class="testimonial-text">
+            We signed up for the Comfort Plus maintenance plan and it has been worth every penny. Our system runs more efficiently, the filters are always fresh, and the techs are incredibly knowledgeable. Highly recommend.
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar warm">SL</div>
+            <div>
+              <div class="testimonial-name">Sofia L.</div>
+              <div class="testimonial-location">Beaverton, OR</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-controls" id="testimonialControls">
+        <button class="testimonial-dot active" data-index="0" aria-label="Testimonial 1"></button>
+        <button class="testimonial-dot" data-index="1" aria-label="Testimonial 2"></button>
+        <button class="testimonial-dot" data-index="2" aria-label="Testimonial 3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section financing" id="financing">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Financing</span>
+      <h2 class="section-title">Comfort Within <span class="gradient-warm">Reach</span></h2>
+      <p class="section-subtitle">Flexible financing options that make upgrading your home's comfort system more affordable than ever.</p>
+    </div>
+    <div class="financing-grid">
+      <div class="financing-info reveal">
+        <h3>Affordable Payment Options</h3>
+        <p>We believe every family deserves a comfortable home. That's why we partner with leading lenders to offer financing solutions that fit your budget, not the other way around.</p>
+        <div class="financing-highlight">
+          <div class="apr">0% APR for 12 Months</div>
+          <div class="apr-sub">on qualifying systems with approved credit &mdash; no interest, no hidden fees.</div>
+        </div>
+        <div class="financing-badges">
+          <span class="financing-badge"><i class="fa-regular fa-building"></i> Wells Fargo</span>
+          <span class="financing-badge"><i class="fa-regular fa-building"></i> Synchrony</span>
+          <span class="financing-badge"><i class="fa-regular fa-building"></i> GreenSky</span>
+          <span class="financing-badge"><i class="fa-regular fa-credit-card"></i> Apply Online</span>
+        </div>
+      </div>
+      <div class="financing-benefits reveal reveal-delay-2">
+        <div class="financing-benefit">
+          <i class="fa-solid fa-percent"></i>
+          <div>
+            <strong>Competitive Rates</strong>
+            <span>Rates as low as 3.99% APR for qualified buyers with terms up to 10 years.</span>
+          </div>
+        </div>
+        <div class="financing-benefit">
+          <i class="fa-solid fa-check-circle"></i>
+          <div>
+            <strong>Quick Approval</strong>
+            <span>Get approved in minutes with a simple online application. No impact to your credit score.</span>
+          </div>
+        </div>
+        <div class="financing-benefit">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div>
+            <strong>No Hidden Fees</strong>
+            <span>Zero prepayment penalties, no origination fees, and transparent terms from day one.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Contact Us</span>
+      <h2 class="section-title">Let's Get <span class="gradient-split">Started</span></h2>
+      <p class="section-subtitle">Ready for a quote or need emergency service? Reach out and we'll respond within hours, not days.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-form-wrap reveal">
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="formName">Full Name</label>
+            <input type="text" id="formName" name="name" placeholder="Your name" required>
+            <div class="form-error" id="nameError">Please enter your name.</div>
+          </div>
+          <div class="form-group">
+            <label for="formPhone">Phone Number</label>
+            <input type="tel" id="formPhone" name="phone" placeholder="(555) 123-4567" required>
+            <div class="form-error" id="phoneError">Please enter a valid phone number.</div>
+          </div>
+          <div class="form-group">
+            <label for="formEmail">Email Address</label>
+            <input type="email" id="formEmail" name="email" placeholder="you@example.com" required>
+            <div class="form-error" id="emailError">Please enter a valid email address.</div>
+          </div>
+          <div class="form-group">
+            <label for="formService">Service Needed</label>
+            <select id="formService" name="service" required>
+              <option value="">Select a service...</option>
+              <option value="ac">AC Repair / Installation</option>
+              <option value="heating">Furnace / Heating</option>
+              <option value="heat-pump">Heat Pump</option>
+              <option value="air-quality">Indoor Air Quality</option>
+              <option value="ductwork">Ductwork / Ventilation</option>
+              <option value="commercial">Commercial HVAC</option>
+              <option value="other">Other</option>
+            </select>
+            <div class="form-error" id="serviceError">Please select a service.</div>
+          </div>
+          <div class="form-group">
+            <label for="formMessage">Message</label>
+            <textarea id="formMessage" name="message" placeholder="Tell us about your project or issue..." rows="4"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <i class="fa-regular fa-circle-check"></i>
+          <h3>Thank You!</h3>
+          <p>We've received your message and will be in touch within 24 hours. For immediate emergencies, please call our 24/7 line.</p>
+        </div>
+      </div>
+      <div class="contact-info reveal reveal-delay-2">
+        <div class="contact-info-card">
+          <h4><i class="fa-solid fa-location-dot"></i> Service Area</h4>
+          <ul>
+            <li>Portland</li>
+            <li>Beaverton</li>
+            <li>Salem</li>
+            <li>Hillsboro</li>
+            <li>Gresham</li>
+            <li>Tigard</li>
+            <li>Lake Oswego</li>
+          </ul>
+        </div>
+        <div class="contact-info-card">
+          <h4><i class="fa-solid fa-clock"></i> Hours of Operation</h4>
+          <p><strong>Mon &ndash; Fri:</strong> 7:00 AM &ndash; 7:00 PM<br>
+          <strong>Saturday:</strong> 8:00 AM &ndash; 5:00 PM<br>
+          <strong>Sunday:</strong> Emergency service only</p>
+        </div>
+        <div class="contact-info-card">
+          <h4><i class="fa-solid fa-shield"></i> Licensed &amp; Insured</h4>
+          <p>CCB #214185 &bull; Fully insured for your protection &bull; All technicians are background-checked and drug-tested.</p>
+          <div class="badge-row">
+            <span class="badge-tag"><i class="fa-solid fa-certificate"></i> NATE Certified</span>
+            <span class="badge-tag"><i class="fa-solid fa-award"></i> EPA Certified</span>
+            <span class="badge-tag"><i class="fa-solid fa-thumbs-up"></i> BBB A+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">
+          <span class="nav-logo-icon"><i class="fa-solid fa-wind"></i></span>
+          Climate<span>Craft</span>
+        </a>
+        <p>Your Perfect Climate, Every Season. Family-owned and operated since 1988, delivering premium HVAC services with warmth and integrity.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Yelp"><i class="fa-brands fa-yelp"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">AC Repair</a></li>
+          <li><a href="#services">Furnace Service</a></li>
+          <li><a href="#services">Heat Pumps</a></li>
+          <li><a href="#services">Air Quality</a></li>
+          <li><a href="#services">Commercial HVAC</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#testimonials">Reviews</a></li>
+          <li><a href="#plans">Maintenance Plans</a></li>
+          <li><a href="#financing">Financing</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+15553456789">(555) 345-6789</a></li>
+          <li><a href="mailto:hello@climatecrafthvac.com">hello@climatecrafthvac.com</a></li>
+          <li><a href="#">1234 Comfort Way<br>Portland, OR 97201</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 ClimateCraft HVAC, LLC. All rights reserved.</span>
+      <span>License #CCB214185 &bull; Privacy Policy &bull; Terms of Service</span>
+    </div>
+  </div>
+</footer>
+
+<a href="#contact" class="floating-cta" id="floatingCta">
+  <i class="fa-solid fa-calculator"></i>
+  <span>Get Free Estimate</span>
+</a>
+
+<script>
+(function() {
+  'use strict';
+
+  const nav = document.getElementById('navbar');
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  const floatingCta = document.getElementById('floatingCta');
+
+  hamburger.addEventListener('click', function() {
+    this.classList.toggle('active');
+    navLinks.classList.toggle('open');
+    document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+  });
+
+  navLinks.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  let lastScroll = 0;
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY;
+    if (scrollY > 60) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+    if (scrollY > 500) {
+      floatingCta.style.transform = 'translateY(0)';
+      floatingCta.style.opacity = '1';
+    } else {
+      floatingCta.style.transform = 'translateY(20px)';
+      floatingCta.style.opacity = '0';
+    }
+    lastScroll = scrollY;
+  }, { passive: true });
+
+  floatingCta.style.transform = 'translateY(20px)';
+  floatingCta.style.opacity = '0';
+  floatingCta.style.transition = 'all 0.4s cubic-bezier(0.4,0,0.2,1)';
+
+  var countdownDate = new Date();
+  countdownDate.setDate(countdownDate.getDate() + 7);
+  countdownDate.setHours(23, 59, 59, 0);
+
+  function updateTimer() {
+    var now = new Date().getTime();
+    var diff = countdownDate.getTime() - now;
+    if (diff <= 0) {
+      document.getElementById('countdown').innerHTML = '<span style="font-weight:700;color:var(--warm-dark);">Offer expired</span>';
+      return;
+    }
+    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    var secs = Math.floor((diff % (1000 * 60)) / 1000);
+    document.getElementById('timer-days').textContent = String(days).padStart(2,'0');
+    document.getElementById('timer-hours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('timer-minutes').textContent = String(mins).padStart(2,'0');
+    document.getElementById('timer-seconds').textContent = String(secs).padStart(2,'0');
+  }
+  updateTimer();
+  setInterval(updateTimer, 1000);
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target.id === 'gaugeArrow') {
+          setTimeout(function() {
+            entry.target.classList.add('animate');
+          }, 300);
+        }
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal, #gaugeArrow').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  var testimonialTrack = document.getElementById('testimonialTrack');
+  var dots = document.querySelectorAll('.testimonial-dot');
+  var currentSlide = 0;
+  var autoRotate;
+
+  function goToSlide(index) {
+    currentSlide = index;
+    testimonialTrack.style.transform = 'translateX(-' + (index * 100) + '%)';
+    dots.forEach(function(dot, i) {
+      dot.classList.toggle('active', i === index);
+    });
+  }
+
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      goToSlide(parseInt(this.getAttribute('data-index')));
+      resetAutoRotate();
+    });
+  });
+
+  function resetAutoRotate() {
+    clearInterval(autoRotate);
+    autoRotate = setInterval(function() {
+      goToSlide((currentSlide + 1) % dots.length);
+    }, 6000);
+  }
+  autoRotate = setInterval(function() {
+    goToSlide((currentSlide + 1) % dots.length);
+  }, 6000);
+
+  var isAnnual = false;
+  var toggle = document.getElementById('pricingToggle');
+  var monthlyLabel = document.getElementById('toggleMonthlyLabel');
+  var annualLabel = document.getElementById('toggleAnnualLabel');
+  var prices = [
+    { monthly: 19, annual: 194 },
+    { monthly: 34, annual: 347 },
+    { monthly: 59, annual: 602 }
+  ];
+
+  function updatePricing() {
+    prices.forEach(function(p, i) {
+      var priceEl = document.getElementById('price' + (i+1));
+      var periodEl = document.getElementById('period' + (i+1));
+      if (isAnnual) {
+        priceEl.textContent = '$' + p.annual;
+        periodEl.textContent = '/year';
+      } else {
+        priceEl.textContent = '$' + p.monthly;
+        periodEl.textContent = '/month';
+      }
+    });
+    toggle.classList.toggle('active', isAnnual);
+    monthlyLabel.classList.toggle('active', !isAnnual);
+    annualLabel.classList.toggle('active', isAnnual);
+  }
+
+  toggle.addEventListener('click', function() {
+    isAnnual = !isAnnual;
+    updatePricing();
+  });
+
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var greetingEl = document.getElementById('seasonal-greeting');
+  var month = new Date().getMonth();
+  var seasonGreetings = {
+    winter: 'Winter is here &mdash; stay warm with ClimateCraft',
+    spring: 'Spring has sprung &mdash; fresh air with ClimateCraft',
+    summer: 'Summer is here &mdash; stay cool with ClimateCraft',
+    fall: 'Leaves are falling &mdash; cozy up with ClimateCraft'
+  };
+  var seasons = ['winter','winter','spring','spring','spring','summer','summer','summer','fall','fall','fall','winter'];
+  greetingEl.innerHTML = seasonGreetings[seasons[month]];
+
+  var form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var valid = true;
+    var name = document.getElementById('formName');
+    var phone = document.getElementById('formPhone');
+    var email = document.getElementById('formEmail');
+    var service = document.getElementById('formService');
+    var errors = {
+      name: document.getElementById('nameError'),
+      phone: document.getElementById('phoneError'),
+      email: document.getElementById('emailError'),
+      service: document.getElementById('serviceError')
+    };
+
+    [name, phone, email, service].forEach(function(field) {
+      field.classList.remove('error-input');
+    });
+    Object.values(errors).forEach(function(el) { el.classList.remove('show'); });
+
+    if (!name.value.trim()) {
+      errors.name.classList.add('show');
+      name.classList.add('error-input');
+      valid = false;
+    }
+    if (!phone.value.trim() || !/^[\\s\\d\\-()\\.\\+]{7,20}$/.test(phone.value.trim())) {
+      errors.phone.classList.add('show');
+      phone.classList.add('error-input');
+      valid = false;
+    }
+    if (!email.value.trim() || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.value.trim())) {
+      errors.email.classList.add('show');
+      email.classList.add('error-input');
+      valid = false;
+    }
+    if (!service.value) {
+      errors.service.classList.add('show');
+      service.classList.add('error-input');
+      valid = false;
+    }
+
+    if (valid) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    }
+  });
+})();
+</script>
+</body>
+</html>

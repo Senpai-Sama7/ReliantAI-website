@@ -63,6 +63,7 @@ interface TestimonialsV2Props {
 
 export default function TestimonialsV2({ introComplete = true }: TestimonialsV2Props) {
   const sectionRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const logosRef = useRef<HTMLDivElement>(null);
@@ -78,8 +79,9 @@ export default function TestimonialsV2({ introComplete = true }: TestimonialsV2P
       ctxRef.current = null;
 
       const section = sectionRef.current;
+      const pin = pinRef.current;
       const track = trackRef.current;
-      if (!section || !track) return;
+      if (!section || !pin || !track) return;
 
       const reduced = prefersReducedMotion();
       const mobile = isMobileViewport();
@@ -103,10 +105,10 @@ export default function TestimonialsV2({ introComplete = true }: TestimonialsV2P
           const scrollAmount = Math.max(0, track.scrollWidth - window.innerWidth);
 
           const pinTrigger = ScrollTrigger.create({
-            trigger: section,
+            trigger: pin,
             start: 'top top',
             end: () => `+=${scrollAmount}`,
-            pin: true,
+            pin: pin,
             scrub: 1,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -166,7 +168,7 @@ export default function TestimonialsV2({ introComplete = true }: TestimonialsV2P
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 h-screen flex flex-col justify-center">
+      <div ref={pinRef} className="relative z-10 h-screen flex flex-col justify-center">
         <div ref={headerRef} className="text-center mb-12 px-6 pt-16">
           <span className="reveal-item text-xs uppercase tracking-[0.3em] text-white/40 font-opensans block mb-4">
             Client Results

@@ -75,6 +75,11 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
     };
 
     const draw = (time: number) => {
+      if (document.hidden) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
+
       const breath = 0.5 + Math.sin(time * 0.0008) * 0.5;
       const wind = scrollVelRef.current * 0.08;
       scrollVelRef.current *= 0.92;

@@ -1,6 +1,4 @@
 import { useEffect, useState, useCallback } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/Navigation';
 import IntroOverlay from './components/IntroOverlay';
@@ -12,9 +10,12 @@ import SmoothScrollProvider from './components/SmoothScrollProvider';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import VideoShowcase from './pages/VideoShowcase';
+import PortfolioShowcase from './pages/PortfolioShowcase';
 import NotFound from './pages/NotFound';
 import { useTheme } from './hooks/useTheme';
 import { applyRouteSeo } from './lib/seo';
+import { markScrollLayoutReady } from './lib/scrollLayout';
+import { INTRO_LAYOUT_SETTLE_MS } from './hooks/useIntroAnimations';
 import { Toaster } from 'sonner';
 import './App.css';
 
@@ -32,8 +33,6 @@ import Contact from './sections/Contact';
 
 import { caseStudyChapters } from './data/chapters';
 
-gsap.registerPlugin(ScrollTrigger);
-
 function App() {
   useTheme();
   const [introComplete, setIntroComplete] = useState(false);
@@ -42,19 +41,13 @@ function App() {
     setIntroComplete(true);
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIntroComplete(true);
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, []);
-
   const path = window.location.pathname;
   const isPrivacyPolicy = path === '/privacy-policy';
   const isTermsOfService = path === '/terms-of-service';
   const isShowcase = path === '/showcase';
-  const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isShowcase;
-  const isStandalonePage = isPrivacyPolicy || isTermsOfService || isShowcase;
+  const isPortfolio = path === '/portfolio';
+  const isKnownPath = path === '/' || isPrivacyPolicy || isTermsOfService || isShowcase || isPortfolio;
+  const isStandalonePage = isPrivacyPolicy || isTermsOfService || isShowcase || isPortfolio;
 
   useEffect(() => {
     applyRouteSeo(window.location.pathname);
@@ -63,14 +56,11 @@ function App() {
   useEffect(() => {
     if (isStandalonePage || !introComplete) return;
 
-    const refresh = () => ScrollTrigger.refresh();
-    refresh();
-    const t1 = setTimeout(refresh, 500);
-    const t2 = setTimeout(refresh, 1200);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
+    const layoutTimer = window.setTimeout(() => {
+      markScrollLayoutReady();
+    }, INTRO_LAYOUT_SETTLE_MS + 400);
+
+    return () => window.clearTimeout(layoutTimer);
   }, [isStandalonePage, introComplete]);
 
   if (isPrivacyPolicy) {
@@ -83,6 +73,10 @@ function App() {
 
   if (isShowcase) {
     return <VideoShowcase />;
+  }
+
+  if (isPortfolio) {
+    return <PortfolioShowcase />;
   }
 
   if (!isKnownPath) {
