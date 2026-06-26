@@ -1,32 +1,10 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
-import fs from "fs"
-
-// Serve static portfolio HTML files before SPA fallback
-function portfolioPlugin() {
-  return {
-    name: 'portfolio-static',
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        const url = req.url || '';
-        if (url.startsWith('/portfolio/') && url.endsWith('/')) {
-          const filePath = path.join(__dirname, 'public', url, 'index.html');
-          if (fs.existsSync(filePath)) {
-            res.setHeader('Content-Type', 'text/html');
-            res.end(fs.readFileSync(filePath));
-            return;
-          }
-        }
-        next();
-      });
-    },
-  };
-}
 
 export default defineConfig({
   base: './',
-  plugins: [react(), portfolioPlugin()],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
