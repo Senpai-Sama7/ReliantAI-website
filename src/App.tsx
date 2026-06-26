@@ -25,6 +25,7 @@ import ExperienceZoneTracker from './components/immersive/ExperienceZoneTracker'
 import ImmersiveAtmosphere from './components/immersive/ImmersiveAtmosphere';
 import ZoneHud from './components/immersive/ZoneHud';
 import PinnedStory from './sections/PinnedStory';
+import PortfolioSection from './sections/PortfolioSection';
 import ServicesV2 from './sections/ServicesV2';
 import TestimonialsV2 from './sections/TestimonialsV2';
 import About from './sections/About';
@@ -111,6 +112,8 @@ function App() {
             <section id="work" aria-label="Case studies overview">
               <PinnedStory chapters={caseStudyChapters} introComplete={introComplete} />
             </section>
+
+            <PortfolioSection />
 
             <ServicesV2 introComplete={introComplete} />
             <TestimonialsV2 introComplete={introComplete} />

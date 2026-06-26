@@ -1,0 +1,180 @@
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight, ExternalLink, Wrench, Zap, Thermometer, CheckCircle } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const SITES = [
+  {
+    id: 'plumbing',
+    title: 'AquaGuard Plumbing',
+    tagline: 'Trusted Flow. Premium Service.',
+    icon: Wrench,
+    previewUrl: '/portfolio/plumbing/',
+    color: '#0b1a2e',
+    accent: '#1a7a7a',
+    highlights: ['Emergency booking', 'Animated trust metrics', 'Tiered pricing toggle'],
+  },
+  {
+    id: 'electrical',
+    title: 'VoltCore Electric',
+    tagline: 'Power. Precision. Protection.',
+    icon: Zap,
+    previewUrl: '/portfolio/electrical/',
+    color: '#0a0a0f',
+    accent: '#2563eb',
+    highlights: ['Certification marquee', 'Smart home grid', 'Glass-morphism pricing'],
+  },
+  {
+    id: 'hvac',
+    title: 'ClimateCraft HVAC',
+    tagline: 'Your Perfect Climate, Every Season.',
+    icon: Thermometer,
+    previewUrl: '/portfolio/hvac/',
+    color: '#0d3b3b',
+    accent: '#d4692b',
+    highlights: ['Seasonal countdown', 'SEER efficiency gauge', 'Warm/cool split identity'],
+  },
+];
+
+export default function PortfolioSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [activeId, setActiveId] = useState(SITES[0].id);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const ctx = gsap.context(() => {
+      gsap.from(el.querySelectorAll('.port-fade'), {
+        y: 30, opacity: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%' },
+      });
+    }, el);
+    return () => ctx.revert();
+  }, []);
+
+  const active = SITES.find(s => s.id === activeId)!;
+
+  return (
+    <section
+      ref={sectionRef}
+      id="portfolio"
+      className="relative bg-[#060606] py-20 lg:py-28 overflow-hidden"
+    >
+      {/* Subtle grid background */}
+      <div
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,110,0,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,110,0,0.4) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+        }}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-8 lg:px-16">
+        {/* Header */}
+        <div className="port-fade mb-12 lg:mb-16">
+          <span className="flex items-center gap-3 font-opensans text-orange text-xs uppercase tracking-[0.45em] mb-5">
+            <span className="w-8 h-px bg-orange" />
+            Proof of Work
+          </span>
+          <h2 className="font-teko font-bold leading-[0.88] text-white" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}>
+            <span className="block">THREE SITES.</span>
+            <span className="block text-orange">ZERO TEMPLATES.</span>
+          </h2>
+          <p className="font-opensans text-white/50 text-sm leading-relaxed mt-5 max-w-2xl">
+            Hand-coded contractor websites — plumbing, electrical, HVAC — each built from scratch
+            with production-ready interactivity, SEO, and conversion optimization.
+          </p>
+        </div>
+
+        {/* Tab buttons */}
+        <div className="port-fade flex flex-wrap gap-2 mb-8">
+          {SITES.map(site => (
+            <button
+              key={site.id}
+              onClick={() => setActiveId(site.id)}
+              className={`group relative px-5 py-3 rounded-lg font-opensans text-sm font-semibold transition-all duration-500 ${
+                activeId === site.id
+                  ? 'bg-orange text-white shadow-lg shadow-orange/20'
+                  : 'bg-white/[0.04] text-white/50 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
+              }`}
+            >
+              <site.icon size={14} className="inline mr-2 -mt-0.5" />
+              {site.title}
+            </button>
+          ))}
+        </div>
+
+        {/* Browser frame preview */}
+        <div className="port-fade">
+          <div className="relative rounded-2xl overflow-hidden bg-[#1a1a1a] shadow-2xl shadow-black/50 border border-white/[0.08]">
+            {/* Title bar */}
+            <div className="flex items-center gap-2 px-4 py-3 bg-[#0f0f0f] border-b border-white/[0.06]">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+              </div>
+              <div className="flex-1 text-center">
+                <span className="text-[10px] font-opensans text-white/20">reliantai.org{active.previewUrl}</span>
+              </div>
+              <ExternalLink size={12} className="text-white/20" />
+            </div>
+            {/* Iframe */}
+            <div className="relative bg-white" style={{ height: 'clamp(400px, 55vh, 650px)' }}>
+              <iframe
+                src={active.previewUrl}
+                className="absolute inset-0 w-full h-full"
+                style={{ border: 'none' }}
+                title={active.title}
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Info cards below preview */}
+        <div className="port-fade mt-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {SITES.map(site => (
+            <a
+              key={site.id}
+              href={site.previewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group bg-white/[0.03] border rounded-xl p-5 transition-all duration-500 hover:bg-white/[0.06] ${
+                activeId === site.id
+                  ? 'border-orange/30 shadow-lg shadow-orange/5'
+                  : 'border-white/[0.06] hover:border-white/20'
+              }`}
+              onClick={() => setActiveId(site.id)}
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                  activeId === site.id ? 'bg-orange' : 'bg-white/10 group-hover:bg-orange/20'
+                }`}>
+                  <site.icon size={15} className={activeId === site.id ? 'text-white' : 'text-white/60 group-hover:text-orange'} />
+                </div>
+                <div>
+                  <div className="font-teko text-sm font-bold text-white">{site.title}</div>
+                  <div className="font-opensans text-[10px] text-white/30">{site.tagline}</div>
+                </div>
+                <ArrowUpRight size={14} className="ml-auto text-white/20 group-hover:text-orange transition-colors" />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {site.highlights.map(h => (
+                  <div key={h} className="flex items-center gap-1.5 text-white/40 text-[11px] font-opensans">
+                    <CheckCircle size={10} className="text-orange/60 flex-shrink-0" />
+                    {h}
+                  </div>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
