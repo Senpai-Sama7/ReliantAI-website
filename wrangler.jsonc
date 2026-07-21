@@ -1,0 +1,11 @@
+{
+  // Cloudflare Workers Builds requires a Wrangler config whose `name`
+  // matches the dashboard Worker ("reliantai"). This site is a static
+  // Vite SPA — serve the production build output with SPA fallback.
+  "name": "reliantai",
+  "compatibility_date": "2026-07-21",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
