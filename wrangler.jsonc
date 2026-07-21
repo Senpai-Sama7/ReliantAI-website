@@ -1,7 +1,10 @@
 {
   // Cloudflare Workers Builds requires a Wrangler config whose `name`
-  // matches the dashboard Worker ("reliantai"). This site is a static
-  // Vite SPA — build with Vite, then serve dist/ with SPA fallback.
+  // matches the dashboard Worker ("reliantai").
+  //
+  // Note: Workers Builds ignores wrangler `build.command`. CI creates dist/
+  // via scripts/workers-ci-build.mjs (postinstall when WORKERS_CI=1).
+  // `build.command` still helps local `wrangler deploy` / `versions upload`.
   "name": "reliantai",
   "compatibility_date": "2026-07-21",
   "build": {
@@ -12,3 +15,4 @@
     "not_found_handling": "single-page-application"
   }
 }
+
