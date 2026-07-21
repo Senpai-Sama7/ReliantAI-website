@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Workers Builds ignores wrangler.jsonc build.command.
- * When Cloudflare installs deps (WORKERS_CI=1), produce dist/ so the
- * subsequent `wrangler versions upload` / `wrangler deploy` can find assets.
+ * Workers Builds ignores wrangler.jsonc `build.command` and may not set
+ * WORKERS_CI during `npm ci`. When any non-Vercel CI install runs, produce
+ * dist/ so the subsequent wrangler upload can find assets.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
@@ -12,8 +12,22 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(path.join(root, 'package.json'));
+const distIndex = path.join(root, 'dist', 'index.html');
 
-if (process.env.WORKERS_CI !== '1') {
+const isVercel = process.env.VERCEL === '1' || process.env.VERCEL === 'true';
+const isWorkersCi = process.env.WORKERS_CI === '1';
+const isCi =
+  isWorkersCi ||
+  process.env.CI === 'true' ||
+  process.env.CI === '1' ||
+  process.env.CF_PAGES === '1';
+
+if (isVercel || !isCi) {
+  process.exit(0);
+}
+
+if (existsSync(distIndex)) {
+  console.log('[workers-ci] dist/ already present — skipping build.');
   process.exit(0);
 }
 
@@ -30,7 +44,7 @@ function run(cmd, args) {
   }
 }
 
-console.log('[workers-ci] WORKERS_CI detected — preparing production assets for Cloudflare.');
+console.log('[workers-ci] CI detected without dist/ — running production build for Cloudflare assets.');
 
 let hasVite = false;
 try {
@@ -47,7 +61,7 @@ if (!hasVite) {
 
 run(npm, ['run', 'build']);
 
-if (!existsSync(path.join(root, 'dist', 'index.html'))) {
+if (!existsSync(distIndex)) {
   console.error('[workers-ci] Build finished but dist/index.html is missing.');
   process.exit(1);
 }
