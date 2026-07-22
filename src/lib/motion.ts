@@ -16,6 +16,19 @@ export function isMobileViewport(breakpoint = 1024): boolean {
   return window.innerWidth < breakpoint;
 }
 
+/** True for phones/tablets in portrait-ish widths used for density tweaks. */
+export function isPhoneViewport(breakpoint = 640): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < breakpoint;
+}
+
+export function isCoarsePointer(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia('(pointer: coarse)').matches
+  );
+}
+
 export function onMotionPreferenceChange(callback: () => void): () => void {
   if (typeof window === 'undefined') return () => {};
   const mq = window.matchMedia('(prefers-reduced-motion: reduce)');

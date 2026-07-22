@@ -76,11 +76,11 @@ const LogoReveal = () => {
       {/* Logo Container - explicit height to prevent CLS */}
       <div
         ref={containerRef}
-        className="relative inline-block max-w-full h-[80px] sm:h-[120px] md:h-[150px] lg:h-[180px]"
+        className="relative inline-block max-w-full h-[64px] sm:h-[120px] md:h-[150px] lg:h-[180px]"
       >
         <div className="relative flex items-center justify-center h-full">
           <span
-            className="font-teko font-bold uppercase text-5xl sm:text-7xl md:text-8xl lg:text-[10rem]"
+            className="font-teko font-bold uppercase text-[2.65rem] sm:text-7xl md:text-8xl lg:text-[10rem]"
             style={{ letterSpacing: '-0.03em', lineHeight: 0.85 }}
           >
             {reliantPart && (
@@ -92,7 +92,7 @@ const LogoReveal = () => {
           {!reducedMotion && !settled && (
             <span
               ref={cursorRef}
-              className="text-orange text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-normal ml-1"
+              className="text-orange text-[2.65rem] sm:text-7xl md:text-8xl lg:text-[10rem] font-normal ml-1"
               style={{ lineHeight: 0.85 }}
             >
               |
@@ -103,7 +103,7 @@ const LogoReveal = () => {
         {/* Animated underline */}
         <div
           ref={lineRef}
-          className="absolute -bottom-2 left-0 right-0 h-[3px] origin-left"
+          className="absolute -bottom-1 sm:-bottom-2 left-0 right-0 h-[2px] sm:h-[3px] origin-left"
           style={{
             background: 'linear-gradient(90deg, transparent 0%, #ff6e00 20%, #ff6e00 80%, transparent 100%)',
             opacity: 0,
@@ -112,12 +112,12 @@ const LogoReveal = () => {
       </div>
 
       {/* Static subtitle underneath */}
-      <div className="flex items-center gap-3 opacity-70">
-        <div className="h-px w-8 bg-orange/50" />
-        <span className="font-opensans text-xs sm:text-sm uppercase tracking-[0.25em] text-gray-500 dark:text-white/50">
+      <div className="flex items-center gap-2 sm:gap-3 opacity-70 px-2">
+        <div className="h-px w-5 sm:w-8 bg-orange/50" />
+        <span className="font-opensans text-[10px] sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gray-500 dark:text-white/50 text-center">
           Houston Web Design Studio
         </span>
-        <div className="h-px w-8 bg-orange/50" />
+        <div className="h-px w-5 sm:w-8 bg-orange/50" />
       </div>
     </div>
   );

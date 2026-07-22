@@ -79,7 +79,7 @@ export default function PortfolioSection() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-8 lg:px-16">
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-16">
         {/* Header */}
         <div className="port-fade mb-12 lg:mb-16">
           <span className="flex items-center gap-3 font-opensans text-orange text-xs uppercase tracking-[0.45em] mb-5">
@@ -106,14 +106,15 @@ export default function PortfolioSection() {
               role="tab"
               aria-selected={activeId === site.id}
               onClick={() => setActiveId(site.id)}
-              className={`px-5 py-3 font-opensans text-sm font-semibold border transition-colors duration-150 ${
+              className={`px-4 sm:px-5 py-3 min-h-11 font-opensans text-sm font-semibold border transition-colors duration-150 ${
                 activeId === site.id
                   ? 'bg-orange text-white border-orange'
                   : 'bg-transparent text-white/55 border-white/[0.08] hover:text-white hover:border-white/25'
               }`}
             >
               <span className="mr-2 font-teko tracking-wide opacity-70">{site.mark}</span>
-              {site.title}
+              <span className="sm:hidden">{site.title.split(' ')[0]}</span>
+              <span className="hidden sm:inline">{site.title}</span>
             </button>
           ))}
         </div>
@@ -128,28 +129,31 @@ export default function PortfolioSection() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
               </div>
-              <div className="flex-1 text-center">
-                <span className="text-[10px] font-opensans text-white/55">reliantai.org{active.previewUrl}</span>
+              <div className="flex-1 text-center min-w-0">
+                <span className="block truncate text-[10px] font-opensans text-white/55">reliantai.org{active.previewUrl}</span>
               </div>
-              <ExternalLink size={12} className="text-white/20" />
+              <ExternalLink size={12} className="text-white/20 shrink-0" />
             </div>
-            {/* Iframe */}
-            <div className="relative bg-white" style={{ height: 'clamp(320px, 55vh, 650px)' }}>
-              <iframe
-                src={active.previewUrl}
-                className="absolute inset-0 w-full h-full"
-                style={{ border: 'none' }}
-                title={active.title}
-                loading="lazy"
-                sandbox="allow-scripts allow-same-origin"
-              />
+            {/* Iframe — container-query scale so phones see a readable desktop layout */}
+            <div
+              className="relative bg-white overflow-hidden lg:h-[clamp(320px,55vh,650px)]"
+            >
+              <div className="portfolio-preview-frame relative w-full lg:absolute lg:inset-0 lg:aspect-auto">
+                <iframe
+                  src={active.previewUrl}
+                  className="portfolio-preview-iframe border-0"
+                  title={active.title}
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin"
+                />
+              </div>
               {/* Touch scrim: keeps page scroll from being trapped by the iframe */}
               {isCoarsePointer && interactiveId !== activeId && (
-                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/50 backdrop-blur-[2px]">
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/50 backdrop-blur-[2px] px-4">
                   <button
                     type="button"
                     onClick={() => setInteractiveId(activeId)}
-                    className="px-6 py-3 bg-orange text-white font-opensans text-sm font-semibold rounded-lg shadow-lg shadow-black/30"
+                    className="px-6 py-3 min-h-11 bg-orange text-white font-opensans text-sm font-semibold rounded-lg shadow-lg shadow-black/30"
                   >
                     Tap to interact
                   </button>
@@ -157,7 +161,7 @@ export default function PortfolioSection() {
                     href={active.previewUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 text-white/85 font-opensans text-xs font-semibold underline underline-offset-4 decoration-white/40"
+                    className="touch-target inline-flex items-center gap-1.5 px-4 py-2 text-white/85 font-opensans text-xs font-semibold underline underline-offset-4 decoration-white/40"
                   >
                     Open full site <ArrowUpRight size={12} />
                   </a>

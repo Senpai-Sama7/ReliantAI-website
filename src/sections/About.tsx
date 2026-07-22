@@ -46,6 +46,8 @@ const About = ({ introComplete = true }: AboutProps) => {
       triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
 
+      let nameFailsafe: number | undefined;
+
       const ctx = gsap.context(() => {
         const headerTween = revealFrom(headerRef.current, '.reveal-item', {
           y: 40,
@@ -56,10 +58,11 @@ const About = ({ introComplete = true }: AboutProps) => {
 
         const nameChars = headerRef.current?.querySelectorAll('.name-char');
         if (nameChars && nameChars.length > 0) {
-          const nameTween = gsap.from(nameChars, {
-            opacity: 0,
-            y: 60,
-            rotateX: -90,
+          gsap.set(nameChars, { opacity: 0, y: 60, rotateX: -90 });
+          const nameTween = gsap.to(nameChars, {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
             duration: 0.6,
             stagger: 0.04,
             ease: 'back.out(1.7)',
@@ -71,10 +74,15 @@ const About = ({ introComplete = true }: AboutProps) => {
             },
           });
           if (nameTween.scrollTrigger) triggersRef.current.push(nameTween.scrollTrigger);
+
+          // Failsafe: never leave the name blank if ScrollTrigger misses.
+          nameFailsafe = window.setTimeout(() => {
+            gsap.set(nameChars, { opacity: 1, y: 0, rotateX: 0, clearProps: 'transform' });
+          }, 2500);
         }
 
         const leftTween = revealFrom(leftColRef.current, leftColRef.current, {
-          x: -40,
+          y: 40,
           duration: 0.9,
         });
         if (leftTween) triggersRef.current.push(leftTween);
@@ -96,6 +104,7 @@ const About = ({ introComplete = true }: AboutProps) => {
       ctxRef.current = ctx;
 
       return () => {
+        if (typeof nameFailsafe === 'number') window.clearTimeout(nameFailsafe);
         ctx.revert();
         triggersRef.current.forEach((t) => t.kill());
         triggersRef.current = [];
@@ -118,17 +127,17 @@ const About = ({ introComplete = true }: AboutProps) => {
             <span className="reveal-item inline-block px-4 py-1.5 bg-orange/10 border border-orange/30 rounded-full text-orange font-opensans text-sm mb-6">
               The Architect
             </span>
-            <h2 className="reveal-item font-teko text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-4 overflow-hidden">
-              <span className="inline-block whitespace-nowrap">
+            <h2 className="reveal-item font-teko text-3xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-4 overflow-hidden">
+              <span className="inline-block">
                 {'DOUGLAS'.split('').map((ch, i) => (
-                  <span key={`d${i}`} className="name-char inline-block" style={{ opacity: 0 }}>
+                  <span key={`d${i}`} className="name-char inline-block">
                     {ch === ' ' ? '\u00A0' : ch}
                   </span>
                 ))}
               </span>{' '}
-              <span className="inline-block whitespace-nowrap">
+              <span className="inline-block">
                 {'MITCHELL'.split('').map((ch, i) => (
-                  <span key={`m${i}`} className="name-char inline-block gradient-text" style={{ opacity: 0 }}>
+                  <span key={`m${i}`} className="name-char inline-block gradient-text">
                     {ch}
                   </span>
                 ))}

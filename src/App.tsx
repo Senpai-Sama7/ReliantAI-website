@@ -98,7 +98,7 @@ function App() {
       <FloatingCTA />
       <ExitIntentPopup />
       <CookieConsent ready={introComplete} />
-      <Toaster position="top-right" richColors />
+      <Toaster position="bottom-center" richColors offset="calc(1.5rem + env(safe-area-inset-bottom, 0px))" />
 
       {introComplete && <ImmersiveAtmosphere />}
       {introComplete && <ZoneHud />}

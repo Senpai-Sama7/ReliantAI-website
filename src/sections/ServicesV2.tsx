@@ -93,7 +93,7 @@ export default function ServicesV2({ introComplete = true }: ServicesV2Props) {
     <section
       id="services"
       ref={sectionRef}
-      className="relative py-32 lg:py-40 bg-[#f7f7f7] dark:bg-[#0a0a0a] transition-colors duration-500"
+      className="relative py-20 sm:py-28 lg:py-40 bg-[#f7f7f7] dark:bg-[#0a0a0a] transition-colors duration-500"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Header */}

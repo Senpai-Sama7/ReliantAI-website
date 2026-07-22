@@ -60,7 +60,7 @@ export default function CookieConsent({ ready = true }: CookieConsentProps) {
       ref={barRef}
       role="dialog"
       aria-label="Cookie consent"
-      className="cookie-consent fixed inset-x-0 bottom-0 z-[10050] px-4 pb-4 sm:px-6 sm:pb-6 pointer-events-auto"
+      className="cookie-consent fixed inset-x-0 bottom-0 z-[10050] px-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] sm:px-6 sm:pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] pointer-events-auto"
     >
       <div className="mx-auto max-w-5xl glass-dark border border-white/10 rounded-xl px-5 py-4 sm:px-6 sm:py-5 shadow-2xl shadow-black/40 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
         <p className="font-opensans text-sm text-white/80 leading-relaxed flex-1">
