@@ -8,33 +8,33 @@ gsap.registerPlugin(ScrollTrigger);
 const SITES = [
   {
     id: 'plumbing',
-    title: 'AquaGuard Plumbing',
-    tagline: 'Trusted Flow. Premium Service.',
+    title: 'Copperline Plumbing',
+    tagline: 'Water where it belongs.',
     icon: Wrench,
     previewUrl: '/portfolio/plumbing/',
-    color: '#0b1a2e',
-    accent: '#1a7a7a',
-    highlights: ['Emergency booking', 'Animated trust metrics', 'Tiered pricing toggle'],
+    color: '#1c1f24',
+    accent: '#b87333',
+    highlights: ['Tap-to-call emergency bar', 'Asymmetric service index', 'Named Houston service areas'],
   },
   {
     id: 'electrical',
-    title: 'VoltCore Electric',
-    tagline: 'Power. Precision. Protection.',
+    title: 'Linework Electric',
+    tagline: 'Power that passes inspection.',
     icon: Zap,
     previewUrl: '/portfolio/electrical/',
-    color: '#0a0a0f',
-    accent: '#2563eb',
-    highlights: ['Certification marquee', 'Smart home grid', 'Glass-morphism pricing'],
+    color: '#0c0d10',
+    accent: '#f5c518',
+    highlights: ['Blueprint industrial identity', 'Numbered capability list', 'TECL license on the page'],
   },
   {
     id: 'hvac',
-    title: 'ClimateCraft HVAC',
-    tagline: 'Your Perfect Climate, Every Season.',
+    title: 'Stillair Comfort',
+    tagline: 'Indoor air that stays out of the way.',
     icon: Thermometer,
     previewUrl: '/portfolio/hvac/',
-    color: '#0d3b3b',
-    accent: '#d4692b',
-    highlights: ['Seasonal countdown', 'SEER efficiency gauge', 'Warm/cool split identity'],
+    color: '#1a2332',
+    accent: '#d97706',
+    highlights: ['Cool steel identity system', 'Heat / cool editorial split', 'Maintenance plan without gimmicks'],
   },
 ];
 
@@ -84,8 +84,9 @@ export default function PortfolioSection() {
             <span className="block text-orange">ZERO TEMPLATES.</span>
           </h2>
           <p className="font-opensans text-white/50 text-sm leading-relaxed mt-5 max-w-2xl">
-            Hand-coded contractor websites — plumbing, electrical, HVAC — each built from scratch
-            with production-ready interactivity, SEO, and conversion optimization.
+            Three Houston contractor demos — plumbing, electrical, HVAC — each with a locked
+            identity, asymmetric layout, and copy that only fits that trade. Built as T1 editorial
+            surfaces, not interchangeable SaaS templates.
           </p>
         </div>
 

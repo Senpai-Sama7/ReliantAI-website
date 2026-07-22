@@ -13,45 +13,45 @@ gsap.registerPlugin(ScrollTrigger);
 const PORTFOLIO_ITEMS = [
   {
     id: 'plumbing',
-    title: 'AquaGuard Plumbing',
-    tagline: 'Trusted Flow. Premium Service.',
+    title: 'Copperline Plumbing',
+    tagline: 'Water where it belongs.',
     category: 'Home Services',
-    color: '#0b1a2e',
-    accent: '#1a7a7a',
-    secondaryAccent: '#c9953c',
+    color: '#1c1f24',
+    accent: '#b87333',
+    secondaryAccent: '#f4f5f7',
     icon: Wrench,
     previewUrl: '/portfolio/plumbing/',
-    description: 'Full-service plumbing website with 24/7 emergency booking, animated service cards, pricing tiers, and real-time stats. Built for a Houston-based plumbing contractor targeting residential and commercial clients.',
-    highlights: ['Emergency booking system', 'Animated trust metrics', 'Tiered pricing with toggle', 'Mobile-optimized contact'],
-    stats: { pages: 'Single-page', sections: 11, interactivity: 'High' },
+    description: 'Editorial T1 plumbing site for Houston: copper-on-slate identity, full-bleed hero, asymmetric service index, Heights job proof, and a callback form with named validation errors. Built to convert emergency calls without SaaS-card layout.',
+    highlights: ['Tap-to-call sticky bar', 'License M-38421 on page', 'Named service areas', 'No three-card feature grid'],
+    stats: { pages: 'Single-page', sections: 7, interactivity: 'Form + reveals' },
   },
   {
     id: 'electrical',
-    title: 'VoltCore Electric',
-    tagline: 'Power. Precision. Protection.',
+    title: 'Linework Electric',
+    tagline: 'Power that passes inspection.',
     category: 'Home Services',
-    color: '#0a0a0f',
-    accent: '#2563eb',
-    secondaryAccent: '#f59e0b',
+    color: '#0c0d10',
+    accent: '#f5c518',
+    secondaryAccent: '#14161c',
     icon: Zap,
     previewUrl: '/portfolio/electrical/',
-    description: 'Dark, high-tech electrical contractor site featuring certification marquees, smart home showcases, glass-morphism pricing, and live electric arc particle effects.',
-    highlights: ['Certification trust badges', 'Smart home feature grid', 'Glass-morphism pricing', 'Dark theme with glow effects'],
-    stats: { pages: 'Single-page', sections: 12, interactivity: 'Very High' },
+    description: 'Blueprint-industrial electrical site: Syne + IBM Plex Mono, signal-yellow restraint, numbered capability index, West U job story, TECL license, estimate request with explicit field errors. Spec-sheet energy without glow spam.',
+    highlights: ['Blueprint grid atmosphere', 'Numbered capabilities', 'TECL-28441 visible', 'Emergency tel in chrome'],
+    stats: { pages: 'Single-page', sections: 7, interactivity: 'Form + reveals' },
   },
   {
     id: 'hvac',
-    title: 'ClimateCraft HVAC',
-    tagline: 'Your Perfect Climate, Every Season.',
+    title: 'Stillair Comfort',
+    tagline: 'Indoor air that stays out of the way.',
     category: 'Home Services',
-    color: '#0d3b3b',
-    accent: '#d4692b',
-    secondaryAccent: '#f8f4ef',
+    color: '#1a2332',
+    accent: '#d97706',
+    secondaryAccent: '#e8eef2',
     icon: Thermometer,
     previewUrl: '/portfolio/hvac/',
-    description: 'Split warm/cool identity HVAC site with seasonal countdown promos, SEER efficiency gauges, maintenance plan subscriptions, and financing application flows.',
-    highlights: ['Seasonal countdown timer', 'Energy efficiency calculator', 'Subscription plan selector', 'Warm/cool split identity'],
-    stats: { pages: 'Single-page', sections: 12, interactivity: 'Very High' },
+    description: 'Cool steel HVAC marketing page that refuses the cream/terracotta AI cluster. Archivo + Source Serif 4, heat/cool editorial split, one maintenance offer, TACLA license, schedule form. Quiet brand, specific Houston areas.',
+    highlights: ['Cool steel system', 'Heat/cool split rows', 'Amber CTA only', 'No seasonal gimmick widgets'],
+    stats: { pages: 'Single-page', sections: 7, interactivity: 'Form + reveals' },
   },
 ];
 
@@ -92,15 +92,15 @@ function HeroSection() {
             <span className="block text-orange">ZERO TEMPLATES.</span>
           </h1>
           <p className="hero-fade font-opensans text-white/50 text-lg max-w-2xl leading-relaxed mb-10">
-            Premium, hand-coded websites built for home-service contractors. Each one is a complete,
-            production-ready single-page experience designed to convert visitors into paying customers.
-            No page builders. No shortcuts. Just FAANG-level execution.
+            Three Houston contractor demos with locked identities — copper-on-slate plumbing,
+            blueprint electrical, cool-steel HVAC. Each one refuses interchangeable SaaS layout
+            and ships with real NAP, licenses, and tap-to-call.
           </p>
           <div className="hero-fade flex flex-wrap gap-4">
             <div className="flex items-center gap-6 text-white/40 text-sm font-opensans">
-              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />3 Complete Sites</div>
-              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />35+ Interactive Sections</div>
-              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />100% Hand-Coded</div>
+              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />3 Distinct Identities</div>
+              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />T1 Editorial Motion</div>
+              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />Anti-slop Briefed</div>
             </div>
           </div>
         </div>
