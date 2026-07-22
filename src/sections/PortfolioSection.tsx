@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUpRight, ExternalLink, Wrench, Zap, Thermometer, CheckCircle } from 'lucide-react';
+import { ArrowUpRight, ExternalLink } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,7 +10,7 @@ const SITES = [
     id: 'plumbing',
     title: 'Copperline Plumbing',
     tagline: 'Water where it belongs.',
-    icon: Wrench,
+    mark: 'Cu',
     previewUrl: '/portfolio/plumbing/',
     color: '#1c1f24',
     accent: '#b87333',
@@ -20,7 +20,7 @@ const SITES = [
     id: 'electrical',
     title: 'Linework Electric',
     tagline: 'Power that passes inspection.',
-    icon: Zap,
+    mark: 'Lw',
     previewUrl: '/portfolio/electrical/',
     color: '#0c0d10',
     accent: '#f5c518',
@@ -30,7 +30,7 @@ const SITES = [
     id: 'hvac',
     title: 'Stillair Comfort',
     tagline: 'Indoor air that stays out of the way.',
-    icon: Thermometer,
+    mark: 'St',
     previewUrl: '/portfolio/hvac/',
     color: '#1a2332',
     accent: '#d97706',
@@ -91,18 +91,21 @@ export default function PortfolioSection() {
         </div>
 
         {/* Tab buttons */}
-        <div className="port-fade flex flex-wrap gap-2 mb-8">
+        <div className="port-fade flex flex-wrap gap-2 mb-8" role="tablist" aria-label="Portfolio demos">
           {SITES.map(site => (
             <button
               key={site.id}
+              type="button"
+              role="tab"
+              aria-selected={activeId === site.id}
               onClick={() => setActiveId(site.id)}
-              className={`group relative px-5 py-3 rounded-lg font-opensans text-sm font-semibold transition-all duration-500 ${
+              className={`px-5 py-3 font-opensans text-sm font-semibold border transition-colors duration-150 ${
                 activeId === site.id
-                  ? 'bg-orange text-white shadow-lg shadow-orange/20'
-                  : 'bg-white/[0.04] text-white/50 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
+                  ? 'bg-orange text-white border-orange'
+                  : 'bg-transparent text-white/55 border-white/[0.08] hover:text-white hover:border-white/25'
               }`}
             >
-              <site.icon size={14} className="inline mr-2 -mt-0.5" />
+              <span className="mr-2 font-teko tracking-wide opacity-70">{site.mark}</span>
               {site.title}
             </button>
           ))}
@@ -138,40 +141,39 @@ export default function PortfolioSection() {
         </div>
 
         {/* Info cards below preview */}
-        <div className="port-fade mt-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="port-fade mt-8 grid grid-cols-1 lg:grid-cols-3 gap-px bg-white/[0.06]">
           {SITES.map(site => (
             <a
               key={site.id}
               href={site.previewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group bg-white/[0.03] border rounded-xl p-5 transition-all duration-500 hover:bg-white/[0.06] ${
-                activeId === site.id
-                  ? 'border-orange/30 shadow-lg shadow-orange/5'
-                  : 'border-white/[0.06] hover:border-white/20'
+              className={`group block bg-[#060606] p-5 transition-colors duration-150 hover:bg-white/[0.03] ${
+                activeId === site.id ? 'ring-1 ring-inset ring-orange/40' : ''
               }`}
               onClick={() => setActiveId(site.id)}
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                  activeId === site.id ? 'bg-orange' : 'bg-white/10 group-hover:bg-orange/20'
-                }`}>
-                  <site.icon size={15} className={activeId === site.id ? 'text-white' : 'text-white/60 group-hover:text-orange'} />
-                </div>
-                <div>
+              <div className="flex items-start gap-3 mb-4">
+                <span
+                  className="font-teko text-lg font-bold leading-none pt-0.5"
+                  style={{ color: site.accent }}
+                  aria-hidden
+                >
+                  {site.mark}
+                </span>
+                <div className="min-w-0">
                   <div className="font-teko text-sm font-bold text-white">{site.title}</div>
-                  <div className="font-opensans text-[10px] text-white/30">{site.tagline}</div>
+                  <div className="font-opensans text-[10px] text-white/35 mt-0.5">{site.tagline}</div>
                 </div>
-                <ArrowUpRight size={14} className="ml-auto text-white/20 group-hover:text-orange transition-colors" />
+                <ArrowUpRight size={14} className="ml-auto text-white/20 group-hover:text-orange transition-colors shrink-0" />
               </div>
-              <div className="flex flex-wrap gap-2">
+              <ul className="space-y-1.5">
                 {site.highlights.map(h => (
-                  <div key={h} className="flex items-center gap-1.5 text-white/40 text-[11px] font-opensans">
-                    <CheckCircle size={10} className="text-orange/60 flex-shrink-0" />
+                  <li key={h} className="font-opensans text-[11px] text-white/40 leading-snug pl-3 border-l border-white/10">
                     {h}
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </a>
           ))}
         </div>
