@@ -37,5 +37,9 @@ jobs:
     - name: Typecheck
       run: npm run typecheck
 
+    # Secret is optional here: PR verification must stay green without deploy
+    # credentials. Vercel production still hard-fails when the key is missing.
     - name: Build
+      env:
+        VITE_WEB3FORMS_KEY: ${{ secrets.VITE_WEB3FORMS_KEY }}
       run: npm run build

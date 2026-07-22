@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/Navigation';
 import IntroOverlay from './components/IntroOverlay';
@@ -6,14 +6,10 @@ import CookieConsent from './components/CookieConsent';
 import FloatingCTA from './components/FloatingCTA';
 import ExitIntentPopup from './components/ExitIntentPopup';
 import SmoothScrollProvider from './components/SmoothScrollProvider';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
-import VideoShowcase from './pages/VideoShowcase';
-import PortfolioShowcase from './pages/PortfolioShowcase';
-import NotFound from './pages/NotFound';
 import { useTheme } from './hooks/useTheme';
 import { applyRouteSeo } from './lib/seo';
 import { markScrollLayoutReady } from './lib/scrollLayout';
+import { scrollToSection } from './lib/scroll';
 import { INTRO_LAYOUT_SETTLE_MS } from './hooks/useIntroAnimations';
 import { Toaster } from 'sonner';
 import './App.css';
@@ -33,10 +29,30 @@ import Contact from './sections/Contact';
 
 import { caseStudyChapters } from './data/chapters';
 
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const VideoShowcase = lazy(() => import('./pages/VideoShowcase'));
+const PortfolioShowcase = lazy(() => import('./pages/PortfolioShowcase'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
 /** Strips trailing slashes so paths like /portfolio/ match /portfolio. */
 function normalizePathname(pathname: string): string {
   const stripped = pathname.replace(/\/+$/, '');
   return stripped === '' ? '/' : stripped;
+}
+
+function RouteFallback() {
+  return (
+    <div
+      className="min-h-screen bg-[#f7f7f7] dark:bg-[#0a0a0a] flex items-center justify-center"
+      role="status"
+      aria-live="polite"
+    >
+      <span className="font-opensans text-sm text-gray-500 dark:text-white/50 tracking-widest uppercase">
+        Loading…
+      </span>
+    </div>
+  );
 }
 
 function App() {
@@ -69,24 +85,58 @@ function App() {
     return () => window.clearTimeout(layoutTimer);
   }, [isStandalonePage, introComplete]);
 
+  // Honor /#section deep links after intro + layout settle (nav from other routes uses this).
+  useEffect(() => {
+    if (isStandalonePage || !introComplete) return;
+
+    const raw = window.location.hash.replace(/^#/, '').trim();
+    if (!raw) return;
+
+    const timer = window.setTimeout(() => {
+      scrollToSection(raw, raw === 'hero' ? 0 : 80);
+    }, INTRO_LAYOUT_SETTLE_MS + 550);
+
+    return () => window.clearTimeout(timer);
+  }, [isStandalonePage, introComplete]);
+
   if (isPrivacyPolicy) {
-    return <PrivacyPolicy />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <PrivacyPolicy />
+      </Suspense>
+    );
   }
 
   if (isTermsOfService) {
-    return <TermsOfService />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <TermsOfService />
+      </Suspense>
+    );
   }
 
   if (isShowcase) {
-    return <VideoShowcase />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <VideoShowcase />
+      </Suspense>
+    );
   }
 
   if (isPortfolio) {
-    return <PortfolioShowcase />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <PortfolioShowcase />
+      </Suspense>
+    );
   }
 
   if (!isKnownPath) {
-    return <NotFound />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <NotFound />
+      </Suspense>
+    );
   }
 
   return (

@@ -57,6 +57,12 @@ if ! grep -q 'html.dark body' "$DIST_DIR/index.html"; then
   exit 1
 fi
 
+# Absolute asset base — relative base ('./') breaks trailing-slash SPA deep links.
+if grep -qE 'src="\./assets/|href="\./assets/' "$DIST_DIR/index.html"; then
+  echo "Production build verification failed: dist/index.html still uses relative ./assets paths (set vite base to '/')."
+  exit 1
+fi
+
 # --- SEO / GEO / AEO guards ---
 
 if ! grep -q 'rel="canonical" href="https://www.reliantai.org/"' "$DIST_DIR/index.html"; then

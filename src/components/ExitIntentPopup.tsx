@@ -3,7 +3,7 @@ import { X, Check, Loader2 } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { usePopupTrigger } from '../hooks/usePopupTrigger';
-import { submitToWeb3Forms } from '../lib/web3forms';
+import { submitToWeb3Forms, Web3FormsConfigError } from '../lib/web3forms';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 
@@ -101,8 +101,12 @@ const ExitIntentPopup = () => {
       setSubmitted(true);
       markDismissed();
       setTimeout(() => setShow(false), 2000);
-    } catch {
-      toast.error('Something went wrong. Please try again.');
+    } catch (error) {
+      if (error instanceof Web3FormsConfigError) {
+        toast.error('Form is temporarily unavailable. Call (832) 947-7028 instead.');
+      } else {
+        toast.error('Something went wrong. Please try again or call (832) 947-7028.');
+      }
     } finally {
       setIsSubmitting(false);
     }

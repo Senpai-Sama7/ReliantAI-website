@@ -552,7 +552,7 @@ form { display: grid; gap: 1.15rem; }
           </div>
           <button class="btn btn--dark" type="submit">Request a callback</button>
           <p class="form-note">We call back within one business hour during open hours. This form does not charge your card.</p>
-          <p class="form-success" id="form-success" role="status">Thanks — we have your request and will call shortly.</p>
+          <p class="form-success" id="form-success" role="status">Demo form only — nothing was sent. This is a Reliant AI portfolio sample. <a href="https://www.reliantai.org/#contact">Contact Reliant AI</a> for a real build.</p>
         </form>
       </div>
     </div>
@@ -592,6 +592,7 @@ form { display: grid; gap: 1.15rem; }
     if (!ok) { if (firstBad) firstBad.focus(); return; }
     document.getElementById("form-success").classList.add("is-visible");
     form.querySelector('button[type="submit"]').disabled = true;
+    form.reset();
   });
 })();
 </script>
