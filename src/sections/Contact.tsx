@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, Loader2, Shield, Award, Building2 } from 'lucide-react';
+import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, ChevronDown, Loader2, Shield, Award, Building2 } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { submitToWeb3Forms } from '../lib/web3forms';
@@ -216,15 +216,22 @@ const Contact = ({ introComplete = true }: ContactProps) => {
                   </div>
                   <div>
                     <label className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Industry</label>
-                    <select name="industry" value={formData.industry} onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all duration-300 appearance-none cursor-pointer">
-                      <option value="" className="bg-white dark:bg-dark-100">Select Industry</option>
-                      <option value="metal" className="bg-white dark:bg-dark-100">Metal Fabrication</option>
-                      <option value="oilfield" className="bg-white dark:bg-dark-100">Oilfield Services</option>
-                      <option value="home" className="bg-white dark:bg-dark-100">Home Services</option>
-                      <option value="medical" className="bg-white dark:bg-dark-100">Medical/Healthcare</option>
-                      <option value="other" className="bg-white dark:bg-dark-100">Other</option>
-                    </select>
+                    <div className="relative">
+                      <select name="industry" value={formData.industry} onChange={handleChange}
+                        className="w-full pl-4 pr-10 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all duration-300 appearance-none cursor-pointer">
+                        <option value="" className="bg-white dark:bg-dark-100">Select Industry</option>
+                        <option value="metal" className="bg-white dark:bg-dark-100">Metal Fabrication</option>
+                        <option value="oilfield" className="bg-white dark:bg-dark-100">Oilfield Services</option>
+                        <option value="home" className="bg-white dark:bg-dark-100">Home Services</option>
+                        <option value="medical" className="bg-white dark:bg-dark-100">Medical/Healthcare</option>
+                        <option value="other" className="bg-white dark:bg-dark-100">Other</option>
+                      </select>
+                      <ChevronDown
+                        size={18}
+                        aria-hidden="true"
+                        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-white/40"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -311,7 +318,7 @@ const Contact = ({ introComplete = true }: ContactProps) => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 bg-orange rounded-lg flex items-center justify-center">
-                <span className="font-teko text-2xl font-bold text-white">N</span>
+                <span className="font-teko text-2xl font-bold text-white">R</span>
               </div>
               <span className="font-teko text-2xl font-semibold tracking-wide text-gray-900 dark:text-white">RELIANT AI</span>
             </div>
@@ -320,7 +327,7 @@ const Contact = ({ introComplete = true }: ContactProps) => {
               © 2026 Reliant AI. All rights reserved.
             </p>
 
-            <div className="flex gap-6">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
               <a href="/privacy-policy"
                 className="font-opensans text-sm text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white transition-colors duration-300 relative group">
                 Privacy Policy

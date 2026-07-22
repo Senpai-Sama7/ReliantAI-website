@@ -5,10 +5,11 @@ import { ArrowRight } from 'lucide-react';
 import CountUp from '../components/CountUp';
 import { scrollToSection } from '@/lib/scroll';
 import { revealFrom } from '@/lib/reveal';
+import { isMobileViewport, prefersReducedMotion } from '@/lib/motion';
 import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
-// Interactive SVG overlays per industry
-const IndustryAnimation = ({ index, mousePos }: { index: number; mousePos: { x: number; y: number } }) => {
+// Interactive SVG overlays per industry (SMIL loops disabled when `reduced`)
+const IndustryAnimation = ({ index, mousePos, reduced = false }: { index: number; mousePos: { x: number; y: number }; reduced?: boolean }) => {
   const ox = mousePos.x * 20;
   const oy = mousePos.y * 20;
 
@@ -28,13 +29,13 @@ const IndustryAnimation = ({ index, mousePos }: { index: number; mousePos: { x: 
               fill="#ff6e00"
               opacity={0.6 + (i % 5) * 0.08}
             >
-              <animate attributeName="opacity" values="1;0.2;1" dur={`${0.5 + i * 0.15}s`} repeatCount="indefinite" />
-              <animate attributeName="r" values="2;4;2" dur={`${0.4 + i * 0.1}s`} repeatCount="indefinite" />
+              {!reduced && <animate attributeName="opacity" values="1;0.2;1" dur={`${0.5 + i * 0.15}s`} repeatCount="indefinite" />}
+              {!reduced && <animate attributeName="r" values="2;4;2" dur={`${0.4 + i * 0.1}s`} repeatCount="indefinite" />}
             </circle>
           );
         })}
         <line x1={200 + ox * 0.5} y1={150 + oy * 0.5} x2={200 + ox} y2={150 + oy} stroke="#ff6e00" strokeWidth="2" opacity="0.5">
-          <animate attributeName="opacity" values="0.8;0.2;0.8" dur="0.3s" repeatCount="indefinite" />
+          {!reduced && <animate attributeName="opacity" values="0.8;0.2;0.8" dur="0.3s" repeatCount="indefinite" />}
         </line>
       </svg>
     );
@@ -52,7 +53,7 @@ const IndustryAnimation = ({ index, mousePos }: { index: number; mousePos: { x: 
         <line x1={140 + swing} y1={90 + oy * 0.2} x2={260 + swing} y2={90 - oy * 0.2} stroke="#ff6e00" strokeWidth="4" opacity="0.6" strokeLinecap="round" />
         {/* Head */}
         <circle cx={140 + swing} cy={90 + oy * 0.2} r="6" fill="#ff6e00" opacity="0.7">
-          <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" />
+          {!reduced && <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" />}
         </circle>
         {/* Ground line */}
         <line x1="100" y1="250" x2="300" y2="250" stroke="#ff6e00" strokeWidth="1" opacity="0.2" />
@@ -70,14 +71,14 @@ const IndustryAnimation = ({ index, mousePos }: { index: number; mousePos: { x: 
           return (
             <g key={i}>
               <circle cx={baseX + ox * (0.3 + i * 0.05)} cy={baseY + oy * 0.2} r="3" fill="#ff6e00" opacity="0.3">
-                <animate attributeName="cx" values={`${baseX};${baseX + 30};${baseX}`} dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.1;0.5;0.1" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />
+                {!reduced && <animate attributeName="cx" values={`${baseX};${baseX + 30};${baseX}`} dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />}
+                {!reduced && <animate attributeName="opacity" values="0.1;0.5;0.1" dur={`${2 + i * 0.3}s`} repeatCount="indefinite" />}
               </circle>
               <path
                 d={`M${baseX - 10 + ox * 0.2},${baseY} Q${baseX + 10},${baseY - 8 + oy * 0.1} ${baseX + 30 + ox * 0.3},${baseY}`}
                 fill="none" stroke="#ff6e00" strokeWidth="1" opacity="0.2"
               >
-                <animate attributeName="opacity" values="0.1;0.3;0.1" dur={`${2.5 + i * 0.2}s`} repeatCount="indefinite" />
+                {!reduced && <animate attributeName="opacity" values="0.1;0.3;0.1" dur={`${2.5 + i * 0.2}s`} repeatCount="indefinite" />}
               </path>
             </g>
           );
@@ -94,11 +95,11 @@ const IndustryAnimation = ({ index, mousePos }: { index: number; mousePos: { x: 
         d={`M 40,150 L ${120 + pulseOffset},150 L ${150 + pulseOffset},${100 + oy} L ${170 + pulseOffset},${200 - oy} L ${190 + pulseOffset},${120 + oy * 0.5} L ${210 + pulseOffset},150 L 360,150`}
         fill="none" stroke="#ff6e00" strokeWidth="2.5" opacity="0.5" strokeLinecap="round" strokeLinejoin="round"
       >
-        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="1.5s" repeatCount="indefinite" />
+        {!reduced && <animate attributeName="opacity" values="0.3;0.7;0.3" dur="1.5s" repeatCount="indefinite" />}
       </path>
       <circle cx={190 + pulseOffset} cy={120 + oy * 0.5} r="8" fill="none" stroke="#ff6e00" strokeWidth="1" opacity="0.3">
-        <animate attributeName="r" values="8;20;8" dur="1.5s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0.4;0;0.4" dur="1.5s" repeatCount="indefinite" />
+        {!reduced && <animate attributeName="r" values="8;20;8" dur="1.5s" repeatCount="indefinite" />}
+        {!reduced && <animate attributeName="opacity" values="0.4;0;0.4" dur="1.5s" repeatCount="indefinite" />}
       </circle>
     </svg>
   );
@@ -125,8 +126,10 @@ interface PinnedStoryProps {
 export default function PinnedStory({ chapters, introComplete = true }: PinnedStoryProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const chaptersColRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [reducedMotion] = useState(() => prefersReducedMotion());
   const triggersRef = useRef<ScrollTrigger[]>([]);
   const activeRef = useRef(0);
   const chapterContentRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -144,7 +147,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
   // Detect mobile on mount
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024 || 'ontouchstart' in window);
+      setIsMobile(isMobileViewport());
     };
     checkMobile();
     window.addEventListener('resize', checkMobile, { passive: true });
@@ -189,10 +192,19 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
           const pinTrigger = ScrollTrigger.create({
             trigger: root,
             start: 'top top',
-            end: () => `+=${chapterEls.length * window.innerHeight * 0.65}`,
+            // Pin for the full height of the chapters column so the stage
+            // stays put until the last chapter scrolls past.
+            end: () => {
+              const chaptersCol = chaptersColRef.current;
+              const distance = chaptersCol
+                ? Math.max(chaptersCol.offsetHeight - window.innerHeight, 0)
+                : chapterEls.length * window.innerHeight * 0.65;
+              return `+=${distance}`;
+            },
             pin: stage,
-            pinSpacing: true,
+            pinSpacing: false,
             scrub: 0.5,
+            invalidateOnRefresh: true,
           });
           triggersRef.current.push(pinTrigger);
         }
@@ -295,11 +307,13 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
       role="region"
       aria-label="Pinned case studies"
     >
-      <div className={`grid grid-cols-1 ${isMobile ? '' : 'lg:grid-cols-2'} min-h-screen`}>
+      {/* Block layout on mobile so the sticky stage can travel the full story height
+          (sticky grid items are confined to their own grid area). */}
+      <div className={`${isMobile ? 'block' : 'grid grid-cols-1 lg:grid-cols-2'} min-h-screen`}>
         {/* Stage - Left Side (or Top on Mobile) */}
         <div 
           ref={stageRef} 
-          className={`relative ${isMobile ? 'h-[50vh]' : 'h-screen lg:h-screen'} flex items-center justify-center p-6 lg:p-16 bg-[#f7f7f7] dark:bg-[#0a0a0a]`}
+          className={`relative ${isMobile ? 'sticky top-20 z-10 h-[40vh] supports-[height:40dvh]:h-[40dvh]' : 'h-screen-dvh'} flex items-center justify-center p-6 lg:p-16 bg-[#f7f7f7] dark:bg-[#0a0a0a]`}
         >
           {/* Background gradient based on theme */}
           <div 
@@ -334,7 +348,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
             ))}
-            <IndustryAnimation index={active} mousePos={mousePos} />
+            <IndustryAnimation index={active} mousePos={mousePos} reduced={reducedMotion} />
           </div>
 
           {/* Chapter counter - hidden on mobile */}
@@ -344,7 +358,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
         </div>
 
         {/* Chapters - Right Side (or Below on Mobile) */}
-        <div className="relative bg-[#f7f7f7] dark:bg-[#0a0a0a]">
+        <div ref={chaptersColRef} className="relative bg-[#f7f7f7] dark:bg-[#0a0a0a]">
           {chapters.map((chapter, i) => (
             <article
               key={i}
@@ -376,7 +390,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
                 </p>
 
                 {/* Two Column Layout: Services + Stats */}
-                <div className="reveal-item grid grid-cols-2 gap-6 lg:gap-8 mb-8 lg:mb-10">
+                <div className="reveal-item grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8 mb-8 lg:mb-10">
                   {/* Services */}
                   <div>
                     <h4 className="text-xs uppercase tracking-[0.15em] text-gray-400 dark:text-white/40 font-opensans mb-4">

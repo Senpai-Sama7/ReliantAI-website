@@ -20,7 +20,7 @@ export default function ZoneHud() {
   const progress = ((experienceZones.findIndex((z) => z.id === zone.id) + 1) / experienceZones.length) * 100;
 
   return (
-    <div className="zone-hud fixed top-24 right-4 lg:right-8 z-[90] pointer-events-none select-none" aria-hidden="true">
+    <div className="zone-hud hidden lg:block fixed top-24 right-4 lg:right-8 z-[90] pointer-events-none select-none" aria-hidden="true">
       <div
         className={`glass-dark rounded-lg px-4 py-3 min-w-[148px] border border-white/10 transition-all duration-500 ${
           pulse ? 'scale-[1.03] border-orange/40 shadow-lg shadow-orange/10' : ''

@@ -118,18 +118,21 @@ const About = ({ introComplete = true }: AboutProps) => {
             <span className="reveal-item inline-block px-4 py-1.5 bg-orange/10 border border-orange/30 rounded-full text-orange font-opensans text-sm mb-6">
               The Architect
             </span>
-            <h2 className="reveal-item font-teko text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-4 overflow-hidden">
-              {'DOUGLAS'.split('').map((ch, i) => (
-                <span key={`d${i}`} className="name-char inline-block" style={{ opacity: 0 }}>
-                  {ch === ' ' ? '\u00A0' : ch}
-                </span>
-              ))}
-              {'\u00A0'}
-              {'MITCHELL'.split('').map((ch, i) => (
-                <span key={`m${i}`} className="name-char inline-block gradient-text" style={{ opacity: 0 }}>
-                  {ch}
-                </span>
-              ))}
+            <h2 className="reveal-item font-teko text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-4 overflow-hidden">
+              <span className="inline-block whitespace-nowrap">
+                {'DOUGLAS'.split('').map((ch, i) => (
+                  <span key={`d${i}`} className="name-char inline-block" style={{ opacity: 0 }}>
+                    {ch === ' ' ? '\u00A0' : ch}
+                  </span>
+                ))}
+              </span>{' '}
+              <span className="inline-block whitespace-nowrap">
+                {'MITCHELL'.split('').map((ch, i) => (
+                  <span key={`m${i}`} className="name-char inline-block gradient-text" style={{ opacity: 0 }}>
+                    {ch}
+                  </span>
+                ))}
+              </span>
             </h2>
             <p className="reveal-item font-opensans text-xl text-gray-600 dark:text-white/70 max-w-2xl mx-auto">
               Operations Manager · AI Architect · Full-Stack Developer

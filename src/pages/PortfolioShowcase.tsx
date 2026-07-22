@@ -143,7 +143,7 @@ function DeviceFrame({ children, isActive }: { children: React.ReactNode; isActi
           </div>
           <ExternalLink size={12} className="text-white/20" />
         </div>
-        <div className="relative bg-white" style={{ height: 'clamp(400px, 60vh, 700px)' }}>
+        <div className="relative bg-white" style={{ height: 'clamp(320px, 55vh, 650px)' }}>
           {children}
         </div>
       </div>
@@ -155,6 +155,13 @@ function PreviewPanel() {
   const ref = useRef<HTMLElement>(null);
   const [activeId, setActiveId] = useState(PORTFOLIO_ITEMS[0].id);
   const iframeRefs = useRef<Record<string, HTMLIFrameElement | null>>({});
+  // Coarse pointers (touch) get a tap-to-interact scrim so the iframe doesn't
+  // swallow page scrolling. Tracks the unlocked demo id so switching tabs
+  // re-arms the scrim automatically.
+  const [isCoarsePointer] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+  );
+  const [interactiveId, setInteractiveId] = useState<string | null>(null);
 
   const setIframeRef = useCallback((id: string) => (el: HTMLIFrameElement | null) => {
     iframeRefs.current[id] = el;
@@ -225,6 +232,26 @@ function PreviewPanel() {
                   loading="lazy"
                   sandbox="allow-scripts allow-same-origin"
                 />
+                {/* Touch scrim: keeps page scroll from being trapped by the iframe */}
+                {isCoarsePointer && interactiveId !== item.id && (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/50 backdrop-blur-[2px]">
+                    <button
+                      type="button"
+                      onClick={() => setInteractiveId(item.id)}
+                      className="px-6 py-3 bg-orange text-white font-opensans text-sm font-semibold rounded-lg shadow-lg shadow-black/30"
+                    >
+                      Tap to interact
+                    </button>
+                    <a
+                      href={item.previewUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 text-white/85 font-opensans text-xs font-semibold underline underline-offset-4 decoration-white/40"
+                    >
+                      Open full site <ArrowUpRight size={12} />
+                    </a>
+                  </div>
+                )}
               </DeviceFrame>
             </div>
           ))}
@@ -572,7 +599,7 @@ export default function PortfolioShowcase() {
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[9999] px-4 py-2 bg-orange text-white font-opensans text-sm rounded">
         Skip to main content
       </a>
-      <Navigation />
+      <Navigation darkHero />
       <main id="main">
         <HeroSection />
         <ProofStrip />

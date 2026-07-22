@@ -160,7 +160,7 @@ const SocialProofToast = () => {
     <div 
       role="status"
       aria-live="polite"
-      className={`fixed bottom-24 left-6 z-50 max-w-sm transition-all duration-500 ${
+      className={`fixed bottom-24 left-6 right-6 sm:right-auto sm:max-w-sm z-50 transition-all duration-500 ${
         visible 
           ? 'opacity-100 translate-x-0' 
           : 'opacity-0 -translate-x-4 pointer-events-none'
@@ -170,10 +170,10 @@ const SocialProofToast = () => {
         {/* Dismiss Button */}
         <button
           onClick={handleDismiss}
-          className="absolute top-2 right-2 p-1 text-gray-300 hover:text-gray-500 dark:hover:text-white/60 transition-colors"
+          className="absolute top-1 right-1 p-2.5 min-w-[40px] min-h-[40px] flex items-center justify-center text-gray-300 hover:text-gray-500 dark:hover:text-white/60 transition-colors"
           aria-label="Dismiss notification"
         >
-          <X size={14} />
+          <X size={16} />
         </button>
 
         <div className="flex items-start gap-3">

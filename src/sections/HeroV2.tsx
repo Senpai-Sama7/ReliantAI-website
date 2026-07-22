@@ -185,10 +185,10 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
 
       {/* Spinning Double Orbit Rings */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
-        {/* Outer orbit */}
+        {/* Outer orbit — hidden on the smallest screens, viewport-capped elsewhere */}
         <div 
           ref={orbit1Ref}
-          className="absolute w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] opacity-0"
+          className="hidden sm:block absolute w-[min(600px,90vw)] h-[min(600px,90vw)] lg:w-[800px] lg:h-[800px] opacity-0"
         >
           <div className="absolute inset-0 border border-orange/20 rounded-full" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-orange/60 rounded-full blur-sm" />
@@ -199,7 +199,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         {/* Inner orbit */}
         <div 
           ref={orbit2Ref}
-          className="absolute w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] opacity-0"
+          className="absolute w-[min(400px,85vw)] h-[min(400px,85vw)] lg:w-[500px] lg:h-[500px] opacity-0"
         >
           <div className="absolute inset-0 border border-orange/30 rounded-full" />
           <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-orange/70 rounded-full blur-sm" />
@@ -211,19 +211,19 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div 
           className="absolute top-[20%] left-[10%] w-24 h-24 border border-orange/20 rounded-full opacity-60"
-          style={{ animation: 'float 8s ease-in-out infinite' }}
+          style={{ animation: 'heroFloat 8s ease-in-out infinite' }}
         />
         <div 
           className="absolute top-[30%] right-[15%] w-16 h-16 bg-orange/10 rounded-lg rotate-45 opacity-40"
-          style={{ animation: 'float 10s ease-in-out infinite reverse' }}
+          style={{ animation: 'heroFloat 10s ease-in-out infinite reverse' }}
         />
         <div 
           className="absolute bottom-[35%] left-[20%] w-32 h-1 bg-gradient-to-r from-transparent via-orange/30 to-transparent"
-          style={{ animation: 'float 9s ease-in-out infinite' }}
+          style={{ animation: 'heroFloat 9s ease-in-out infinite' }}
         />
         <div 
           className="absolute bottom-[25%] right-[10%] w-20 h-20 border border-gray-300 dark:border-white/10 rounded-full opacity-30"
-          style={{ animation: 'float 12s ease-in-out infinite' }}
+          style={{ animation: 'heroFloat 12s ease-in-out infinite' }}
         />
         
         {/* Grid pattern overlay */}
@@ -340,7 +340,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
       </div>
 
       <style>{`
-        @keyframes float {
+        @keyframes heroFloat {
           0%, 100% { transform: translateY(0) rotate(0deg); }
           50% { transform: translateY(-15px) rotate(1deg); }
         }

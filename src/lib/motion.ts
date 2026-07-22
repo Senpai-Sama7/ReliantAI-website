@@ -7,9 +7,13 @@ export function prefersReducedMotion(): boolean {
   );
 }
 
+/**
+ * Width-based mobile check. Deliberately ignores touch capability so that
+ * touch-enabled laptops/desktops still get the full desktop experience.
+ */
 export function isMobileViewport(breakpoint = 1024): boolean {
   if (typeof window === 'undefined') return false;
-  return window.innerWidth < breakpoint || 'ontouchstart' in window;
+  return window.innerWidth < breakpoint;
 }
 
 export function onMotionPreferenceChange(callback: () => void): () => void {

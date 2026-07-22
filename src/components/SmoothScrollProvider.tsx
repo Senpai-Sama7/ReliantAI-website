@@ -41,11 +41,16 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     // Disable GSAP's lag smoothing for better sync
     gsap.ticker.lagSmoothing(0);
 
-    // Refresh ScrollTrigger on window resize
+    // Refresh ScrollTrigger only when the viewport width changes. iOS Safari
+    // fires resize on every URL-bar show/hide (height-only change), and a full
+    // refresh there causes pinned sections to jump mid-scroll.
+    let lastWidth = window.innerWidth;
     const handleResize = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
       ScrollTrigger.refresh();
     };
-    
+
     window.addEventListener('resize', handleResize);
 
     // Initial refresh after a short delay

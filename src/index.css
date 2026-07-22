@@ -75,7 +75,11 @@
   
   html {
     scroll-behavior: smooth;
-    color-scheme: light dark;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
   
   body {
@@ -353,8 +357,26 @@ input:focus, textarea:focus, select:focus {
   will-change: transform, opacity;
 }
 
+/* Dynamic-viewport heights for pinned sections (vh fallback for old browsers).
+   Declared in @layer utilities so Tailwind variants (lg:, etc.) apply. */
+@layer utilities {
+  .h-screen-dvh {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .h-half-dvh {
+    height: 50vh;
+    height: 50dvh;
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
@@ -384,5 +406,12 @@ input:focus, textarea:focus, select:focus {
   .floating-cta button {
     min-width: 44px;
     min-height: 44px;
+  }
+
+  /* Carousel indicator dots keep their compact 32px hit box (the visual dot
+     is an inner span), instead of being inflated to 44px. */
+  button.indicator-dot {
+    min-width: 32px;
+    min-height: 32px;
   }
 }

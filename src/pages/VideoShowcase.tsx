@@ -271,7 +271,7 @@ function BrandStory() {
           </p>
           <div className="story-item mt-6 flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-orange flex items-center justify-center">
-              <span className="font-teko text-white font-bold text-lg">N</span>
+              <span className="font-teko text-white font-bold text-lg">R</span>
             </div>
             <div>
               <div className="font-teko text-white text-lg font-semibold leading-none">RELIANT AI</div>
@@ -318,7 +318,7 @@ export default function VideoShowcase() {
         Skip to main content
       </a>
 
-      <Navigation />
+      <Navigation darkHero />
 
       <main id="main">
         {/* 1. Full-screen video hero with gear field */}

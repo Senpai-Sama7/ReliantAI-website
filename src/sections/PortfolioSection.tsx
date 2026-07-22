@@ -41,6 +41,13 @@ const SITES = [
 export default function PortfolioSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeId, setActiveId] = useState(SITES[0].id);
+  // Coarse pointers (touch) get a tap-to-interact scrim so the iframe doesn't
+  // swallow page scrolling. Tracks the unlocked demo id so switching tabs
+  // re-arms the scrim automatically.
+  const [isCoarsePointer] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+  );
+  const [interactiveId, setInteractiveId] = useState<string | null>(null);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -127,7 +134,7 @@ export default function PortfolioSection() {
               <ExternalLink size={12} className="text-white/20" />
             </div>
             {/* Iframe */}
-            <div className="relative bg-white" style={{ height: 'clamp(400px, 55vh, 650px)' }}>
+            <div className="relative bg-white" style={{ height: 'clamp(320px, 55vh, 650px)' }}>
               <iframe
                 src={active.previewUrl}
                 className="absolute inset-0 w-full h-full"
@@ -136,6 +143,26 @@ export default function PortfolioSection() {
                 loading="lazy"
                 sandbox="allow-scripts allow-same-origin"
               />
+              {/* Touch scrim: keeps page scroll from being trapped by the iframe */}
+              {isCoarsePointer && interactiveId !== activeId && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/50 backdrop-blur-[2px]">
+                  <button
+                    type="button"
+                    onClick={() => setInteractiveId(activeId)}
+                    className="px-6 py-3 bg-orange text-white font-opensans text-sm font-semibold rounded-lg shadow-lg shadow-black/30"
+                  >
+                    Tap to interact
+                  </button>
+                  <a
+                    href={active.previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-white/85 font-opensans text-xs font-semibold underline underline-offset-4 decoration-white/40"
+                  >
+                    Open full site <ArrowUpRight size={12} />
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>

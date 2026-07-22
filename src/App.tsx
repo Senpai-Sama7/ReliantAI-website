@@ -34,6 +34,12 @@ import Contact from './sections/Contact';
 
 import { caseStudyChapters } from './data/chapters';
 
+/** Strips trailing slashes so paths like /portfolio/ match /portfolio. */
+function normalizePathname(pathname: string): string {
+  const stripped = pathname.replace(/\/+$/, '');
+  return stripped === '' ? '/' : stripped;
+}
+
 function App() {
   useTheme();
   const [introComplete, setIntroComplete] = useState(false);
@@ -42,7 +48,7 @@ function App() {
     setIntroComplete(true);
   }, []);
 
-  const path = window.location.pathname;
+  const path = normalizePathname(window.location.pathname);
   const isPrivacyPolicy = path === '/privacy-policy';
   const isTermsOfService = path === '/terms-of-service';
   const isShowcase = path === '/showcase';
@@ -51,8 +57,8 @@ function App() {
   const isStandalonePage = isPrivacyPolicy || isTermsOfService || isShowcase || isPortfolio;
 
   useEffect(() => {
-    applyRouteSeo(window.location.pathname);
-  }, []);
+    applyRouteSeo(path);
+  }, [path]);
 
   useEffect(() => {
     if (isStandalonePage || !introComplete) return;
