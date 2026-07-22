@@ -17,6 +17,7 @@
     "deploy:preview": "npm run build && wrangler versions upload",
     "typecheck": "tsc -b --pretty false",
     "smoke:immersive": "node ./scripts/smoke-immersive.mjs",
+    "validate:credentials": "node --experimental-strip-types ./scripts/validate_credentials.ts",
     "quality:check": "bash ./scripts/quality-loop.sh",
     "quality:fix": "eslint . --fix"
   },

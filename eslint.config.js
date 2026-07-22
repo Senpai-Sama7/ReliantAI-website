@@ -8,7 +8,19 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 export default defineConfig([
   globalIgnores(['dist']),
   {
+    files: ['scripts/**/*.{ts,mts,cts}'],
+    extends: [js.configs.recommended, tseslint.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 2023,
+      globals: globals.node,
+      parserOptions: {
+        projectService: false,
+      },
+    },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
+    ignores: ['scripts/**'],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
