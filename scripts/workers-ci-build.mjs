@@ -15,6 +15,7 @@ const require = createRequire(path.join(root, 'package.json'));
 const distIndex = path.join(root, 'dist', 'index.html');
 
 const isVercel = process.env.VERCEL === '1' || process.env.VERCEL === 'true';
+const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
 const isWorkersCi = process.env.WORKERS_CI === '1';
 const isCi =
   isWorkersCi ||
@@ -22,7 +23,9 @@ const isCi =
   process.env.CI === '1' ||
   process.env.CF_PAGES === '1';
 
-if (isVercel || !isCi) {
+// GitHub Actions already runs `npm run build` explicitly — skip the
+// postinstall Cloudflare asset build there (avoids double work + secret gates).
+if (isVercel || isGitHubActions || !isCi) {
   process.exit(0);
 }
 

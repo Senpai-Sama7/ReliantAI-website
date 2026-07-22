@@ -4,22 +4,43 @@ import { defineConfig, type Plugin } from "vite"
 
 const PLACEHOLDER_KEYS = new Set(["", "your_key_here", "undefined", "null"])
 
-/** Fail hosted production builds when the contact form key was never provided. */
+function isWeb3FormsKeyMissing(): boolean {
+  const key = process.env.VITE_WEB3FORMS_KEY?.trim() ?? ""
+  return PLACEHOLDER_KEYS.has(key)
+}
+
+/**
+ * Fail real production deploys when the contact form key is missing.
+ * Do not gate generic GitHub Actions / PR verification builds on CI=true —
+ * those runs often lack deploy secrets and would fail install/postinstall.
+ */
 function requireWeb3FormsKey(): Plugin {
   return {
     name: "require-web3forms-key",
     configResolved(config) {
       if (config.command !== "build") return
-      const enforce =
-        process.env.VERCEL === "1" ||
-        process.env.CI === "true" ||
-        process.env.ENFORCE_WEB3FORMS === "1"
-      if (!enforce) return
+      if (!isWeb3FormsKeyMissing()) return
 
-      const key = process.env.VITE_WEB3FORMS_KEY?.trim() ?? ""
-      if (PLACEHOLDER_KEYS.has(key)) {
+      const onVercelProduction =
+        (process.env.VERCEL === "1" || process.env.VERCEL === "true") &&
+        process.env.VERCEL_ENV === "production"
+      const enforce =
+        process.env.ENFORCE_WEB3FORMS === "1" || onVercelProduction
+
+      if (enforce) {
         throw new Error(
-          "VITE_WEB3FORMS_KEY must be set for production CI builds (contact form is dead without it)."
+          "VITE_WEB3FORMS_KEY must be set for production deploys (contact form is dead without it)."
+        )
+      }
+
+      const hostedPreview =
+        process.env.VERCEL === "1" ||
+        process.env.VERCEL === "true" ||
+        process.env.WORKERS_CI === "1" ||
+        process.env.CF_PAGES === "1"
+      if (hostedPreview || process.env.CI === "true" || process.env.CI === "1") {
+        console.warn(
+          "[web3forms] VITE_WEB3FORMS_KEY is missing — contact form will be disabled in this build. Set it for Vercel production (and Cloudflare) before shipping."
         )
       }
     },
