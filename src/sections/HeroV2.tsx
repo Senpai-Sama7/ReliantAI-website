@@ -5,7 +5,7 @@ import { ArrowDown } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import LogoReveal from '../components/LogoReveal';
 import CountUp from '../components/CountUp';
-import { prefersReducedMotion } from '@/lib/motion';
+import { prefersReducedMotion, isMobileViewport } from '@/lib/motion';
 import { scrollToSection } from '@/lib/scroll';
 
 // Lazy load 3D component to reduce initial bundle and TBT
@@ -69,6 +69,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
 
     // Start animations if introComplete is true
     if (introComplete) {
+      const mobile = isMobileViewport();
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({ delay: 0.1 });
 
@@ -77,7 +78,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
           { y: -24, opacity: 0, duration: 1, ease: 'power3.out' }
         ).from(
           headlineRef.current,
-          { y: 80, opacity: 0, duration: 1.2, ease: 'power3.out' }
+          { y: mobile ? 40 : 80, opacity: 0, duration: mobile ? 0.9 : 1.2, ease: 'power3.out' }
         )
           .from(
             subheadRef.current,
@@ -120,44 +121,46 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
           repeat: -1,
         });
 
-        // Hero exit — fly toward the next world on scroll
-        const exitTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1.2,
-          },
-        });
-
-        exitTl
-          .to(
-            bodyRef.current,
-            {
-              x: () => -window.innerWidth * 0.22,
-              rotateY: -12,
-              opacity: 0.35,
-              scale: 0.94,
-              ease: 'none',
-              transformPerspective: 1200,
+        // Desktop-only 3D exit scrub — on phones it skews the card and fights Lenis.
+        if (!mobile) {
+          const exitTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1.2,
             },
-            0
-          )
-          .to(
-            crownRef.current,
-            { y: -40, opacity: 0.15, ease: 'none' },
-            0
-          )
-          .to(
-            orbit1Ref.current,
-            { x: 80, opacity: 0.2, ease: 'none' },
-            0
-          )
-          .to(
-            orbit2Ref.current,
-            { x: 120, opacity: 0.15, ease: 'none' },
-            0
-          );
+          });
+
+          exitTl
+            .to(
+              bodyRef.current,
+              {
+                x: () => -window.innerWidth * 0.22,
+                rotateY: -12,
+                opacity: 0.35,
+                scale: 0.94,
+                ease: 'none',
+                transformPerspective: 1200,
+              },
+              0
+            )
+            .to(
+              crownRef.current,
+              { y: -40, opacity: 0.15, ease: 'none' },
+              0
+            )
+            .to(
+              orbit1Ref.current,
+              { x: 80, opacity: 0.2, ease: 'none' },
+              0
+            )
+            .to(
+              orbit2Ref.current,
+              { x: 120, opacity: 0.15, ease: 'none' },
+              0
+            );
+        }
       }, sectionRef);
 
       return () => ctx.revert();
@@ -220,8 +223,8 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         </div>
       </div>
 
-      {/* Floating decorative props */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* Floating decorative props — toned down on phones */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden hidden sm:block">
         <div 
           className="absolute top-[20%] left-[10%] w-24 h-24 border border-orange/20 rounded-full opacity-60"
           style={{ animation: 'heroFloat 8s ease-in-out infinite' }}
@@ -254,11 +257,11 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
       {introComplete && (
         <header
           ref={crownRef}
-          className="relative z-30 w-full pt-28 sm:pt-32 lg:pt-36 pb-4 lg:pb-6 text-center px-6"
+          className="relative z-30 w-full pt-24 sm:pt-32 lg:pt-36 pb-2 sm:pb-4 lg:pb-6 text-center px-5 sm:px-6"
         >
-          <div className="flex items-center justify-center gap-4 mb-6 lg:mb-8 opacity-80">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8 opacity-80">
             <span className="hidden sm:block w-10 lg:w-16 h-px bg-gradient-to-r from-transparent to-orange/60" />
-            <span className="font-opensans text-orange text-[10px] sm:text-xs uppercase tracking-[0.45em] sm:tracking-[0.55em]">
+            <span className="font-opensans text-orange text-[10px] sm:text-xs uppercase tracking-[0.35em] sm:tracking-[0.55em]">
               Boutique Digital Craftsmanship
             </span>
             <span className="hidden sm:block w-10 lg:w-16 h-px bg-gradient-to-l from-transparent to-orange/60" />
@@ -270,7 +273,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
       {/* Main hero body — value prop one tier below the crown */}
       <div
         ref={bodyRef}
-        className="relative z-20 flex-1 flex flex-col items-center justify-center text-center px-6 max-w-5xl mx-auto pb-20 lg:pb-24"
+        className="relative z-20 flex-1 flex flex-col items-center justify-center text-center px-5 sm:px-6 max-w-5xl mx-auto pb-16 sm:pb-20 lg:pb-24"
         style={{ transformStyle: 'preserve-3d' }}
       >
         <h1 className="sr-only">
@@ -280,7 +283,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         {/* Display headline (visual tier 2) */}
         <h2
           ref={headlineRef}
-          className="font-teko text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.85] mb-8"
+          className="font-teko text-[2.75rem] leading-[0.88] sm:text-6xl sm:leading-[0.85] md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-5 sm:mb-8"
           aria-hidden="true"
         >
           <span className="block text-gray-900 dark:text-white">
@@ -289,7 +292,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
           <span className="block text-orange">
             DESIGN
           </span>
-          <span className="block text-gray-500 dark:text-white/40 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mt-2">
+          <span className="block text-gray-500 dark:text-white/40 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light mt-1 sm:mt-2">
             REDEFINED
           </span>
         </h2>
@@ -297,7 +300,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         {/* Subheadline */}
         <p
           ref={subheadRef}
-          className="font-opensans text-lg sm:text-xl text-gray-700 dark:text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed"
+          className="font-opensans text-base sm:text-xl text-gray-700 dark:text-white/70 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed"
         >
           We craft conversion-focused digital experiences for Houston's 
           most ambitious businesses. No templates. No compromises.
@@ -307,7 +310,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         <div ref={ctaRef}>
           <button
             onClick={scrollToWorlds}
-            className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-opensans font-semibold rounded-full overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-orange/10"
+            className="group relative inline-flex items-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-opensans font-semibold rounded-full overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-orange/10"
           >
             {/* Subtle shine effect on hover */}
             <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -323,12 +326,12 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
           </button>
         </div>
 
-        {/* Stats row - with counter animation */}
-        <div className="mt-20 pt-12 border-t border-gray-200 dark:border-white/10">
-          <div ref={statsRef} className="flex flex-wrap justify-center gap-12 sm:gap-16">
+        {/* Stats — below the first-screen fold on short phones so the hero stays one composition */}
+        <div className="mt-12 sm:mt-20 pt-8 sm:pt-12 border-t border-gray-200 dark:border-white/10 w-full max-w-lg sm:max-w-none">
+          <div ref={statsRef} className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:justify-center sm:gap-16">
             {stats.map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="font-teko text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white">
+              <div key={i} className="text-center min-w-0">
+                <div className="font-teko text-3xl sm:text-5xl font-bold text-gray-900 dark:text-white leading-none">
                   <CountUp 
                     end={stat.value} 
                     prefix={stat.prefix} 
@@ -337,7 +340,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
                     duration={2.5}
                   />
                 </div>
-                <div className="font-opensans text-xs uppercase tracking-[0.15em] text-gray-500 dark:text-white/40 mt-1">
+                <div className="font-opensans text-[10px] sm:text-xs uppercase tracking-[0.08em] sm:tracking-[0.15em] text-gray-500 dark:text-white/40 mt-1 leading-snug">
                   {stat.label}
                 </div>
               </div>
@@ -346,8 +349,8 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         </div>
       </div>
 
-      {/* Scroll hint */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 dark:text-white/30">
+      {/* Scroll hint — desktop / tall viewports only */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-gray-400 dark:text-white/30">
         <span className="font-opensans text-xs tracking-widest uppercase">Scroll</span>
         <div className="w-px h-8 bg-gradient-to-b from-current to-transparent" />
       </div>

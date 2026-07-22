@@ -21,8 +21,8 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
   const beatTitleRef = useRef<HTMLParagraphElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
   const gsapCtxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isReducedMotion, setIsReducedMotion] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => isMobileViewport());
+  const [isReducedMotion, setIsReducedMotion] = useState(() => prefersReducedMotion());
 
   useEffect(() => {
     const sync = () => {
@@ -46,26 +46,20 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
       gsapCtxRef.current?.revert();
       gsapCtxRef.current = null;
 
+      // Mobile + reduced-motion use the static stacked layout — no pin scrub.
+      if (isMobile || isReducedMotion) return;
+
       const root = rootRef.current;
       const pin = pinRef.current;
       const stage = stageRef.current;
       if (!root || !pin || !stage) return;
 
-      const reduced = isReducedMotion;
-      const mobile = isMobile;
       const beatCount = portalWorlds.length;
-      const segVh = mobile ? 0.95 : 1.1;
+      const segVh = 1.1;
 
       const ctx = gsap.context(() => {
         const panels = gsap.utils.toArray<HTMLElement>('.story-beat', stage);
         if (panels.length === 0) return;
-
-        if (reduced) {
-          panels.forEach((panel, i) => {
-            gsap.set(panel, { opacity: i === 0 ? 1 : 1 });
-          });
-          return;
-        }
 
         gsap.set(panels, { opacity: 0, scale: 1, x: 0, filter: 'none', clipPath: 'inset(0%)' });
         gsap.set(panels[0], { opacity: 1 });
@@ -120,7 +114,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
     [isMobile, isReducedMotion]
   );
 
-  if (isReducedMotion) {
+  if (isReducedMotion || isMobile) {
     return (
       <section
         id={id}
@@ -131,7 +125,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
         {portalWorlds.map((world) => (
           <article
             key={world.id}
-            className="story-beat-static relative min-h-screen flex flex-col justify-center px-8 sm:px-14 lg:px-24 border-b border-white/10"
+            className="story-beat-static relative min-h-[70dvh] sm:min-h-screen flex flex-col justify-end sm:justify-center px-6 sm:px-14 lg:px-24 py-16 sm:py-0 border-b border-white/10"
           >
             <img
               src={world.image}
@@ -140,11 +134,12 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
               loading="lazy"
               decoding="async"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/30" />
             <div className="relative z-10 max-w-3xl">
               <p className="font-opensans text-orange text-xs uppercase tracking-[0.45em] mb-4">
                 {world.eyebrow}
               </p>
-              <h2 className="font-teko text-5xl sm:text-6xl font-bold text-white leading-none">
+              <h2 className="font-teko text-4xl sm:text-6xl font-bold text-white leading-none">
                 {world.title}{' '}
                 <span className="text-orange">{world.accent}</span>
               </h2>

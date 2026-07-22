@@ -93,15 +93,15 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
         }} />
       </div>
 
-      <div className="intro-content absolute inset-0 flex flex-col items-center justify-center">
+      <div className="intro-content absolute inset-0 flex flex-col items-center justify-center px-4">
         {/* Reliant AI Typography */}
-        <div className="flex items-baseline gap-3 mb-8">
-          <span className="intro-reliant font-teko text-6xl sm:text-8xl font-bold text-white">RELIANT</span>
-          <span className="intro-ai font-teko text-6xl sm:text-8xl font-bold text-orange">AI</span>
+        <div className="flex items-baseline gap-2 sm:gap-3 mb-6 sm:mb-8">
+          <span className="intro-reliant font-teko text-5xl sm:text-8xl font-bold text-white">RELIANT</span>
+          <span className="intro-ai font-teko text-5xl sm:text-8xl font-bold text-orange">AI</span>
         </div>
 
         {/* Website wireframe with Houston skyline being sketched */}
-        <div className="intro-wireframe w-[320px] sm:w-[480px] aspect-[16/10] border border-orange/30 rounded-lg overflow-hidden bg-black/60">
+        <div className="intro-wireframe w-[min(320px,calc(100vw-2rem))] sm:w-[480px] aspect-[16/10] border border-orange/30 rounded-lg overflow-hidden bg-black/60">
           {/* Browser chrome */}
           <div className="h-6 bg-white/5 border-b border-orange/20 flex items-center px-2 gap-1.5">
             <div className="w-2 h-2 rounded-full bg-red-500/60" />
@@ -170,7 +170,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
       <button
         type="button"
         onClick={handleSkip}
-        className="absolute bottom-6 right-6 z-10 px-4 py-2 font-opensans text-xs uppercase tracking-[0.2em] text-white/60 border border-white/20 rounded-full transition-colors duration-200 hover:text-white hover:border-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange"
+        className="absolute z-10 safe-bottom safe-right px-4 py-2 min-h-11 font-opensans text-xs uppercase tracking-[0.2em] text-white/60 border border-white/20 rounded-full transition-colors duration-200 hover:text-white hover:border-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange"
       >
         Skip intro
       </button>

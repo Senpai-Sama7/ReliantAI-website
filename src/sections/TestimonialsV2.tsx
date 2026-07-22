@@ -132,7 +132,7 @@ export default function TestimonialsV2({ introComplete = true }: TestimonialsV2P
                   </span>
                 </div>
 
-                <blockquote className="font-opensans text-xl lg:text-2xl text-white/90 leading-relaxed mb-6">
+                <blockquote className="font-opensans text-base sm:text-xl lg:text-2xl text-white/90 leading-relaxed mb-6">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
 

@@ -138,7 +138,7 @@ const Navigation = ({ darkHero }: NavigationProps) => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 safe-pt ${
           isScrolled
             ? 'bg-white/95 dark:bg-black/90 backdrop-blur-xl border-b border-gray-200 dark:border-white/10 shadow-sm'
             : 'bg-transparent'
@@ -197,11 +197,11 @@ const Navigation = ({ darkHero }: NavigationProps) => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="flex items-center gap-3 lg:hidden">
+            <div className="flex items-center gap-2 lg:hidden">
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); handleSectionScroll('contact'); }}
-                className="px-3 py-1.5 bg-orange text-white font-opensans text-xs font-semibold rounded-lg hover:shadow-lg hover:shadow-orange/30 transition-all duration-300"
+                className="touch-target inline-flex items-center justify-center min-h-11 px-4 py-2 bg-orange text-white font-opensans text-xs font-semibold rounded-lg hover:shadow-lg hover:shadow-orange/30 transition-all duration-300"
               >
                 Get a Quote
               </a>
@@ -209,7 +209,7 @@ const Navigation = ({ darkHero }: NavigationProps) => {
               <button
                 ref={menuToggleRef}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`p-2 transition-transform duration-300 hover:scale-110 ${
+                className={`p-2.5 min-w-11 min-h-11 flex items-center justify-center transition-transform duration-300 hover:scale-110 ${
                   onDarkSurface ? 'text-white' : 'text-gray-900 dark:text-white'
                 }`}
                 aria-label="Toggle menu"

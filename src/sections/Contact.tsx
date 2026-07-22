@@ -58,13 +58,13 @@ const Contact = ({ introComplete = true }: ContactProps) => {
         if (headerTween) triggersRef.current.push(headerTween);
 
         const formTween = revealFrom(formRef.current, formRef.current, {
-          x: -40,
+          y: 40,
           duration: 0.9,
         });
         if (formTween) triggersRef.current.push(formTween);
 
         const infoTween = revealFrom(infoRef.current, infoRef.current, {
-          x: 40,
+          y: 40,
           duration: 0.9,
         });
         if (infoTween) triggersRef.current.push(infoTween);

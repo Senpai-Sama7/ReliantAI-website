@@ -128,7 +128,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
   const stageRef = useRef<HTMLDivElement | null>(null);
   const chaptersColRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => isMobileViewport());
   const [reducedMotion] = useState(() => prefersReducedMotion());
   const triggersRef = useRef<ScrollTrigger[]>([]);
   const activeRef = useRef(0);
@@ -144,7 +144,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
     });
   }, []);
 
-  // Detect mobile on mount
+  // Detect mobile on mount (initialized above to avoid sticky/desktop first-paint flash)
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(isMobileViewport());
@@ -161,6 +161,9 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
       triggersRef.current = [];
       gsapCtxRef.current?.revert();
       gsapCtxRef.current = null;
+
+      // Mobile uses stacked chapter cards — no pin / stage crossfade.
+      if (isMobile) return;
 
       const root = rootRef.current;
       const stage = stageRef.current;
@@ -300,6 +303,120 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
 
   const currentChapter = chapters[active];
 
+  // Phones: stacked chapter cards with inline imagery (no sticky stage stealing 40% of the viewport).
+  if (isMobile) {
+    return (
+      <div
+        ref={rootRef}
+        className="relative bg-[#f7f7f7] dark:bg-[#0a0a0a]"
+        role="region"
+        aria-label="Case studies"
+      >
+        <div ref={stageRef} className="hidden" aria-hidden="true" />
+        <div ref={chaptersColRef} className="relative">
+          {chapters.map((chapter, i) => (
+            <article
+              key={i}
+              data-chapter
+              className="px-5 py-12 sm:px-8 sm:py-16 border-b border-gray-200 dark:border-white/10 last:border-b-0"
+            >
+              <div
+                className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-xl mb-8"
+              >
+                <img
+                  src={chapter.visualSrc}
+                  alt={chapter.visualAlt}
+                  width={512}
+                  height={384}
+                  className="w-full h-full object-cover"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+                <IndustryAnimation index={i} mousePos={{ x: 0, y: 0 }} reduced />
+              </div>
+
+              <div
+                ref={(el) => {
+                  chapterContentRefs.current[i] = el;
+                }}
+                className="max-w-lg"
+              >
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="font-teko text-3xl text-orange/30">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-white/50 font-opensans">
+                    {chapter.eyebrow}
+                  </span>
+                </div>
+
+                <h3 className="font-teko text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-[0.92]">
+                  {chapter.title}
+                </h3>
+
+                <p className="font-opensans text-base text-gray-600 dark:text-white/70 mb-6 leading-relaxed">
+                  {chapter.description}
+                </p>
+
+                <div className="grid grid-cols-1 gap-6 mb-6">
+                  <div>
+                    <h4 className="text-xs uppercase tracking-[0.15em] text-gray-400 dark:text-white/40 font-opensans mb-3">
+                      Services
+                    </h4>
+                    <ul className="space-y-2">
+                      {chapter.bullets.map((bullet, j) => (
+                        <li
+                          key={j}
+                          className="font-opensans text-sm text-gray-700 dark:text-white/80 flex items-start gap-2"
+                        >
+                          <span className="text-orange mt-1">—</span>
+                          {bullet}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs uppercase tracking-[0.15em] text-gray-400 dark:text-white/40 font-opensans mb-3">
+                      Results
+                    </h4>
+                    <ul className="grid grid-cols-2 gap-3">
+                      {chapter.stats.map((stat, j) => (
+                        <li key={j}>
+                          <div className="font-teko text-2xl font-bold text-orange">
+                            <CountUp end={stat.value} duration={1.8} />
+                          </div>
+                          <div className="font-opensans text-xs text-gray-500 dark:text-white/50">
+                            {stat.label}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <a
+                  href="#contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection('contact');
+                  }}
+                  className="group inline-flex items-center gap-3 min-h-11 text-gray-900 dark:text-white font-opensans font-semibold"
+                >
+                  <span className="relative">
+                    Start Your Project
+                    <span className="absolute bottom-0 left-0 w-0 h-px bg-orange group-hover:w-full transition-all duration-300" />
+                  </span>
+                  <ArrowRight size={18} className="transform group-hover:translate-x-1 transition-transform duration-300" />
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div 
       ref={rootRef} 
@@ -309,11 +426,11 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
     >
       {/* Block layout on mobile so the sticky stage can travel the full story height
           (sticky grid items are confined to their own grid area). */}
-      <div className={`${isMobile ? 'block' : 'grid grid-cols-1 lg:grid-cols-2'} min-h-screen`}>
-        {/* Stage - Left Side (or Top on Mobile) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+        {/* Stage - Left Side */}
         <div 
           ref={stageRef} 
-          className={`relative ${isMobile ? 'sticky top-20 z-10 h-[40vh] supports-[height:40dvh]:h-[40dvh]' : 'h-screen-dvh'} flex items-center justify-center p-6 lg:p-16 bg-[#f7f7f7] dark:bg-[#0a0a0a]`}
+          className="relative h-screen-dvh flex items-center justify-center p-6 lg:p-16 bg-[#f7f7f7] dark:bg-[#0a0a0a]"
         >
           {/* Background gradient based on theme */}
           <div 
@@ -351,19 +468,19 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
             <IndustryAnimation index={active} mousePos={mousePos} reduced={reducedMotion} />
           </div>
 
-          {/* Chapter counter - hidden on mobile */}
+          {/* Chapter counter */}
           <div className="hidden lg:block absolute bottom-8 left-8 font-teko text-8xl font-bold text-gray-200 dark:text-white/5 select-none">
             {String(active + 1).padStart(2, '0')}
           </div>
         </div>
 
-        {/* Chapters - Right Side (or Below on Mobile) */}
+        {/* Chapters - Right Side */}
         <div ref={chaptersColRef} className="relative bg-[#f7f7f7] dark:bg-[#0a0a0a]">
           {chapters.map((chapter, i) => (
             <article
               key={i}
               data-chapter
-              className={`${isMobile ? '' : 'min-h-screen'} flex items-center px-6 lg:px-16 py-12 lg:py-24 border-b border-gray-200 dark:border-white/10 last:border-b-0`}
+              className="min-h-screen flex items-center px-6 lg:px-16 py-12 lg:py-24 border-b border-gray-200 dark:border-white/10 last:border-b-0"
             >
               <div 
                 ref={(el) => { chapterContentRefs.current[i] = el; }}
