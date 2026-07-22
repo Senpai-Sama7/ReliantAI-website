@@ -1,0 +1,21 @@
+{
+  // Cloudflare Workers Builds requires a Wrangler config whose `name`
+  // matches the dashboard Worker ("reliantai").
+  //
+  // Note: Workers Builds ignores wrangler `build.command`. CI creates dist/
+  // via scripts/workers-ci-build.mjs (postinstall on non-Vercel CI).
+  // `build.command` still helps local `wrangler deploy` / `versions upload`.
+  //
+  // First upload must use `wrangler deploy` (not `versions upload`). After
+  // the Worker exists on the account, PR preview uploads will succeed.
+  "name": "reliantai",
+  "compatibility_date": "2026-07-21",
+  "workers_dev": true,
+  "build": {
+    "command": "npm run build"
+  },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}

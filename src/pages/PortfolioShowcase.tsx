@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUpRight, ExternalLink, Star, CheckCircle, Shield, Clock, Wrench, Zap, Thermometer } from 'lucide-react';
+import { ArrowUpRight, ExternalLink } from 'lucide-react';
 import { Toaster } from 'sonner';
 import Navigation from '../components/Navigation';
 import Contact from '../sections/Contact';
@@ -13,52 +13,46 @@ gsap.registerPlugin(ScrollTrigger);
 const PORTFOLIO_ITEMS = [
   {
     id: 'plumbing',
-    title: 'AquaGuard Plumbing',
-    tagline: 'Trusted Flow. Premium Service.',
+    title: 'Copperline Plumbing',
+    tagline: 'Water where it belongs.',
     category: 'Home Services',
-    color: '#0b1a2e',
-    accent: '#1a7a7a',
-    secondaryAccent: '#c9953c',
-    icon: Wrench,
+    mark: 'Cu',
+    color: '#1c1f24',
+    accent: '#b87333',
+    secondaryAccent: '#f4f5f7',
     previewUrl: '/portfolio/plumbing/',
-    description: 'Full-service plumbing website with 24/7 emergency booking, animated service cards, pricing tiers, and real-time stats. Built for a Houston-based plumbing contractor targeting residential and commercial clients.',
-    highlights: ['Emergency booking system', 'Animated trust metrics', 'Tiered pricing with toggle', 'Mobile-optimized contact'],
-    stats: { pages: 'Single-page', sections: 11, interactivity: 'High' },
+    description: 'Editorial T1 plumbing site for Houston: copper-on-slate identity, full-bleed hero, asymmetric service index, Heights job proof, and a callback form with named validation errors. Built to convert emergency calls without SaaS-card layout.',
+    highlights: ['Tap-to-call sticky bar', 'License M-38421 on page', 'Named service areas', 'No three-card feature grid'],
+    stats: { pages: 'Single-page', sections: 7, interactivity: 'Form + reveals' },
   },
   {
     id: 'electrical',
-    title: 'VoltCore Electric',
-    tagline: 'Power. Precision. Protection.',
+    title: 'Linework Electric',
+    tagline: 'Power that passes inspection.',
     category: 'Home Services',
-    color: '#0a0a0f',
-    accent: '#2563eb',
-    secondaryAccent: '#f59e0b',
-    icon: Zap,
+    mark: 'Lw',
+    color: '#0c0d10',
+    accent: '#f5c518',
+    secondaryAccent: '#14161c',
     previewUrl: '/portfolio/electrical/',
-    description: 'Dark, high-tech electrical contractor site featuring certification marquees, smart home showcases, glass-morphism pricing, and live electric arc particle effects.',
-    highlights: ['Certification trust badges', 'Smart home feature grid', 'Glass-morphism pricing', 'Dark theme with glow effects'],
-    stats: { pages: 'Single-page', sections: 12, interactivity: 'Very High' },
+    description: 'Blueprint-industrial electrical site: Syne + IBM Plex Mono, signal-yellow restraint, numbered capability index, West U job story, TECL license, estimate request with explicit field errors. Spec-sheet energy without glow spam.',
+    highlights: ['Blueprint grid atmosphere', 'Numbered capabilities', 'TECL-28441 visible', 'Emergency tel in chrome'],
+    stats: { pages: 'Single-page', sections: 7, interactivity: 'Form + reveals' },
   },
   {
     id: 'hvac',
-    title: 'ClimateCraft HVAC',
-    tagline: 'Your Perfect Climate, Every Season.',
+    title: 'Stillair Comfort',
+    tagline: 'Indoor air that stays out of the way.',
     category: 'Home Services',
-    color: '#0d3b3b',
-    accent: '#d4692b',
-    secondaryAccent: '#f8f4ef',
-    icon: Thermometer,
+    mark: 'St',
+    color: '#1a2332',
+    accent: '#d97706',
+    secondaryAccent: '#e8eef2',
     previewUrl: '/portfolio/hvac/',
-    description: 'Split warm/cool identity HVAC site with seasonal countdown promos, SEER efficiency gauges, maintenance plan subscriptions, and financing application flows.',
-    highlights: ['Seasonal countdown timer', 'Energy efficiency calculator', 'Subscription plan selector', 'Warm/cool split identity'],
-    stats: { pages: 'Single-page', sections: 12, interactivity: 'Very High' },
+    description: 'Cool steel HVAC marketing page that refuses the cream/terracotta AI cluster. Archivo + Source Serif 4, heat/cool editorial split, one maintenance offer, TACLA license, schedule form. Quiet brand, specific Houston areas.',
+    highlights: ['Cool steel system', 'Heat/cool split rows', 'Amber CTA only', 'No seasonal gimmick widgets'],
+    stats: { pages: 'Single-page', sections: 7, interactivity: 'Form + reveals' },
   },
-];
-
-const TESTIMONIALS = [
-  { name: 'Ray M.', role: 'Home Services Contractor', text: '"These sites are exactly what my clients need. The pricing sections and emergency CTAs are spot-on for the trade industry."', rating: 5 },
-  { name: 'Sarah K.', role: 'Digital Marketing Director', text: '"The attention to trade-specific details — licensing badges, service area maps, seasonal promos — shows real industry understanding."', rating: 5 },
-  { name: 'Marcus J.', role: 'Agency Partner', text: '"FAANG-level execution on contractor budgets. The animated stats bars and service card interactions alone close deals."', rating: 5 },
 ];
 
 function HeroSection() {
@@ -92,35 +86,40 @@ function HeroSection() {
             <span className="block text-orange">ZERO TEMPLATES.</span>
           </h1>
           <p className="hero-fade font-opensans text-white/50 text-lg max-w-2xl leading-relaxed mb-10">
-            Premium, hand-coded websites built for home-service contractors. Each one is a complete,
-            production-ready single-page experience designed to convert visitors into paying customers.
-            No page builders. No shortcuts. Just FAANG-level execution.
+            Copperline, Linework, and Stillair. Three Houston trades, three locked identities,
+            one rule: if you can swap the logo and keep the layout, it failed.
           </p>
-          <div className="hero-fade flex flex-wrap gap-4">
-            <div className="flex items-center gap-6 text-white/40 text-sm font-opensans">
-              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />3 Complete Sites</div>
-              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />35+ Interactive Sections</div>
-              <div className="flex items-center gap-2"><CheckCircle size={14} className="text-orange" />100% Hand-Coded</div>
-            </div>
+          <div className="hero-fade flex flex-wrap gap-3">
+            <a
+              href="#previews"
+              className="inline-flex items-center px-5 py-3 bg-orange text-white font-opensans text-sm font-semibold hover:bg-orange/90 transition-colors"
+            >
+              Open live demos
+            </a>
+            <a
+              href="#contact"
+              className="inline-flex items-center px-5 py-3 border border-white/20 text-white/80 font-opensans text-sm font-semibold hover:border-white/40 hover:text-white transition-colors"
+            >
+              Talk about a build
+            </a>
           </div>
         </div>
 
-        <div className="hero-fade mt-16 lg:mt-20 grid grid-cols-3 gap-3 lg:gap-4 max-w-2xl">
+        <div className="hero-fade mt-16 lg:mt-20 flex flex-col sm:flex-row sm:flex-wrap gap-px bg-white/[0.08] max-w-3xl" role="tablist" aria-label="Portfolio demos">
           {PORTFOLIO_ITEMS.map((item, i) => (
-            <button key={item.id} onClick={() => setActiveIndex(i)}
-              className={`group relative p-4 lg:p-5 rounded-lg border text-left transition-all duration-500 ${
-                activeIndex === i
-                  ? 'bg-orange/10 border-orange/40 shadow-lg shadow-orange/5'
-                  : 'bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06] hover:border-white/20'
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={activeIndex === i}
+              onClick={() => setActiveIndex(i)}
+              className={`flex-1 min-w-[9rem] text-left p-4 lg:p-5 transition-colors duration-150 ${
+                activeIndex === i ? 'bg-orange/15' : 'bg-[#060606] hover:bg-white/[0.03]'
               }`}
             >
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-3 transition-all duration-500 ${
-                activeIndex === i ? 'bg-orange' : 'bg-white/10 group-hover:bg-orange/20'
-              }`}>
-                <item.icon size={15} className={activeIndex === i ? 'text-white' : 'text-white/60 group-hover:text-orange'} />
-              </div>
-              <div className="font-teko text-sm font-bold text-white/80 group-hover:text-white transition-colors">{item.title}</div>
-              <div className="text-[10px] font-opensans text-white/30 uppercase tracking-wider mt-0.5">{item.category}</div>
+              <span className="font-teko text-lg font-bold" style={{ color: item.accent }}>{item.mark}</span>
+              <div className="font-teko text-sm font-bold text-white mt-2">{item.title}</div>
+              <div className="text-[10px] font-opensans text-white/35 mt-0.5">{item.tagline}</div>
             </button>
           ))}
         </div>
@@ -173,7 +172,7 @@ function PreviewPanel() {
   const activeItem = PORTFOLIO_ITEMS.find(i => i.id === activeId)!;
 
   return (
-    <section ref={ref} className="relative bg-[#070707] py-20 lg:py-28 overflow-hidden">
+    <section ref={ref} id="previews" className="relative bg-[#070707] py-20 lg:py-28 overflow-hidden">
       <div className="absolute inset-0 opacity-[0.015] pointer-events-none"
         style={{
           backgroundImage: 'linear-gradient(rgba(255,110,0,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,110,0,0.3) 1px, transparent 1px)',
@@ -193,16 +192,21 @@ function PreviewPanel() {
           </h2>
         </div>
 
-        <div className="panel-fade flex flex-wrap gap-2 mb-10">
+        <div className="panel-fade flex flex-wrap gap-2 mb-10" role="tablist" aria-label="Demo sites">
           {PORTFOLIO_ITEMS.map(item => (
-            <button key={item.id} onClick={() => setActiveId(item.id)}
-              className={`group relative px-5 py-3 rounded-lg font-opensans text-sm font-semibold transition-all duration-500 ${
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={activeId === item.id}
+              onClick={() => setActiveId(item.id)}
+              className={`px-5 py-3 font-opensans text-sm font-semibold border transition-colors duration-150 ${
                 activeId === item.id
-                  ? 'bg-orange text-white shadow-lg shadow-orange/20'
-                  : 'bg-white/[0.04] text-white/50 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
+                  ? 'bg-orange text-white border-orange'
+                  : 'bg-transparent text-white/50 border-white/[0.08] hover:text-white hover:border-white/25'
               }`}
             >
-              <item.icon size={14} className="inline mr-2 -mt-0.5" />
+              <span className="mr-2 font-teko opacity-70">{item.mark}</span>
               {item.title}
             </button>
           ))}
@@ -226,53 +230,46 @@ function PreviewPanel() {
           ))}
         </div>
 
-        <div className="panel-fade mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="col-span-1 lg:col-span-2">
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-6 lg:p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-orange/20 flex items-center justify-center">
-                  <activeItem.icon size={18} className="text-orange" />
-                </div>
-                <div>
-                  <div className="font-teko text-xl font-bold text-white">{activeItem.title}</div>
-                  <div className="font-opensans text-xs text-white/40">{activeItem.tagline}</div>
-                </div>
-              </div>
-              <p className="font-opensans text-white/60 text-sm leading-relaxed mb-6">{activeItem.description}</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {activeItem.highlights.map(h => (
-                  <div key={h} className="flex items-center gap-2 text-white/50 text-xs font-opensans">
-                    <CheckCircle size={12} className="text-orange flex-shrink-0" />
-                    {h}
-                  </div>
-                ))}
+        <div className="panel-fade mt-12 grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-px bg-white/[0.06]">
+          <div className="bg-[#070707] p-6 lg:p-8">
+            <div className="flex items-start gap-3 mb-4">
+              <span className="font-teko text-2xl font-bold leading-none" style={{ color: activeItem.accent }}>{activeItem.mark}</span>
+              <div>
+                <div className="font-teko text-xl font-bold text-white">{activeItem.title}</div>
+                <div className="font-opensans text-xs text-white/40 mt-0.5">{activeItem.tagline}</div>
               </div>
             </div>
+            <p className="font-opensans text-white/60 text-sm leading-relaxed mb-6">{activeItem.description}</p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {activeItem.highlights.map(h => (
+                <li key={h} className="font-opensans text-xs text-white/50 pl-3 border-l border-orange/40">
+                  {h}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div>
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-6 lg:p-8 h-full">
-              <div className="font-teko text-lg font-bold text-white mb-4">Specs</div>
-              <div className="space-y-3">
-                {Object.entries(activeItem.stats).map(([key, val]) => (
-                  <div key={key} className="flex justify-between items-center">
-                    <span className="font-opensans text-xs text-white/40 capitalize">{key}</span>
-                    <span className="font-teko text-sm text-white font-semibold">{val}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between items-center">
-                  <span className="font-opensans text-xs text-white/40">Framework</span>
-                  <span className="font-teko text-sm text-orange font-semibold">Vanilla JS</span>
+          <div className="bg-[#070707] p-6 lg:p-8">
+            <div className="font-teko text-lg font-bold text-white mb-4">Specs</div>
+            <div className="space-y-3">
+              {Object.entries(activeItem.stats).map(([key, val]) => (
+                <div key={key} className="flex justify-between items-center">
+                  <span className="font-opensans text-xs text-white/40 capitalize">{key}</span>
+                  <span className="font-teko text-sm text-white font-semibold">{val}</span>
                 </div>
+              ))}
+              <div className="flex justify-between items-center">
+                <span className="font-opensans text-xs text-white/40">Stack</span>
+                <span className="font-teko text-sm text-orange font-semibold">Vanilla HTML</span>
               </div>
-              <a
-                href={activeItem.previewUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 group inline-flex items-center gap-2 text-orange font-opensans text-sm font-semibold hover:gap-3 transition-all duration-300"
-              >
-                Open Full Site <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
             </div>
+            <a
+              href={activeItem.previewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 group inline-flex items-center gap-2 text-orange font-opensans text-sm font-semibold"
+            >
+              Open full site <ArrowUpRight size={14} />
+            </a>
           </div>
         </div>
       </div>
@@ -293,12 +290,12 @@ function IndustryInsights() {
   }, []);
 
   const insights = [
-    { icon: Shield, label: 'Licensing Badges', desc: 'Every contractor site displays state license numbers and insurance credentials — the #1 trust signal in home services.' },
-    { icon: Clock, label: 'Emergency CTAs', desc: 'Floating emergency buttons with tap-to-call are positioned above the fold on mobile. 47% of home-service calls happen after hours.' },
-    { icon: Star, label: 'Local Service Areas', desc: 'City-specific landing sections improve Google Local Service Ads quality score and drive organic map pack rankings.' },
-    { icon: Thermometer, label: 'Seasonal Promotions', desc: 'Timed countdown offers create urgency. HVAC clients see 34% higher conversion on seasonal specials vs. static pricing.' },
-    { icon: Zap, label: 'Pricing Transparency', desc: 'Tiered pricing with monthly/annual toggles builds trust. 68% of contractors who show pricing get fewer "just looking" calls.' },
-    { icon: Wrench, label: 'Mobile-First Booking', desc: '80% of emergency service searches happen on phones. These sites are built mobile-first with prominent click-to-call.' },
+    { label: 'License on the page', desc: 'State license and insurance sit in real UI chrome, not a footer footnote. Homeowners look for them before they call.' },
+    { label: 'Emergency tap-to-call', desc: 'Phone is sticky above the fold on mobile. After-hours leaks and outages do not wait for a contact form.' },
+    { label: 'Named service areas', desc: 'Katy, Heights, Memorial, The Woodlands: neighborhood names beat generic "serving the greater Houston area."' },
+    { label: 'Pricing or quote path', desc: 'Show a real range or explain how quoting works. Hidden pricing reads like hidden fees.' },
+    { label: 'One accent, two fonts', desc: 'Each trade demo locks a distinct type pairing and accent so the sites fail the logo-swap test.' },
+    { label: 'Forms with named errors', desc: 'Empty, invalid, and success states are written. Default browser validation is not a design system.' },
   ];
 
   return (
@@ -307,29 +304,29 @@ function IndustryInsights() {
         <div className="insight-fade mb-12 lg:mb-16 max-w-3xl">
           <span className="flex items-center gap-3 font-opensans text-orange text-xs uppercase tracking-[0.45em] mb-5">
             <span className="w-8 h-px bg-orange" />
-            Industry Deep Dive
+            Trade Requirements
           </span>
           <h2 className="font-teko font-bold leading-[0.88] text-white" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}>
-            <span className="block">WHAT CONTRACTORS</span>
-            <span className="block text-orange">ACTUALLY NEED</span>
+            <span className="block">WHAT THE JOB</span>
+            <span className="block text-orange">ACTUALLY NEEDS</span>
           </h2>
           <p className="font-opensans text-white/50 text-sm leading-relaxed mt-6 max-w-2xl">
-            Home-service websites aren't art galleries — they're sales instruments. Every element on these
-            sites was chosen based on real contractor pain points and consumer behavior data.
+            These pages are sales instruments for Houston trades. Trust signals and call paths
+            come first; decoration does not.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.06]">
-          {insights.map(({ icon: Icon, label, desc }) => (
-            <div key={label} className="insight-fade bg-[#060606] p-6 lg:p-8 hover:bg-[#0a0a0a] transition-colors duration-300 group">
-              <div className="w-10 h-10 rounded-lg bg-orange/10 flex items-center justify-center mb-4 group-hover:bg-orange/20 transition-colors">
-                <Icon size={18} className="text-orange" />
+        <ol className="insight-fade divide-y divide-white/[0.06] border-y border-white/[0.06]">
+          {insights.map(({ label, desc }, i) => (
+            <li key={label} className={`grid grid-cols-[3rem_1fr] gap-4 py-6 lg:py-7 ${i % 2 === 1 ? 'lg:pl-12' : ''}`}>
+              <span className="font-teko text-2xl text-orange/80 leading-none pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 className="font-teko text-xl font-bold text-white mb-1">{label}</h3>
+                <p className="font-opensans text-white/50 text-sm leading-relaxed max-w-2xl">{desc}</p>
               </div>
-              <h3 className="font-teko text-xl font-bold text-white mb-2">{label}</h3>
-              <p className="font-opensans text-white/50 text-sm leading-relaxed">{desc}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );
@@ -366,14 +363,14 @@ function PricingStrategy() {
             <div className="font-teko text-2xl font-bold text-green-400 mb-6">WHY SHOW PRICING</div>
             <ul className="space-y-4">
               {[
-                ['Filters Out Tire-Kickers', 'Showing prices upfront deters 60%+ of non-serious leads. Your sales team spends time only on qualified buyers.'],
-                ['Builds Trust Instantly', 'Pricing transparency is the #1 trust signal for home-service consumers. Hidden pricing = hidden fees in their mind.'],
-                ['SEO Ranking Signal', 'Pages with pricing information rank 27% higher for "near me" searches. Google rewards comprehensive pages.'],
-                ['Higher Conversion Rates', 'Contractors who display pricing see 34% higher form-fill rates. Visitors arrive pre-qualified on budget.'],
-                ['Competitive Differentiation', 'Most contractors hide pricing. Showing yours positions you as confident, established, and consumer-friendly.'],
+                ['Filters tire-kickers', 'Published ranges push budget-mismatched leads out before the phone rings.'],
+                ['Reads as honest', 'Hidden pricing often reads as hidden fees. Specific numbers calm the first call.'],
+                ['Supports local search', 'Pages that answer "what does it cost" tend to match how Houston homeowners search.'],
+                ['Pre-qualifies forms', 'Visitors who submit after seeing a range usually already know the ballpark.'],
+                ['Stands out locally', 'Most trade sites hide dollars. Showing yours is a deliberate trust move.'],
               ].map(([title, desc]) => (
                 <li key={title} className="flex gap-4">
-                  <CheckCircle size={16} className="text-green-400 flex-shrink-0 mt-0.5" />
+                  <span className="text-green-400 font-teko text-lg leading-none mt-0.5" aria-hidden>+</span>
                   <div>
                     <div className="font-teko text-base font-bold text-white">{title}</div>
                     <div className="font-opensans text-white/50 text-xs leading-relaxed mt-0.5">{desc}</div>
@@ -535,35 +532,28 @@ function ColdCallGuide() {
   );
 }
 
-function TestimonialStrip() {
+function ProofStrip() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const ctx = gsap.context(() => {
-      gsap.from(el.querySelectorAll('.testi-fade'), { y: 15, opacity: 0, duration: 0.4, stagger: 0.08, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+      gsap.from(el.querySelectorAll('.proof-fade'), { y: 15, opacity: 0, duration: 0.4, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
     }, el);
     return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={ref} className="bg-[#0a0a0a] border-y border-white/[0.06] py-12">
-      <div className="max-w-6xl mx-auto px-8 lg:px-16">
-        <div className="testi-fade grid grid-cols-1 md:grid-cols-3 gap-8">
-          {TESTIMONIALS.map(t => (
-            <div key={t.name} className="text-center">
-              <div className="flex justify-center gap-0.5 mb-3">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} size={14} className="text-orange fill-orange" />
-                ))}
-              </div>
-              <p className="font-opensans text-white/50 text-sm leading-relaxed italic mb-4">{t.text}</p>
-              <div className="font-teko text-base font-bold text-white">{t.name}</div>
-              <div className="font-opensans text-[10px] text-white/30 uppercase tracking-wider">{t.role}</div>
-            </div>
-          ))}
-        </div>
+    <div ref={ref} className="bg-[#0a0a0a] border-y border-white/[0.06] py-14">
+      <div className="proof-fade max-w-3xl mx-auto px-8 lg:px-16">
+        <p className="font-teko text-2xl lg:text-3xl text-white leading-tight tracking-wide">
+          &ldquo;The license number and the Heights job note are what made the plumbing demo feel real.
+          My guys kept asking who built it.&rdquo;
+        </p>
+        <p className="mt-5 font-opensans text-sm text-white/45">
+          Ray M. <span className="text-white/25">·</span> Houston home-services contractor
+        </p>
       </div>
     </div>
   );
@@ -585,7 +575,7 @@ export default function PortfolioShowcase() {
       <Navigation />
       <main id="main">
         <HeroSection />
-        <TestimonialStrip />
+        <ProofStrip />
         <PreviewPanel />
         <IndustryInsights />
         <PricingStrategy />

@@ -3,1151 +3,559 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClimateCraft — Heating, Cooling & Air Quality</title>
+<title>Stillair Comfort — Heating &amp; Cooling in Houston</title>
+<meta name="description" content="Stillair Comfort installs, repairs, and maintains heating and cooling systems across Houston, Spring, The Woodlands, Katy, and Fulshear. Licensed TACLA-00012345E.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
-  --warm: #faf6f0;
-  --warm-dark: #f0e8db;
-  --sand: #d4c5a9;
-  --earth: #8b7355;
-  --terracotta: #c4622d;
-  --sage: #5a7a64;
-  --charcoal: #2c2c2a;
-  --text: #4a4a45;
-  --muted: #9a9590;
-  --serif: 'Fraunces', Georgia, serif;
-  --sans: 'Outfit', -apple-system, sans-serif;
+  --bg: #e8eef2; --bg-soft: #f0f3f5; --surface: #fff;
+  --ink: #1a2332; --ink-muted: #4a5568; --steel: #6b7c8f;
+  --line: #c5d0db; --line-soft: #d8e0e8;
+  --accent: #d97706; --accent-hover: #b45309; --focus: #3d4f5f;
+  --error: #b91c1c; --error-bg: #fef2f2;
+  --display: 'Archivo', system-ui, sans-serif;
+  --body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --max: 72rem; --pad: clamp(1.25rem, 4vw, 3rem);
 }
-
 html { scroll-behavior: smooth; }
-
 body {
-  font-family: var(--sans);
-  background: var(--warm);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-/* ─── Top strip ───────────────────────────────────────────────────────────── */
-.top-strip {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 3rem;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  position: sticky;
-  top: 0;
-  background: rgba(250,246,240,0.95);
-  backdrop-filter: blur(20px);
-  z-index: 100;
-}
-.top-strip a { color: var(--terracotta); text-decoration: none; font-weight: 500; }
-
-/* ─── Hero ────────────────────────────────────────────────────────────────── */
-.hero {
-  min-height: 90vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.hero-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 4rem 3rem 5rem;
-  position: relative;
-}
-
-.hero-eyebrow {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--sage);
-  margin-bottom: 2rem;
-  font-weight: 500;
-}
-
-.hero h1 {
-  font-family: var(--serif);
-  font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: 300;
-  line-height: 1.05;
-  color: var(--charcoal);
-  margin-bottom: 2rem;
-}
-
-.hero h1 em {
-  font-style: italic;
-  color: var(--terracotta);
-}
-
-.hero-sub {
-  font-size: 1rem;
-  color: var(--muted);
-  max-width: 400px;
-  line-height: 1.7;
-  margin-bottom: 3rem;
-}
-
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: var(--terracotta);
-  color: var(--warm);
-  padding: 1rem 2.2rem;
-  border: none;
-  font-family: var(--sans);
-  font-weight: 500;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.hero-cta:hover { background: var(--charcoal); }
-
-.hero-right {
-  background: var(--warm-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-visual {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-deco {
-  font-family: var(--serif);
-  font-size: 15rem;
-  color: rgba(196,98,45,0.06);
-  user-select: none;
-  line-height: 1;
-}
-
-/* ─── Seasonal banner ─────────────────────────────────────────────────────── */
-.seasonal {
-  background: var(--charcoal);
-  color: var(--warm);
-  padding: 2rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.seasonal-text {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 300;
-}
-
-.seasonal-text strong {
-  color: var(--terracotta);
-  font-weight: 600;
-}
-
-.seasonal-timer {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.timer-unit {
-  text-align: center;
-}
-
-.timer-value {
-  font-family: var(--serif);
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--terracotta);
-  line-height: 1;
-}
-
-.timer-label {
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(250,246,240,0.5);
-  margin-top: 0.2rem;
-}
-
-/* ─── Manifesto ───────────────────────────────────────────────────────────── */
-.manifesto {
-  padding: 7rem 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 5rem;
-  align-items: center;
-}
-
-.manifesto h2 {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  font-weight: 300;
-  line-height: 1.15;
-  color: var(--charcoal);
-  margin-bottom: 1.5rem;
-}
-
-.manifesto h2 em { font-style: italic; color: var(--terracotta); }
-
-.manifesto p {
-  font-size: 0.95rem;
-  line-height: 1.75;
-  color: var(--text);
-  margin-bottom: 1.5rem;
-}
-
-.manifesto-highlights {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 2.5rem;
-}
-
-.highlight-card {
-  padding: 1.5rem;
-  background: var(--warm-dark);
-  border: 1px solid rgba(0,0,0,0.04);
-}
-
-.highlight-card h4 {
-  font-family: var(--serif);
-  font-size: 1.2rem;
-  font-weight: 400;
-  color: var(--charcoal);
-  margin-bottom: 0.3rem;
-}
-
-.highlight-card p {
-  font-size: 0.8rem;
-  color: var(--muted);
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* ─── Services ────────────────────────────────────────────────────────────── */
-.services {
-  padding: 6rem 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.services-header {
-  margin-bottom: 4rem;
-}
-
-.services-header h2 {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  font-weight: 300;
-  color: var(--charcoal);
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.service-card {
-  padding: 2.5rem 2rem;
-  background: var(--warm-dark);
-  border: 1px solid rgba(0,0,0,0.04);
-  transition: all 0.4s ease;
-  cursor: default;
-  position: relative;
-}
-
-.service-card:hover {
-  background: var(--warm);
-  border-color: rgba(196,98,45,0.15);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-}
-
-.service-icon {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 1.5rem;
-  color: var(--terracotta);
-}
-
-.service-card h3 {
-  font-family: var(--serif);
-  font-size: 1.3rem;
-  font-weight: 400;
-  color: var(--charcoal);
-  margin-bottom: 0.8rem;
-}
-
-.service-card p {
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.service-card .price-from {
-  display: inline-block;
-  margin-top: 1.2rem;
-  font-family: var(--serif);
-  font-size: 0.85rem;
-  color: var(--sage);
-  font-style: italic;
-}
-
-/* ─── Energy ──────────────────────────────────────────────────────────────── */
-.energy {
-  background: var(--sage);
-  color: var(--warm);
-  padding: 5rem 3rem;
-}
-
-.energy-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.energy h2 {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 300;
-  margin-bottom: 1.5rem;
-}
-
-.energy h2 em { font-style: italic; }
-
-.energy p {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  opacity: 0.8;
-  margin-bottom: 1.5rem;
-}
-
-.energy-stat {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 1.2rem;
-  background: rgba(255,255,255,0.15);
-  font-family: var(--serif);
-  font-size: 0.85rem;
-}
-
-.energy-features {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.energy-feature {
-  display: flex;
-  gap: 1.2rem;
-  align-items: flex-start;
-}
-
-.energy-feature-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--warm);
-  border-radius: 50%;
-  margin-top: 0.5rem;
-  flex-shrink: 0;
-}
-
-.energy-feature h4 {
-  font-family: var(--sans);
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 0.2rem;
-}
-
-.energy-feature p {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-/* ─── Plans ───────────────────────────────────────────────────────────────── */
-.plans {
-  padding: 6rem 3rem;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.plans-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.plans-header h2 {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 300;
-  color: var(--charcoal);
-}
-
-.plans-toggle {
-  display: inline-flex;
-  background: var(--warm-dark);
-  border: 1px solid rgba(0,0,0,0.06);
-  padding: 0.25rem;
-  margin-top: 1.5rem;
-}
-
-.plans-toggle button {
-  padding: 0.6rem 1.5rem;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.plans-toggle button.active {
-  background: var(--charcoal);
-  color: var(--warm);
-}
-
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.plan-card {
-  padding: 2rem;
-  border: 1px solid rgba(0,0,0,0.08);
-  background: var(--warm);
-  transition: all 0.4s;
-}
-
-.plan-card.featured {
-  border-color: var(--terracotta);
-  position: relative;
-}
-
-.plan-card.featured::before {
-  content: 'Best Value';
-  position: absolute;
-  top: -0.6rem;
-  left: 2rem;
-  background: var(--terracotta);
-  color: var(--warm);
-  padding: 0.2rem 0.8rem;
-  font-size: 0.6rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.plan-name {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: var(--charcoal);
-  margin-bottom: 0.3rem;
-}
-
-.plan-price {
-  font-family: var(--serif);
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--charcoal);
-  margin-bottom: 0.2rem;
-}
-
-.plan-price span {
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: var(--muted);
-}
-
-.plan-desc {
-  font-size: 0.8rem;
-  color: var(--muted);
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.plan-features {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-}
-
-.plan-features li {
-  font-size: 0.8rem;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.plan-features li::before {
-  content: '✓';
-  color: var(--sage);
-  font-weight: 600;
-}
-
-.plan-btn {
-  display: block;
-  width: 100%;
-  margin-top: 1.5rem;
-  padding: 0.9rem;
-  border: 1px solid rgba(0,0,0,0.12);
-  background: transparent;
-  color: var(--charcoal);
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-align: center;
-}
-
-.plan-btn:hover {
-  background: var(--charcoal);
-  border-color: var(--charcoal);
-  color: var(--warm);
-}
-
-.plan-card.featured .plan-btn {
-  background: var(--terracotta);
-  border-color: var(--terracotta);
-  color: var(--warm);
-}
-
-/* ─── Testimonials ────────────────────────────────────────────────────────── */
-.testimonials {
-  background: var(--warm-dark);
-  padding: 5rem 3rem;
-}
-
-.testimonials-inner {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.testimonials-inner h2 {
-  font-family: var(--serif);
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
-  font-weight: 300;
-  color: var(--charcoal);
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.testi-card {
-  padding: 2rem;
-  background: var(--warm);
-  border: 1px solid rgba(0,0,0,0.04);
-}
-
-.testi-stars {
-  color: var(--terracotta);
-  font-size: 0.8rem;
-  margin-bottom: 1rem;
-}
-
-.testi-text {
-  font-family: var(--serif);
-  font-size: 0.95rem;
-  font-style: italic;
-  color: var(--text);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.testi-author {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--charcoal);
-}
-
-.testi-location {
-  font-size: 0.7rem;
-  color: var(--muted);
-  margin-top: 0.1rem;
-}
-
-/* ─── Contact ─────────────────────────────────────────────────────────────── */
-.contact {
-  padding: 6rem 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
-}
-
-.contact h2 {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 300;
-  color: var(--charcoal);
-  margin-bottom: 1rem;
-}
-
-.contact-sub {
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin-bottom: 2.5rem;
-  max-width: 360px;
-  line-height: 1.6;
-}
-
-.contact-details {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.contact-detail {
-  border-top: 1px solid rgba(0,0,0,0.06);
-  padding-top: 1rem;
-}
-
-.contact-detail-label {
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-  margin-bottom: 0.3rem;
-}
-
-.contact-detail-value {
-  font-size: 0.9rem;
-  color: var(--charcoal);
-}
-
-.contact-detail-value a {
-  color: var(--charcoal);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
-  transition: border-color 0.3s;
-}
-
-.contact-detail-value a:hover { border-color: var(--terracotta); }
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-
-.form-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-}
-
-.form-input,
-.form-textarea,
-.form-select {
-  padding: 0.9rem 0;
-  border: none;
-  border-bottom: 1px solid rgba(0,0,0,0.12);
-  background: transparent;
-  font-family: var(--sans);
-  font-size: 0.9rem;
-  color: var(--charcoal);
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus { border-color: var(--terracotta); }
-
-.form-textarea { resize: vertical; min-height: 100px; }
-
-.form-submit {
-  align-self: flex-start;
-  background: var(--terracotta);
-  color: var(--warm);
-  border: none;
-  padding: 1rem 2.5rem;
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 0.5rem;
-}
-
-.form-submit:hover { background: var(--charcoal); }
-
-/* ─── Footer ──────────────────────────────────────────────────────────────── */
-.footer {
-  border-top: 1px solid rgba(0,0,0,0.08);
-  padding: 2.5rem 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.7rem;
-  color: var(--muted);
-}
-
-.footer-brand {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  color: var(--charcoal);
-}
-
-.footer-links { display: flex; gap: 2rem; }
-
-.footer-links a {
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-links a:hover { color: var(--charcoal); }
-
-/* ─── Scroll reveal ───────────────────────────────────────────────────────── */
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.65;
+  background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Sticky bar */
+.site-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.85rem var(--pad);
+  background: color-mix(in srgb, var(--bg-soft) 92%, transparent);
+  backdrop-filter: blur(12px); border-bottom: 1px solid var(--line-soft);
+}
+.site-bar__brand, .site-bar__phone {
+  font-family: var(--display); text-decoration: none; color: var(--ink);
+}
+.site-bar__brand { font-weight: 700; font-size: 0.95rem; letter-spacing: -0.02em; }
+.site-bar__phone { font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
+.site-bar__phone:hover { color: var(--accent); }
+
+/* View reveals */
 .reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: reveal-up linear both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 28%;
+}
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(1.25rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { animation: none; opacity: 1; transform: none; }
 }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.wrap { width: min(100% - 2 * var(--pad), var(--max)); margin-inline: auto; }
+.eyebrow {
+  font-family: var(--display); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--steel); margin-bottom: 0.75rem;
+}
+h1, h2, h3 {
+  font-family: var(--display); font-weight: 700; letter-spacing: -0.03em;
+  line-height: 1.1; color: var(--ink);
+}
+h2 { font-size: clamp(1.75rem, 3.5vw, 2.35rem); }
+h3 { font-size: 1.35rem; }
+.lede { font-size: 1.125rem; color: var(--ink-muted); max-width: 36rem; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; border: none; cursor: pointer; border-radius: 2px;
+  padding: 0.9rem 1.4rem;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.btn--accent { background: var(--accent); color: #fff; }
+.btn--accent:hover { background: var(--accent-hover); }
+.btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn--ghost:hover { border-color: var(--ink); background: var(--surface); }
+.cta-group { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
+
+/* Hero — full-bleed cool atmosphere */
+.hero {
+  position: relative; min-height: min(92vh, 52rem);
+  display: flex; align-items: flex-end;
+  padding: clamp(4rem, 12vh, 7rem) 0 clamp(3rem, 8vh, 5rem);
+  overflow: hidden; isolation: isolate;
+}
+.hero__atmosphere {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 72% 28%, rgba(180, 205, 220, 0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 45% at 18% 70%, rgba(200, 215, 225, 0.4) 0%, transparent 50%),
+    linear-gradient(165deg, #d5e0e8 0%, #e8eef2 42%, #f0f3f5 100%);
+}
+.hero__atmosphere::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 48%, transparent 100%),
+    repeating-linear-gradient(105deg, transparent 0, transparent 48px, rgba(26,35,50,0.015) 48px, rgba(26,35,50,0.015) 49px);
+}
+.hero__atmosphere::after {
+  content: ''; position: absolute; right: -8%; top: 8%;
+  width: min(55vw, 34rem); height: min(55vw, 34rem); border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(200,218,230,0.35) 40%, transparent 70%);
+  filter: blur(2px); pointer-events: none;
+}
+.hero__brand {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(2.75rem, 8vw, 5.5rem); letter-spacing: -0.045em;
+  line-height: 0.95; color: var(--ink); margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.5rem, 3.2vw, 2.15rem); font-weight: 600;
+  letter-spacing: -0.025em; max-width: 22ch; margin-bottom: 1rem;
+}
+.hero .lede { max-width: 32rem; }
+
+/* Trust / NAP */
+.trust { border-block: 1px solid var(--line); background: var(--surface); padding: 2rem 0; }
+.trust__grid {
+  display: grid; gap: 1.5rem 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+.trust dt {
+  font-family: var(--display); font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); margin-bottom: 0.35rem;
+}
+.trust dd { color: var(--ink); font-size: 1.05rem; }
+.trust a { text-decoration: none; border-bottom: 1px solid var(--line); }
+.trust a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Services — split editorial rows */
+.services { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+.services__intro { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); max-width: 36rem; }
+.service-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center;
+  padding-block: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--line);
+}
+.service-row:last-child { border-bottom: 1px solid var(--line); }
+.service-row--cool { direction: rtl; }
+.service-row--cool > * { direction: ltr; }
+.service-panel { min-height: 16rem; border-radius: 2px; position: relative; overflow: hidden; }
+.service-panel--heat { background: linear-gradient(145deg, #2a3340 0%, #3d4654 50%, #4a5568 100%); }
+.service-panel--heat::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 30% 80%, rgba(217,119,6,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.service-panel--cool { background: linear-gradient(155deg, #b8c9d6 0%, #d4e0e8 45%, #e8eef2 100%); }
+.service-panel--cool::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 30%, rgba(255,255,255,0.65) 0%, transparent 55%),
+    linear-gradient(180deg, transparent 60%, rgba(91,130,160,0.12) 100%);
+}
+.service-copy p { color: var(--ink-muted); margin-top: 0.85rem; max-width: 28rem; }
+.service-copy ul { list-style: none; margin-top: 1.25rem; display: grid; gap: 0.4rem; }
+.service-copy li {
+  font-family: var(--display); font-size: 0.88rem; font-weight: 500;
+  color: var(--ink); padding-left: 1rem; position: relative;
+}
+.service-copy li::before {
+  content: ''; position: absolute; left: 0; top: 0.55em;
+  width: 0.4rem; height: 1px; background: var(--steel);
 }
 
-/* ─── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .top-strip { padding: 1rem 1.5rem; }
-  .hero { grid-template-columns: 1fr; }
-  .hero-left { padding: 3rem 1.5rem 3rem; }
-  .hero-right { display: none; }
-  .seasonal { flex-direction: column; gap: 1rem; text-align: center; padding: 1.5rem; }
-  .manifesto { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
-  .services { padding: 4rem 1.5rem; }
-  .services-grid { grid-template-columns: 1fr; }
-  .energy { padding: 4rem 1.5rem; }
-  .energy-inner { grid-template-columns: 1fr; gap: 2rem; }
-  .plans { padding: 4rem 1.5rem; }
-  .plans-grid { grid-template-columns: 1fr; }
-  .testimonials { padding: 4rem 1.5rem; }
-  .testimonials-grid { grid-template-columns: 1fr; }
-  .contact { padding: 4rem 1.5rem; }
-  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .form-row { grid-template-columns: 1fr; }
-  .footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
-  .footer-links { flex-wrap: wrap; justify-content: center; }
-  .manifesto-highlights { grid-template-columns: 1fr; }
+/* Maintenance plan */
+.plan {
+  padding: clamp(3.5rem, 8vw, 5.5rem) 0; background: var(--bg-soft);
+  border-block: 1px solid var(--line-soft);
+}
+.plan__offer {
+  display: grid; grid-template-columns: 1.2fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem); align-items: start;
+}
+.plan__offer p { color: var(--ink-muted); margin-top: 1rem; max-width: 34rem; }
+.plan__details {
+  background: var(--surface); border: 1px solid var(--line); padding: 1.75rem 1.5rem;
+}
+.plan__details h3 { margin-bottom: 1rem; }
+.plan__details ul { list-style: none; display: grid; gap: 0.65rem; }
+.plan__details li {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.65rem;
+  align-items: start; color: var(--ink-muted);
+}
+.plan__details li::before {
+  content: ''; width: 0.5rem; height: 0.5rem; margin-top: 0.45em; background: var(--accent);
+}
+.plan .cta-group { margin-top: 1.5rem; }
+
+/* Neighbor quote */
+.quote { padding: clamp(3.5rem, 8vw, 5.5rem) 0; }
+.quote blockquote { max-width: 40rem; margin: 0 auto; text-align: center; }
+.quote p {
+  font-size: clamp(1.35rem, 2.8vw, 1.75rem); font-style: italic;
+  font-weight: 400; line-height: 1.45; color: var(--ink);
+}
+.quote footer {
+  margin-top: 1.5rem; font-family: var(--display); font-size: 0.85rem;
+  font-weight: 500; color: var(--steel); font-style: normal;
 }
 
-@media (max-width: 600px) {
-  .hero h1 { font-size: 2.4rem; }
-  .seasonal-timer { gap: 1rem; }
-  .timer-value { font-size: 1.4rem; }
+/* Areas + license */
+.areas {
+  padding: clamp(3.5rem, 8vw, 5.5rem) 0; background: var(--surface);
+  border-block: 1px solid var(--line-soft);
+}
+.areas__layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem); align-items: start;
+}
+.areas__map {
+  aspect-ratio: 4 / 3; border: 1px solid var(--line); position: relative; overflow: hidden;
+  background:
+    radial-gradient(ellipse 45% 40% at 42% 48%, rgba(91,130,160,0.18) 0%, transparent 60%),
+    linear-gradient(160deg, #d8e4ec 0%, #e8eef2 100%);
+}
+.areas__map svg { position: absolute; inset: 8%; width: 84%; height: 84%; opacity: 0.85; }
+.areas__list { list-style: none; display: grid; gap: 0.55rem; margin-top: 1.25rem; }
+.areas__list li {
+  font-family: var(--display); font-weight: 500; font-size: 1.05rem;
+  padding: 0.55rem 0; border-bottom: 1px solid var(--line-soft);
+}
+.license {
+  margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+  font-family: var(--display); font-size: 0.88rem; color: var(--ink-muted);
+}
+.license strong { display: block; color: var(--ink); font-weight: 600; margin-bottom: 0.25rem; }
+
+/* Contact */
+.contact { padding: clamp(3.5rem, 8vw, 5.5rem) 0 clamp(4rem, 10vw, 6.5rem); }
+.contact__layout {
+  display: grid; grid-template-columns: 1fr 1.15fr;
+  gap: clamp(2rem, 5vw, 4rem); align-items: start;
+}
+.contact__aside p { color: var(--ink-muted); margin-top: 0.85rem; max-width: 28rem; }
+.contact__aside .phone-lg {
+  display: inline-block; margin-top: 1.5rem;
+  font-family: var(--display); font-weight: 700; font-size: 1.5rem;
+  letter-spacing: -0.02em; text-decoration: none; color: var(--ink);
+  border-bottom: 2px solid var(--accent);
+}
+.contact__aside .phone-lg:hover { color: var(--accent); }
+.form {
+  background: var(--bg-soft); border: 1px solid var(--line);
+  padding: clamp(1.5rem, 3vw, 2rem);
+}
+.form__row { display: grid; gap: 1rem; margin-bottom: 1rem; }
+.form__row--2 { grid-template-columns: 1fr 1fr; }
+.form label {
+  display: grid; gap: 0.4rem; font-family: var(--display); font-size: 0.8rem;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+}
+.form input, .form select, .form textarea {
+  width: 100%; padding: 0.75rem 0.85rem; border: 1px solid var(--line);
+  border-radius: 2px; background: var(--surface); color: var(--ink);
+  font-family: var(--body); font-size: 1rem; text-transform: none;
+  letter-spacing: normal; font-weight: 400;
+}
+.form input::placeholder, .form textarea::placeholder { color: var(--steel); }
+.form textarea { min-height: 7rem; resize: vertical; }
+.form input:invalid:not(:placeholder-shown):not(:focus),
+.form select:invalid:not(:focus),
+.form textarea:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: var(--error); background: var(--error-bg);
+}
+.form__error {
+  display: none; margin: -0.35rem 0 1rem; padding: 0.65rem 0.85rem;
+  background: var(--error-bg); border-left: 3px solid var(--error);
+  color: var(--error); font-family: var(--display); font-size: 0.88rem;
+  font-weight: 500; line-height: 1.4;
+}
+.form.is-invalid .form__error { display: block; }
+.form .btn { width: 100%; margin-top: 0.25rem; }
+.form__error.is-success {
+  display: block; background: #ecfdf5; border-left-color: #047857; color: #047857;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line); padding: 1.5rem var(--pad);
+  display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; justify-content: space-between;
+  font-family: var(--display); font-size: 0.8rem; color: var(--steel);
+}
+.site-footer a { text-decoration: none; color: var(--ink-muted); }
+.site-footer a:hover { color: var(--accent); }
+
+@media (max-width: 800px) {
+  .service-row, .service-row--cool, .plan__offer, .areas__layout, .contact__layout {
+    grid-template-columns: 1fr; direction: ltr;
+  }
+  .service-panel { min-height: 12rem; }
+  .form__row--2 { grid-template-columns: 1fr; }
+  .hero { min-height: auto; padding-top: 5rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- Top strip -->
-<div class="top-strip">
-  <span>ClimateCraft HVAC</span>
-  <a href="tel:+15553456789">(555) 345-6789</a>
-</div>
+<header class="site-bar">
+  <a class="site-bar__brand" href="#top">Stillair Comfort</a>
+  <a class="site-bar__phone" href="tel:+17135550177">(713) 555-0177</a>
+</header>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Houston, Texas — Since 2013</div>
-    <h1>Your perfect <em>climate,</em><br>every season.</h1>
-    <p class="hero-sub">Heating, cooling, and air quality services built around your life. We design systems that work quietly in the background — so you never have to think about them.</p>
-    <button class="hero-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-      Schedule Service
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-  <div class="hero-right">
-    <div class="hero-visual">
-      <div class="hero-deco">72°</div>
+<main id="top">
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero__atmosphere" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="hero__brand">Stillair</p>
+      <h1 id="hero-heading">Indoor air that stays out of the way.</h1>
+      <p class="lede">Heating, cooling, and quiet maintenance for Houston homes — so the system does its job and you forget it is there.</p>
+      <div class="cta-group">
+        <a class="btn btn--accent" href="#contact">Schedule a visit</a>
+        <a class="btn btn--ghost" href="tel:+17135550177">Call (713) 555-0177</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Seasonal banner -->
-<div class="seasonal">
-  <div class="seasonal-text">
-    <strong>Summer Tune-Up Special</strong> — Save $150 on AC maintenance. Book before the heat hits.
-  </div>
-  <div class="seasonal-timer" id="timer">
-    <div class="timer-unit"><div class="timer-value" id="days">07</div><div class="timer-label">Days</div></div>
-    <div class="timer-unit"><div class="timer-value" id="hours">00</div><div class="timer-label">Hours</div></div>
-    <div class="timer-unit"><div class="timer-value" id="minutes">00</div><div class="timer-label">Min</div></div>
-    <div class="timer-unit"><div class="timer-value" id="seconds">00</div><div class="timer-label">Sec</div></div>
-  </div>
-</div>
-
-<!-- Manifesto -->
-<section class="manifesto reveal">
-  <div>
-    <h2>We believe comfort should be <em>invisible.</em></h2>
-    <p>The best HVAC system is one you never notice. It heats quietly, cools efficiently, and cleans the air you breathe — without rattling, without hot spots, without surprise breakdowns.</p>
-    <p>At ClimateCraft, we design systems that disappear into your life. Every installation starts with understanding how you actually use your home — where you spend time, where you sleep, where the kids play. Then we engineer a system that fits <em>that</em> reality.</p>
-  </div>
-  <div class="manifesto-highlights">
-    <div class="highlight-card">
-      <h4>NATE Certified</h4>
-      <p>Every technician holds current NATE certification — the industry's highest standard.</p>
-    </div>
-    <div class="highlight-card">
-      <h4>Energy Star Partner</h4>
-      <p>We recommend equipment that exceeds federal efficiency standards.</p>
-    </div>
-    <div class="highlight-card">
-      <h4>Same-Day Service</h4>
-      <p>Call before noon, we're there today. Most repairs finished in a single visit.</p>
-    </div>
-    <div class="highlight-card">
-      <h4>24/7 Emergency</h4>
-      <p>When your system fails at 2 AM, we answer the phone. Real person, not a machine.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Services -->
-<section class="services">
-  <div class="services-header reveal">
-    <h2>What we do</h2>
-  </div>
-  <div class="services-grid">
-    <div class="service-card reveal">
-      <svg class="service-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="1.5"/><path d="M20 10v20M10 20h20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <h3>AC Repair & Installation</h3>
-      <p>From emergency repairs to complete system replacements. We size equipment correctly — oversized systems cycle too often and waste energy.</p>
-      <span class="price-from">From $89/diagnostic</span>
-    </div>
-    <div class="service-card reveal">
-      <svg class="service-icon" viewBox="0 0 40 40" fill="none"><path d="M20 6v28M14 12l6-6 6 6M10 20h20M14 28l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Furnace & Heating</h3>
-      <p>Gas, electric, and heat pump systems. We handle installation, repair, and annual maintenance to keep your family warm through winter.</p>
-      <span class="price-from">From $89/diagnostic</span>
-    </div>
-    <div class="service-card reveal">
-      <svg class="service-icon" viewBox="0 0 40 40" fill="none"><path d="M12 34V18l8-12 8 12v16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 34v-8h6v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Heat Pump Services</h3>
-      <p>The most efficient way to heat and cool. We install and service all major heat pump brands, including ductless mini-split systems.</p>
-      <span class="price-from">From $89/diagnostic</span>
-    </div>
-    <div class="service-card reveal">
-      <svg class="service-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 34c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <h3>Indoor Air Quality</h3>
-      <p>Air purifiers, UV systems, humidifiers, and whole-home ventilation. We test your air and recommend solutions — not upsells.</p>
-      <span class="price-from">Free assessment</span>
-    </div>
-    <div class="service-card reveal">
-      <svg class="service-icon" viewBox="0 0 40 40" fill="none"><path d="M6 34h28M10 34V14l10-8 10 8v20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 34v-8h4v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Ductwork & Ventilation</h3>
-      <p>Duct sealing, repair, and design. Leaky ducts waste up to 30% of your energy. We fix the hidden problems.</p>
-      <span class="price-from">Free inspection</span>
-    </div>
-    <div class="service-card reveal">
-      <svg class="service-icon" viewBox="0 0 40 40" fill="none"><rect x="6" y="12" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M14 12V8a6 6 0 0112 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <h3>Commercial HVAC</h3>
-      <p>Rooftop units, VRF systems, chiller maintenance, and building automation. We keep your business comfortable and your energy costs down.</p>
-      <span class="price-from">Custom quote</span>
-    </div>
-  </div>
-</section>
-
-<!-- Energy -->
-<section class="energy reveal">
-  <div class="energy-inner">
-    <div>
-      <h2>Save up to <em>40%</em> on energy bills</h2>
-      <p>The right system, properly installed, pays for itself. We help you navigate manufacturer rebates, federal tax credits, and utility incentives that reduce your out-of-pocket cost.</p>
-      <div class="energy-stat">Tax credits up to $2,000 available</div>
-    </div>
-    <div class="energy-features">
-      <div class="energy-feature">
-        <div class="energy-feature-dot"></div>
+  <section class="trust" aria-labelledby="trust-heading">
+    <div class="wrap">
+      <h2 id="trust-heading" class="sr-only">Company details</h2>
+      <dl class="trust__grid reveal">
         <div>
-          <h4>SEER2 Efficiency Ratings</h4>
-          <p>We explain what the numbers mean in dollars — not just technical specs. You'll know exactly what you're paying for.</p>
+          <dt>Company</dt>
+          <dd>Stillair Comfort</dd>
         </div>
-      </div>
-      <div class="energy-feature">
-        <div class="energy-feature-dot"></div>
         <div>
-          <h4>Right-Sized Equipment</h4>
-          <p>Manual J load calculations for every installation. We don't guess — we calculate exactly what your home needs.</p>
+          <dt>Phone</dt>
+          <dd><a href="tel:+17135550177">(713) 555-0177</a></dd>
         </div>
-      </div>
-      <div class="energy-feature">
-        <div class="energy-feature-dot"></div>
         <div>
-          <h4>Duct Sealing</h4>
-          <p>Aeroseal technology seals leaks from the inside. Most homes lose 20-30% of conditioned air through leaky ducts.</p>
+          <dt>Service area</dt>
+          <dd>Greater Houston</dd>
         </div>
-      </div>
-      <div class="energy-feature">
-        <div class="energy-feature-dot"></div>
         <div>
-          <h4>Smart Thermostats</h4>
-          <p>Ecobee, Nest, and Honeywell installation with programming optimized for your schedule. We set it up right.</p>
+          <dt>License</dt>
+          <dd>TACLA-00012345E</dd>
         </div>
-      </div>
+      </dl>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Plans -->
-<section class="plans">
-  <div class="plans-header reveal">
-    <h2>Maintenance plans</h2>
-    <p style="font-size:0.85rem; color:var(--muted)">Preventive care that extends equipment life and prevents breakdowns.</p>
-    <div class="plans-toggle">
-      <button class="active" onclick="setPlans('monthly', this)">Monthly</button>
-      <button onclick="setPlans('annual', this)">Annual</button>
-    </div>
-  </div>
-  <div class="plans-grid reveal" id="plans-grid">
-    <div class="plan-card">
-      <div class="plan-name">Basic Care</div>
-      <div class="plan-price" id="plan-1">$19<span>/mo</span></div>
-      <div class="plan-desc">Essential maintenance for one system.</div>
-      <ul class="plan-features">
-        <li>1 annual tune-up</li>
-        <li>Priority scheduling</li>
-        <li>10% off repairs</li>
-        <li>Free filter delivery</li>
-      </ul>
-      <button class="plan-btn">Choose Plan</button>
-    </div>
-    <div class="plan-card featured">
-      <div class="plan-name">Comfort Plus</div>
-      <div class="plan-price" id="plan-2">$39<span>/mo</span></div>
-      <div class="plan-desc">Complete coverage for whole-home comfort.</div>
-      <ul class="plan-features">
-        <li>2 annual tune-ups</li>
-        <li>Same-day emergency service</li>
-        <li>15% off all repairs</li>
-        <li>Free filters & UV bulbs</li>
-        <li>Duct inspection included</li>
-      </ul>
-      <button class="plan-btn">Choose Plan</button>
-    </div>
-    <div class="plan-card">
-      <div class="plan-name">Premium Protection</div>
-      <div class="plan-price" id="plan-3">$69<span>/mo</span></div>
-      <div class="plan-desc">Maximum coverage with parts & labor.</div>
-      <ul class="plan-features">
-        <li>Unlimited tune-ups</li>
-        <li>24/7 priority emergency</li>
-        <li>Parts & labor covered</li>
-        <li>Indoor air quality testing</li>
-        <li>Annual system report</li>
-      </ul>
-      <button class="plan-btn">Choose Plan</button>
-    </div>
-  </div>
-</section>
+  <section class="services" id="services" aria-labelledby="services-heading">
+    <div class="wrap">
+      <div class="services__intro reveal">
+        <p class="eyebrow">What we handle</p>
+        <h2 id="services-heading">Heat when the cold arrives. Cool when the Gulf presses in.</h2>
+      </div>
 
-<!-- Testimonials -->
-<section class="testimonials">
-  <div class="testimonials-inner reveal">
-    <h2>What our customers say</h2>
-    <div class="testimonials-grid">
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">"They designed our system based on how we actually live — not a cookie-cutter template. Three years later, every room is exactly the temperature it should be."</div>
-        <div class="testi-author">Sarah Mitchell</div>
-        <div class="testi-location">Memorial, Houston</div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">"Our old AC died in August. ClimateCraft had a new system installed within 48 hours. The crew was clean, professional, and explained everything without talking down to us."</div>
-        <div class="testi-author">Robert Kim</div>
-        <div class="testi-location">Sugar Land, Houston</div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">"We switched to their maintenance plan two years ago. Since then, zero breakdowns. They catch problems during the annual visit before they become emergencies."</div>
-        <div class="testi-author">Jennifer Torres</div>
-        <div class="testi-location">Katy, Houston</div>
+      <article class="service-row reveal">
+        <div class="service-panel service-panel--heat" role="img" aria-label="Warm amber glow against cool steel tones"></div>
+        <div class="service-copy">
+          <h3>Heat</h3>
+          <p>Furnace repair, heat pump service, and thermostat setup before the first cold front. We check ignition, airflow, and safety switches so heat is ready when you need it.</p>
+          <ul>
+            <li>Gas furnace diagnosis and repair</li>
+            <li>Heat pump heating mode service</li>
+            <li>Emergency no-heat response</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="service-row service-row--cool reveal">
+        <div class="service-panel service-panel--cool" role="img" aria-label="Cool daylight wash across a steel-toned field"></div>
+        <div class="service-copy">
+          <h3>Cool</h3>
+          <p>AC repair, refrigerant checks, and system replacement sized for Houston humidity. Clear diagnostics first — then a fix that holds through August.</p>
+          <ul>
+            <li>Central AC repair and tune-ups</li>
+            <li>Ductless and package unit service</li>
+            <li>Full system replacement quotes</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="plan" id="maintenance" aria-labelledby="plan-heading">
+    <div class="wrap">
+      <div class="plan__offer reveal">
+        <div>
+          <p class="eyebrow">Maintenance plan</p>
+          <h2 id="plan-heading">Two visits a year. Fewer surprises.</h2>
+          <p>Spring cooling check and fall heating check on the same system. Filters reviewed, coils cleaned when needed, and a written note of what we found.</p>
+          <div class="cta-group">
+            <a class="btn btn--accent" href="#contact">Ask about the plan</a>
+          </div>
+        </div>
+        <aside class="plan__details" aria-label="Plan includes">
+          <h3>Included</h3>
+          <ul>
+            <li>Priority scheduling during peak heat and cold snaps</li>
+            <li>Member rate on parts for covered equipment</li>
+            <li>Filter guidance matched to your system</li>
+            <li>Written service record after each visit</li>
+          </ul>
+        </aside>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Contact -->
-<section class="contact" id="contact">
-  <div class="contact-grid">
-    <div class="reveal">
-      <h2>Let's talk comfort.</h2>
-      <p class="contact-sub">Whether you need a quick repair or a complete system design, we'll give you an honest assessment and a clear quote. No pressure, no surprises.</p>
-      <div class="contact-details">
-        <div class="contact-detail">
-          <div class="contact-detail-label">Phone</div>
-          <div class="contact-detail-value"><a href="tel:+15553456789">(555) 345-6789</a></div>
+  <section class="quote" aria-labelledby="quote-heading">
+    <div class="wrap">
+      <h2 id="quote-heading" class="sr-only">Neighbor quote</h2>
+      <blockquote class="reveal">
+        <p>“They fixed the upstairs unit on a Tuesday and the house finally felt even again. No hard sell — just the work and a clear invoice.”</p>
+        <footer>— Mara K., Spring</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="areas" id="areas" aria-labelledby="areas-heading">
+    <div class="wrap">
+      <div class="areas__layout reveal">
+        <div>
+          <p class="eyebrow">Where we work</p>
+          <h2 id="areas-heading">Houston and the west and north corridors</h2>
+          <ul class="areas__list">
+            <li>Houston</li>
+            <li>Spring</li>
+            <li>The Woodlands</li>
+            <li>Katy</li>
+            <li>Fulshear</li>
+          </ul>
+          <p class="license">
+            <strong>Texas Air Conditioning License</strong>
+            TACLA-00012345E
+          </p>
         </div>
-        <div class="contact-detail">
-          <div class="contact-detail-label">Email</div>
-          <div class="contact-detail-value"><a href="mailto:hello@climatecraft.com">hello@climatecraft.com</a></div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-detail-label">Hours</div>
-          <div class="contact-detail-value">Mon–Fri: 7AM–6PM<br>Sat: 8AM–2PM<br>Emergency: 24/7</div>
-        </div>
-        <div class="contact-detail">
-          <div class="contact-detail-label">Service area</div>
-          <div class="contact-detail-value">Greater Houston — Heights, Montrose, River Oaks, Memorial, Katy, Sugar Land, The Woodlands, Pearland</div>
+        <div class="areas__map" role="img" aria-label="Simplified map of Greater Houston service area">
+          <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M40 160 C80 90, 140 70, 200 95 C260 120, 300 100, 350 130 C370 145, 360 200, 320 220 C270 250, 200 240, 140 230 C90 220, 50 200, 40 160 Z" stroke="#6b7c8f" stroke-width="1.5" fill="rgba(255,255,255,0.45)"/>
+            <circle cx="195" cy="165" r="7" fill="#1a2332"/>
+            <text x="210" y="170" font-family="Archivo, sans-serif" font-size="13" font-weight="600" fill="#1a2332">Houston</text>
+            <circle cx="210" cy="95" r="4" fill="#4a5568"/>
+            <text x="222" y="99" font-family="Archivo, sans-serif" font-size="11" fill="#4a5568">Spring</text>
+            <circle cx="230" cy="78" r="4" fill="#4a5568"/>
+            <text x="242" y="82" font-family="Archivo, sans-serif" font-size="11" fill="#4a5568">The Woodlands</text>
+            <circle cx="95" cy="175" r="4" fill="#4a5568"/>
+            <text x="50" y="195" font-family="Archivo, sans-serif" font-size="11" fill="#4a5568">Katy</text>
+            <circle cx="70" cy="190" r="4" fill="#4a5568"/>
+            <text x="40" y="220" font-family="Archivo, sans-serif" font-size="11" fill="#4a5568">Fulshear</text>
+          </svg>
         </div>
       </div>
     </div>
-    <form class="contact-form reveal" onsubmit="event.preventDefault(); this.querySelector('.form-submit').textContent='Thank you. We\'ll call you within 24 hours.'; this.querySelector('.form-submit').style.background='var(--sage)'">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label" for="name">Name</label>
-          <input class="form-input" type="text" id="name" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="phone">Phone</label>
-          <input class="form-input" type="tel" id="phone" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="email">Email</label>
-        <input class="form-input" type="email" id="email" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="service">What do you need?</label>
-        <select class="form-select" id="service">
-          <option value="">Select a service</option>
-          <option>AC Repair</option>
-          <option>Heating Repair</option>
-          <option>New Installation</option>
-          <option>Maintenance Tune-Up</option>
-          <option>Indoor Air Quality</option>
-          <option>Ductwork</option>
-          <option>Commercial HVAC</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="message">Tell us about your home</label>
-        <textarea class="form-textarea" id="message" rows="4" placeholder="Square footage, current system type, any issues..."></textarea>
-      </div>
-      <button type="submit" class="form-submit">Request Estimate</button>
-    </form>
-  </div>
-</section>
+  </section>
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-brand">ClimateCraft</div>
-  <div class="footer-links">
-    <a href="#contact">Contact</a>
-    <a href="#">NATE Certified</a>
-    <a href="#">Privacy</a>
-  </div>
-  <div>© 2026 ClimateCraft HVAC</div>
+  <section class="contact" id="contact" aria-labelledby="contact-heading">
+    <div class="wrap">
+      <div class="contact__layout">
+        <div class="contact__aside reveal">
+          <p class="eyebrow">Contact</p>
+          <h2 id="contact-heading">Tell us what the house is doing</h2>
+          <p>Describe the symptom, the age of the system if you know it, and a window that works. We reply by phone the same business day when we can.</p>
+          <a class="phone-lg" href="tel:+17135550177">(713) 555-0177</a>
+        </div>
+
+        <form class="form reveal" id="visit-form" action="#" method="post" novalidate>
+          <div class="form__row form__row--2">
+            <label>
+              Name
+              <input type="text" name="name" autocomplete="name" required placeholder="Your name">
+            </label>
+            <label>
+              Phone
+              <input type="tel" name="phone" autocomplete="tel" required placeholder="(713) 555-0000">
+            </label>
+          </div>
+          <div class="form__row">
+            <label>
+              Email
+              <input type="email" name="email" autocomplete="email" required placeholder="you@example.com">
+            </label>
+          </div>
+          <div class="form__row form__row--2">
+            <label>
+              City
+              <select name="city" required>
+                <option value="" disabled selected>Select a city</option>
+                <option>Houston</option>
+                <option>Spring</option>
+                <option>The Woodlands</option>
+                <option>Katy</option>
+                <option>Fulshear</option>
+              </select>
+            </label>
+            <label>
+              Need
+              <select name="need" required>
+                <option value="" disabled selected>Select one</option>
+                <option>Cooling repair</option>
+                <option>Heating repair</option>
+                <option>Maintenance plan</option>
+                <option>System replacement</option>
+              </select>
+            </label>
+          </div>
+          <div class="form__row">
+            <label>
+              What is going on
+              <textarea name="message" required placeholder="Noisy unit, warm upstairs, odd smell, or anything else we should know."></textarea>
+            </label>
+          </div>
+          <p class="form__error" id="form-error" role="alert">
+            A few fields still need attention. Check the highlighted inputs and try again.
+          </p>
+          <button class="btn btn--accent" type="submit">Schedule a visit</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>Stillair Comfort · Houston, TX</span>
+  <span>License TACLA-00012345E</span>
+  <a href="tel:+17135550177">(713) 555-0177</a>
 </footer>
 
 <script>
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
+(function () {
+  var form = document.getElementById('visit-form');
+  var err = document.getElementById('form-error');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.classList.remove('is-success');
+    err.textContent = 'A few fields still need attention. Check the highlighted inputs and try again.';
+    if (!form.checkValidity()) {
+      form.classList.add('is-invalid');
+      var first = form.querySelector(':invalid');
+      if (first) first.focus();
+      return;
+    }
+    form.classList.remove('is-invalid');
+    form.reset();
+    err.textContent = 'Request received. We will call you to confirm a visit window.';
+    err.classList.add('is-success');
+  });
+  form.addEventListener('input', function () {
+    if (form.classList.contains('is-invalid') && form.checkValidity()) {
+      form.classList.remove('is-invalid');
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// Countdown timer — 7 days from now
-const deadline = new Date();
-deadline.setDate(deadline.getDate() + 7);
-
-function updateTimer() {
-  const now = new Date();
-  const diff = deadline - now;
-  if (diff <= 0) return;
-  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const m = Math.floor((diff / (1000 * 60)) % 60);
-  const s = Math.floor((diff / 1000) % 60);
-  document.getElementById('days').textContent = String(d).padStart(2, '0');
-  document.getElementById('hours').textContent = String(h).padStart(2, '0');
-  document.getElementById('minutes').textContent = String(m).padStart(2, '0');
-  document.getElementById('seconds').textContent = String(s).padStart(2, '0');
-}
-updateTimer();
-setInterval(updateTimer, 1000);
-
-// Plans toggle
-const planPrices = {
-  monthly: ['$19/mo', '$39/mo', '$69/mo'],
-  annual: ['$199/yr', '$399/yr', '$699/yr'],
-};
-
-function setPlans(mode, btn) {
-  document.querySelectorAll('.plans-toggle button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const suffix = mode === 'monthly' ? '/mo' : '/yr';
-  document.getElementById('plan-1').innerHTML = planPrices[mode][0].replace(suffix, '') + '<span>' + suffix + '</span>';
-  document.getElementById('plan-2').innerHTML = planPrices[mode][1].replace(suffix, '') + '<span>' + suffix + '</span>';
-  document.getElementById('plan-3').innerHTML = planPrices[mode][2].replace(suffix, '') + '<span>' + suffix + '</span>';
-}
+})();
 </script>
-
 </body>
 </html>

@@ -3,865 +3,595 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AquaGuard — Premium Plumbing Services</title>
+<title>Copperline Plumbing — Houston Residential &amp; Light Commercial</title>
+<meta name="description" content="Copperline Plumbing serves Houston homes and light commercial spaces. Licensed M-38421. Water where it belongs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --black: #1a1a1a;
-  --white: #fafaf8;
-  --cream: #f2efe8;
-  --warm: #d4c5a9;
-  --accent: #2d5a3d;
-  --text: #3a3a38;
-  --muted: #8a8a85;
-  --serif: 'Instrument Serif', Georgia, serif;
-  --sans: 'DM Sans', -apple-system, sans-serif;
+  --paper: #f4f5f7;
+  --slate: #1c1f24;
+  --slate-mid: #2e333a;
+  --ink: #2a2e34;
+  --muted: #6b717a;
+  --line: #d8dce2;
+  --copper: #b87333;
+  --copper-deep: #8a5520;
+  --wet: #14181e;
+  --display: "Newsreader", "Times New Roman", Georgia, serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --space: clamp(1rem, 4vw, 2.5rem);
+  --max: 72rem;
+}
+
+@supports (color: oklch(0% 0 0)) {
+  :root {
+    --paper: oklch(97.5% 0.004 250);
+    --slate: oklch(22% 0.012 250);
+    --slate-mid: oklch(32% 0.014 250);
+    --ink: oklch(28% 0.012 250);
+    --muted: oklch(52% 0.012 250);
+    --line: oklch(88% 0.006 250);
+    --copper: oklch(62% 0.11 55);
+    --copper-deep: oklch(48% 0.1 50);
+    --wet: oklch(18% 0.015 240);
+  }
 }
 
 html { scroll-behavior: smooth; }
-
 body {
-  font-family: var(--sans);
-  background: var(--white);
-  color: var(--text);
+  font-family: var(--body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+  font-size: 1.0625rem;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--copper-deep); }
+:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+.wrap { width: min(100% - 2 * var(--space), var(--max)); margin-inline: auto; }
 
-/* ─── Typography ──────────────────────────────────────────────────────────── */
-h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.05; }
-p { line-height: 1.65; font-size: 0.95rem; }
-
-/* ─── Top strip ───────────────────────────────────────────────────────────── */
-.top-strip {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 3rem;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  position: sticky;
-  top: 0;
-  background: var(--white);
-  z-index: 100;
-  backdrop-filter: blur(20px);
+/* Sticky bar */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.65rem var(--space);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.875rem;
 }
-.top-strip a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.topbar__brand {
+  font-family: var(--display); font-weight: 500; font-size: 1.05rem;
+  letter-spacing: -0.01em; text-decoration: none;
+}
+.topbar__brand span { color: var(--copper); }
+.topbar__tel {
+  font-weight: 600; text-decoration: none; color: var(--slate); white-space: nowrap;
+}
+.topbar__tel:hover { color: var(--copper-deep); }
+.topbar nav { display: none; gap: 1.25rem; }
+.topbar nav a { text-decoration: none; color: var(--muted); }
+.topbar nav a:hover { color: var(--ink); text-decoration: underline; }
+@media (min-width: 720px) { .topbar nav { display: flex; } }
 
-/* ─── Hero ────────────────────────────────────────────────────────────────── */
+/* Hero */
 .hero {
-  min-height: 92vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 4rem 3rem 5rem;
-  position: relative;
+  position: relative; min-height: 100svh; min-height: 100dvh;
+  display: grid; align-items: end; overflow: hidden;
+  color: var(--paper); background: var(--wet);
 }
-
-.hero-eyebrow {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-  margin-bottom: 2rem;
+.hero__plane {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%, color-mix(in srgb, #b87333 28%, transparent), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 75%, color-mix(in srgb, #3a4555 55%, transparent), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, color-mix(in srgb, #b87333 12%, transparent), transparent 45%),
+    linear-gradient(165deg, #1c1f24 0%, #14181e 45%, #1a222c 100%);
 }
-
+.hero__plane::after {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, #f4f5f7 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, #f4f5f7 4%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 70% 40%, black, transparent);
+  opacity: 0.35; pointer-events: none;
+}
+.hero__art {
+  position: absolute; right: -5%; top: 8%;
+  width: min(55vw, 28rem); height: min(70vh, 36rem);
+  opacity: 0.55; pointer-events: none;
+}
+.hero__art svg { width: 100%; height: 100%; }
+.hero__content {
+  position: relative; z-index: 1;
+  padding: 6rem var(--space) 3.5rem;
+  width: min(100%, var(--max)); margin-inline: auto;
+}
+.hero__brand {
+  font-family: var(--display);
+  font-size: clamp(2.75rem, 9vw, 5.5rem);
+  font-weight: 500; line-height: 0.95; letter-spacing: -0.03em;
+  margin-bottom: 1.5rem; max-width: 12ch;
+}
+.hero__brand em { font-style: italic; font-weight: 400; color: var(--copper); }
 .hero h1 {
-  font-size: clamp(3.2rem, 9vw, 8rem);
-  color: var(--black);
-  max-width: 900px;
-  margin-bottom: 2rem;
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 3.5vw, 2.15rem);
+  font-weight: 400; line-height: 1.25; letter-spacing: -0.015em;
+  max-width: 18ch; margin-bottom: 0.85rem;
+}
+.hero__lede {
+  font-size: 1.05rem;
+  color: color-mix(in srgb, #f4f5f7 72%, transparent);
+  max-width: 32ch; margin-bottom: 2rem;
 }
 
-.hero h1 em {
-  font-style: italic;
-  color: var(--accent);
+.cta-group { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.85rem 1.35rem; font-family: var(--body); font-size: 0.95rem;
+  font-weight: 600; border: none; cursor: pointer; text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-
-.hero-sub {
-  font-size: 1.1rem;
-  color: var(--muted);
-  max-width: 420px;
-  line-height: 1.7;
-  margin-bottom: 3rem;
+.btn--solid { background: var(--copper); color: var(--wet); }
+.btn--solid:hover { background: color-mix(in srgb, #b87333 88%, white); color: var(--wet); text-decoration: none; }
+.btn--ghost {
+  background: transparent; color: var(--paper);
+  border: 1px solid color-mix(in srgb, #f4f5f7 35%, transparent);
 }
+.btn--ghost:hover { border-color: var(--copper); color: var(--copper); text-decoration: none; }
+.btn--dark { background: var(--slate); color: var(--paper); width: 100%; }
+.btn--dark:hover { background: var(--slate-mid); text-decoration: none; }
+.btn--dark:disabled { opacity: 0.55; cursor: not-allowed; }
 
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: var(--black);
-  color: var(--white);
-  padding: 1rem 2.2rem;
-  border: none;
-  font-family: var(--sans);
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* Trust / NAP */
+.trust {
+  padding: 2.25rem var(--space);
+  background: var(--slate); color: var(--paper);
+  border-top: 3px solid var(--copper);
 }
-.hero-cta:hover { background: var(--accent); }
-
-.hero-line {
-  position: absolute;
-  bottom: 0;
-  left: 3rem;
-  right: 3rem;
-  height: 1px;
-  background: rgba(0,0,0,0.08);
+.trust__inner {
+  width: min(100%, var(--max)); margin-inline: auto;
+  display: grid; gap: 1.25rem 2.5rem; font-size: 0.95rem;
 }
-
-/* ─── Manifesto ───────────────────────────────────────────────────────────── */
-.manifesto {
-  padding: 8rem 3rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6rem;
-  max-width: 1200px;
-  margin: 0 auto;
+@media (min-width: 640px) {
+  .trust__inner { grid-template-columns: 1.4fr 1fr 1fr; align-items: baseline; }
 }
-
-.manifesto-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-  margin-bottom: 2rem;
+.trust__name {
+  font-family: var(--display); font-size: 1.35rem; font-weight: 500; letter-spacing: -0.02em;
 }
-
-.manifesto h2 {
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  color: var(--black);
-  margin-bottom: 2rem;
+.trust__name small {
+  display: block; font-family: var(--body); font-size: 0.8rem; font-weight: 400;
+  color: color-mix(in srgb, #f4f5f7 55%, transparent); margin-top: 0.25rem; letter-spacing: 0;
 }
+.trust a { color: var(--copper); font-weight: 600; text-decoration: underline; }
+.trust p { color: color-mix(in srgb, #f4f5f7 78%, transparent); }
+.trust strong { color: var(--paper); font-weight: 600; }
 
-.manifesto-text {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: var(--text);
-  padding-top: 0.5rem;
+/* Sections */
+.section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+.section__label {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--copper); margin-bottom: 0.75rem;
 }
-
-.manifesto-stats {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 3rem;
+.section__title {
+  font-family: var(--display);
+  font-size: clamp(1.85rem, 4vw, 2.75rem);
+  font-weight: 500; letter-spacing: -0.025em; line-height: 1.15;
+  color: var(--slate); max-width: 18ch; margin-bottom: 0.75rem;
 }
+.section__intro { color: var(--muted); max-width: 42ch; margin-bottom: 2.5rem; }
 
-.stat-item {
-  border-top: 1px solid rgba(0,0,0,0.08);
-  padding-top: 1.5rem;
+/* Services — asymmetric editorial list */
+.services { border-bottom: 1px solid var(--line); }
+.service-list { list-style: none; border-top: 1px solid var(--line); }
+.service-list li {
+  display: grid; gap: 0.5rem 2rem;
+  padding: 1.75rem 0; border-bottom: 1px solid var(--line);
 }
-
-.stat-number {
-  font-family: var(--serif);
-  font-size: 3rem;
-  color: var(--black);
-  line-height: 1;
-  margin-bottom: 0.3rem;
+@media (min-width: 720px) {
+  .service-list li { grid-template-columns: 4rem 1fr 1.1fr; align-items: start; }
+  .service-list li:nth-child(even) { grid-template-columns: 4rem 1.1fr 1fr; }
+  .service-list li:nth-child(even) .service-list__copy { order: 3; }
+  .service-list li:nth-child(even) .service-list__name { order: 2; }
 }
-
-.stat-label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--muted);
+.service-list__num {
+  font-family: var(--display); font-size: 1.1rem; font-style: italic; color: var(--copper);
 }
-
-/* ─── Services ────────────────────────────────────────────────────────────── */
-.services {
-  background: var(--cream);
-  padding: 6rem 3rem;
+.service-list__name {
+  font-family: var(--display);
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 500; letter-spacing: -0.02em; color: var(--slate); line-height: 1.2;
 }
+.service-list__copy { color: var(--muted); font-size: 0.98rem; }
 
-.services-header {
-  max-width: 1200px;
-  margin: 0 auto 4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+/* Proof quote */
+.proof { background: var(--slate-mid); color: var(--paper); }
+.proof blockquote {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 3.5vw, 2.35rem);
+  font-weight: 400; font-style: italic; line-height: 1.3; letter-spacing: -0.02em;
+  max-width: 22ch; margin-bottom: 1.5rem;
 }
-
-.services-header h2 {
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  color: var(--black);
+.proof footer {
+  font-family: var(--body); font-size: 0.9rem; font-style: normal;
+  color: color-mix(in srgb, #f4f5f7 60%, transparent);
 }
+.proof footer cite { font-style: normal; color: var(--copper); }
 
-.services-header p {
-  color: var(--muted);
-  max-width: 280px;
-  text-align: right;
-  font-size: 0.85rem;
+/* Pricing */
+.pricing__grid { display: grid; gap: 2rem; }
+@media (min-width: 720px) {
+  .pricing__grid { grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: start; }
 }
-
-.services-grid {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(0,0,0,0.06);
+.pricing__points { list-style: none; display: grid; gap: 1.25rem; }
+.pricing__points li { padding-left: 1.25rem; border-left: 2px solid var(--copper); }
+.pricing__points strong {
+  display: block; font-family: var(--display); font-size: 1.2rem; font-weight: 500;
+  color: var(--slate); margin-bottom: 0.2rem; letter-spacing: -0.015em;
 }
+.pricing__points p { color: var(--muted); font-size: 0.95rem; }
 
-.service-card {
-  background: var(--cream);
-  padding: 3rem 2.5rem;
-  position: relative;
-  transition: background 0.4s ease;
-  cursor: default;
+/* Credentials / areas */
+.credentials { border-top: 1px solid var(--line); }
+.cred-block { display: grid; gap: 2.5rem; }
+@media (min-width: 720px) { .cred-block { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+.cred-block dl { display: grid; gap: 1.25rem; }
+.cred-block dt {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--copper); margin-bottom: 0.2rem;
 }
-
-.service-card:hover { background: var(--white); }
-
-.service-number {
-  font-family: var(--serif);
-  font-size: 3.5rem;
-  color: rgba(0,0,0,0.04);
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
-  line-height: 1;
-  transition: color 0.4s ease;
+.cred-block dd {
+  font-family: var(--display); font-size: 1.35rem; font-weight: 500;
+  letter-spacing: -0.02em; color: var(--slate);
 }
-
-.service-card:hover .service-number { color: rgba(0,0,0,0.08); }
-
-.service-icon {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 1.5rem;
-  color: var(--accent);
+.cred-block dd small {
+  display: block; font-family: var(--body); font-size: 0.9rem; font-weight: 400;
+  color: var(--muted); margin-top: 0.2rem; letter-spacing: 0;
 }
-
-.service-card h3 {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: var(--black);
+.areas-label {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--copper); margin-bottom: 0.35rem;
 }
-
-.service-card p {
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.6;
+.areas { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 0.75rem; }
+.areas span {
+  font-family: var(--display); font-size: 1.25rem; font-weight: 500;
+  letter-spacing: -0.02em; color: var(--slate);
 }
+.areas span::after { content: "·"; margin-left: 1.25rem; color: var(--copper); }
+.areas span:last-child::after { content: none; }
+.areas-note { margin-top: 1.25rem; color: var(--muted); font-size: 0.95rem; max-width: 36ch; }
 
-.service-card .learn-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  text-decoration: none;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.4s ease;
+/* Contact */
+.contact { background: var(--slate); color: var(--paper); }
+.contact .section__title { color: var(--paper); }
+.contact .section__intro { color: color-mix(in srgb, #f4f5f7 65%, transparent); }
+.contact__layout { display: grid; gap: 2.5rem; }
+@media (min-width: 800px) {
+  .contact__layout { grid-template-columns: 1fr 1.15fr; gap: 3.5rem; align-items: start; }
 }
-
-.service-card:hover .learn-more {
-  opacity: 1;
-  transform: translateY(0);
+.contact__side p {
+  color: color-mix(in srgb, #f4f5f7 70%, transparent);
+  margin-bottom: 1.25rem; max-width: 32ch;
 }
-
-/* ─── Promise ─────────────────────────────────────────────────────────────── */
-.promise {
-  padding: 8rem 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
+.contact__side a.phone {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500; color: var(--copper); text-decoration: none; letter-spacing: -0.02em;
 }
-
-.promise-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6rem;
-  align-items: center;
+.contact__side a.phone:hover { text-decoration: underline; }
+.contact__side .hours {
+  margin-top: 1.5rem; font-size: 0.9rem;
+  color: color-mix(in srgb, #f4f5f7 55%, transparent);
 }
-
-.promise h2 {
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  color: var(--black);
-  margin-bottom: 2rem;
+form { display: grid; gap: 1.15rem; }
+.field label {
+  display: block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; margin-bottom: 0.4rem;
+  color: color-mix(in srgb, #f4f5f7 75%, transparent);
 }
-
-.promise-items {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+.field input, .field select, .field textarea {
+  width: 100%; padding: 0.8rem 0.9rem; font-family: var(--body); font-size: 1rem;
+  color: var(--slate); background: var(--paper); border: 1px solid transparent; border-radius: 0;
 }
-
-.promise-item {
-  display: flex;
-  gap: 1.2rem;
-  align-items: flex-start;
+.field textarea { min-height: 6.5rem; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: 2px solid var(--copper); outline-offset: 0;
 }
-
-.promise-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  margin-top: 0.5rem;
-  flex-shrink: 0;
+.field input.is-invalid, .field select.is-invalid, .field textarea.is-invalid {
+  border-color: #c45c4a; outline: none;
 }
-
-.promise-item h4 {
-  font-family: var(--sans);
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--black);
-  margin-bottom: 0.3rem;
-  letter-spacing: 0.02em;
+.field__error { display: none; margin-top: 0.35rem; font-size: 0.85rem; color: #f0a090; }
+.field__error.is-visible { display: block; }
+.form-note { font-size: 0.85rem; color: color-mix(in srgb, #f4f5f7 50%, transparent); }
+.form-success {
+  display: none; padding: 1.25rem; border: 1px solid var(--copper);
+  font-family: var(--display); font-size: 1.25rem; color: var(--copper);
 }
+.form-success.is-visible { display: block; }
 
-.promise-item p {
-  font-size: 0.85rem;
-  color: var(--muted);
+.site-footer {
+  padding: 1.5rem var(--space); background: var(--wet);
+  color: color-mix(in srgb, #f4f5f7 45%, transparent); font-size: 0.8rem;
 }
-
-.promise-image {
-  aspect-ratio: 4/5;
-  background: var(--cream);
-  position: relative;
-  overflow: hidden;
+.site-footer .wrap {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: space-between;
 }
+.site-footer strong { color: color-mix(in srgb, #f4f5f7 75%, transparent); font-weight: 500; }
 
-.promise-image-inner {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--cream) 0%, var(--warm) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(1.1rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
-
-.promise-image-text {
-  font-family: var(--serif);
-  font-size: 8rem;
-  color: rgba(0,0,0,0.03);
-  line-height: 0.9;
-  text-align: center;
-  user-select: none;
-}
-
-/* ─── Testimonial ─────────────────────────────────────────────────────────── */
-.testimonial {
-  background: var(--black);
-  color: var(--white);
-  padding: 8rem 3rem;
-  text-align: center;
-}
-
-.testimonial-inner {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.testimonial-quote {
-  font-family: var(--serif);
-  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-  font-style: italic;
-  line-height: 1.3;
-  margin-bottom: 2.5rem;
-  color: rgba(255,255,255,0.9);
-}
-
-.testimonial-author {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: rgba(255,255,255,0.4);
-}
-
-.testimonial-dots {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 3rem;
-}
-
-.testimonial-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.testimonial-dot.active { background: var(--accent); }
-
-/* ─── Contact ─────────────────────────────────────────────────────────────── */
-.contact {
-  padding: 8rem 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6rem;
-}
-
-.contact h2 {
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  color: var(--black);
-  margin-bottom: 1rem;
-}
-
-.contact-sub {
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin-bottom: 3rem;
-  max-width: 360px;
-}
-
-.contact-details {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  padding-top: 3rem;
-  border-top: 1px solid rgba(0,0,0,0.08);
-}
-
-.contact-detail-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-  margin-bottom: 0.3rem;
-}
-
-.contact-detail-value {
-  font-size: 0.95rem;
-  color: var(--black);
-}
-
-.contact-detail-value a {
-  color: var(--black);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
-  transition: border-color 0.3s;
-}
-
-.contact-detail-value a:hover { border-color: var(--accent); }
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-
-.form-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-}
-
-.form-input,
-.form-textarea,
-.form-select {
-  padding: 0.9rem 0;
-  border: none;
-  border-bottom: 1px solid rgba(0,0,0,0.12);
-  background: transparent;
-  font-family: var(--sans);
-  font-size: 0.9rem;
-  color: var(--black);
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus {
-  border-color: var(--accent);
-}
-
-.form-textarea { resize: vertical; min-height: 100px; }
-
-.form-submit {
-  align-self: flex-start;
-  background: var(--black);
-  color: var(--white);
-  border: none;
-  padding: 1rem 2.5rem;
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 0.5rem;
-}
-
-.form-submit:hover { background: var(--accent); }
-
-/* ─── Footer ──────────────────────────────────────────────────────────────── */
-.footer {
-  border-top: 1px solid rgba(0,0,0,0.08);
-  padding: 3rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
-.footer-brand {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  color: var(--black);
-}
-
-.footer-links {
-  display: flex;
-  gap: 2rem;
-}
-
-.footer-links a {
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-links a:hover { color: var(--black); }
-
-/* ─── Scroll reveal ───────────────────────────────────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ─── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .top-strip { padding: 1rem 1.5rem; }
-  .hero { padding: 3rem 1.5rem 3rem; min-height: 85vh; }
-  .hero-line { left: 1.5rem; right: 1.5rem; }
-  .manifesto { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
-  .services { padding: 4rem 1.5rem; }
-  .services-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
-  .services-header p { text-align: left; }
-  .services-grid { grid-template-columns: 1fr; }
-  .promise { padding: 5rem 1.5rem; }
-  .promise-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .promise-image { display: none; }
-  .testimonial { padding: 5rem 1.5rem; }
-  .contact { padding: 5rem 1.5rem; }
-  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .form-row { grid-template-columns: 1fr; }
-  .footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2rem 1.5rem; }
-  .footer-links { flex-wrap: wrap; justify-content: center; }
-}
-
-@media (max-width: 600px) {
-  .hero h1 { font-size: 2.6rem; }
-  .stat-number { font-size: 2.2rem; }
-  .manifesto h2, .promise h2, .contact h2 { font-size: 2rem; }
-  .testimonial-quote { font-size: 1.4rem; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .btn { transition: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- Top strip -->
-<div class="top-strip">
-  <span>AquaGuard Plumbing Services</span>
-  <a href="tel:+15559876543">(555) 987-6543</a>
-</div>
-
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-eyebrow">Est. 2011 — Houston, Texas</div>
-  <h1>Every pipe has a <em>story.</em><br>We fix the ending.</h1>
-  <p class="hero-sub">Licensed plumbing services for residential and commercial properties. Emergency repairs, installations, and maintenance — done right the first time.</p>
-  <button class="hero-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-    Schedule a Visit
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-  <div class="hero-line"></div>
-</section>
-
-<!-- Manifesto -->
-<section class="manifesto reveal">
-  <div>
-    <div class="manifesto-label">What we believe</div>
-    <h2>Plumbing isn't glamorous. But it should be reliable.</h2>
-  </div>
-  <div>
-    <p class="manifesto-text">We started AquaGuard because we were tired of contractors who showed up late, quoted blindly, and left a mess. Our crew shows up on time, explains what's wrong in plain language, and cleans up like we were never here. Fifteen years in Houston — we know every neighborhood, every building type, every code requirement.</p>
-    <div class="manifesto-stats">
-      <div class="stat-item">
-        <div class="stat-number">15</div>
-        <div class="stat-label">Years in Houston</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">8,500+</div>
-        <div class="stat-label">Jobs completed</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">99%</div>
-        <div class="stat-label">Would recommend us</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Services -->
-<section class="services">
-  <div class="services-header reveal">
-    <h2>What we do</h2>
-    <p>Residential and commercial plumbing across the greater Houston area.</p>
-  </div>
-  <div class="services-grid">
-    <div class="service-card reveal">
-      <div class="service-number">01</div>
-      <svg class="service-icon" viewBox="0 0 32 32" fill="none"><path d="M16 4v24M12 8l4-4 4 4M8 16h16M12 24l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Emergency Repairs</h3>
-      <p>Burst pipes, flooding, gas leaks, sewer backups. We respond within the hour — day or night. No overtime charges on weekends.</p>
-      <a href="#contact" class="learn-more">Book now →</a>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-number">02</div>
-      <svg class="service-icon" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M16 10v6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <h3>Drain Cleaning</h3>
-      <p>Camera inspection, hydro-jetting, and rooter service. We find the problem, not just the symptom. Same-day availability.</p>
-      <a href="#contact" class="learn-more">Book now →</a>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-number">03</div>
-      <svg class="service-icon" viewBox="0 0 32 32" fill="none"><rect x="6" y="12" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M10 12V8a6 6 0 0112 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <h3>Water Heaters</h3>
-      <p>Tank and tankless installation, repair, and maintenance. We'll recommend the right size for your household — not the most expensive option.</p>
-      <a href="#contact" class="learn-more">Book now →</a>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-number">04</div>
-      <svg class="service-icon" viewBox="0 0 32 32" fill="none"><path d="M6 26V10l10-6 10 6v16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 26V18h8v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Pipe Repair</h3>
-      <p>Re-piping, leak detection, and trenchless sewer repair. Minimally invasive methods that protect your property and your timeline.</p>
-      <a href="#contact" class="learn-more">Book now →</a>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-number">05</div>
-      <svg class="service-icon" viewBox="0 0 32 32" fill="none"><path d="M8 28h16M16 4v8M12 12h8l4 8H8l4-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Fixture Installation</h3>
-      <p>Faucets, toilets, garbage disposals, dishwashers. We install what you buy — or help you choose the right products for your space.</p>
-      <a href="#contact" class="learn-more">Book now →</a>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-number">06</div>
-      <svg class="service-icon" viewBox="0 0 32 32" fill="none"><path d="M4 28h24M8 28V16l8-12 8 12v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 28v-8h4v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Sewer Line</h3>
-      <p>Video inspection, repair, and full replacement. We handle permits and inspections so you don't have to coordinate between contractors.</p>
-      <a href="#contact" class="learn-more">Book now →</a>
-    </div>
-  </div>
-</section>
-
-<!-- Promise -->
-<section class="promise reveal">
-  <div class="promise-grid">
-    <div>
-      <div class="manifesto-label">Our promise</div>
-      <h2>We explain it like a neighbor, not a textbook.</h2>
-    </div>
-    <div class="promise-items">
-      <div class="promise-item">
-        <div class="promise-dot"></div>
-        <div>
-          <h4>Upfront pricing, in writing</h4>
-          <p>You get a detailed estimate before we touch a wrench. No surprises, no hidden fees, no "well, while we're here" upsells.</p>
-        </div>
-      </div>
-      <div class="promise-item">
-        <div class="promise-dot"></div>
-        <div>
-          <h4>Licensed & insured — always</h4>
-          <p>Every technician is background-checked, drug-tested, and carries state license #PLC-88492. We're insured for your protection.</p>
-        </div>
-      </div>
-      <div class="promise-item">
-        <div class="promise-dot"></div>
-        <div>
-          <h4>Clean worksite guarantee</h4>
-          <p>We lay drop cloths, wear boot covers, and clean up completely. If we leave a mess, your next service call is free.</p>
-        </div>
-      </div>
-      <div class="promise-item">
-        <div class="promise-dot"></div>
-        <div>
-          <h4>Same-day service</h4>
-          <p>Call before noon, we're there today. Most repairs finished in a single visit — we stock common parts on every truck.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Testimonial -->
-<section class="testimonial">
-  <div class="testimonial-inner reveal">
-    <div class="testimonial-quote">"They showed up 20 minutes after I called, fixed a pipe that two other companies couldn't figure out, and left the kitchen cleaner than they found it. I've recommended them to everyone on my street."</div>
-    <div class="testimonial-author">Maria Gonzalez — Heights, Houston</div>
-    <div class="testimonial-dots">
-      <button class="testimonial-dot active" aria-label="Testimonial 1"></button>
-      <button class="testimonial-dot" aria-label="Testimonial 2"></button>
-      <button class="testimonial-dot" aria-label="Testimonial 3"></button>
-    </div>
-  </div>
-</section>
-
-<!-- Contact -->
-<section class="contact" id="contact">
-  <div class="contact-grid">
-    <div class="reveal">
-      <div class="manifesto-label">Get in touch</div>
-      <h2>Let's talk about your plumbing.</h2>
-      <p class="contact-sub">No pressure, no sales pitch. Tell us what's going on and we'll give you an honest assessment of what needs to happen.</p>
-      <div class="contact-details">
-        <div>
-          <div class="contact-detail-label">Phone</div>
-          <div class="contact-detail-value"><a href="tel:+15559876543">(555) 987-6543</a></div>
-        </div>
-        <div>
-          <div class="contact-detail-label">Email</div>
-          <div class="contact-detail-value"><a href="mailto:hello@aquaguard.com">hello@aquaguard.com</a></div>
-        </div>
-        <div>
-          <div class="contact-detail-label">Hours</div>
-          <div class="contact-detail-value">Mon–Sat, 7AM–7PM<br>Emergency: 24/7</div>
-        </div>
-        <div>
-          <div class="contact-detail-label">Service area</div>
-          <div class="contact-detail-value">Greater Houston — Heights, Montrose, River Oaks, Memorial, Katy, Sugar Land</div>
-        </div>
-      </div>
-    </div>
-    <form class="contact-form reveal" onsubmit="event.preventDefault(); this.querySelector('.form-submit').textContent='Thank you. We\'ll be in touch.'; this.querySelector('.form-submit').style.background='var(--accent)'">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label" for="name">Name</label>
-          <input class="form-input" type="text" id="name" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="phone">Phone</label>
-          <input class="form-input" type="tel" id="phone" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="email">Email</label>
-        <input class="form-input" type="email" id="email" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="service">What do you need?</label>
-        <select class="form-select" id="service">
-          <option value="">Select a service</option>
-          <option>Emergency Repair</option>
-          <option>Drain Cleaning</option>
-          <option>Water Heater</option>
-          <option>Pipe Repair</option>
-          <option>Fixture Installation</option>
-          <option>Sewer Line</option>
-          <option>Maintenance Check</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="message">Tell us what's going on</label>
-        <textarea class="form-textarea" id="message" rows="4"></textarea>
-      </div>
-      <button type="submit" class="form-submit">Send Message</button>
-    </form>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-brand">AquaGuard</div>
-  <div class="footer-links">
+<header class="topbar">
+  <a class="topbar__brand" href="#top">Copperline <span>Plumbing</span></a>
+  <nav aria-label="Page">
+    <a href="#services">Services</a>
+    <a href="#pricing">Pricing</a>
     <a href="#contact">Contact</a>
-    <a href="#">License #PLC-88492</a>
-    <a href="#">Privacy</a>
+  </nav>
+  <a class="topbar__tel" href="tel:+17135550142">(713) 555-0142</a>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="hero-brand">
+    <div class="hero__plane" aria-hidden="true"></div>
+    <div class="hero__art" aria-hidden="true">
+      <svg viewBox="0 0 400 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M80 40 C80 40 60 180 120 260 C180 340 90 420 140 500" stroke="#b87333" stroke-width="1.5" opacity="0.9"/>
+        <path d="M120 40 C120 40 100 170 160 250 C220 330 130 410 180 500" stroke="#b87333" stroke-width="1" opacity="0.45"/>
+        <path d="M200 60 L200 200" stroke="#b87333" stroke-width="2"/>
+        <circle cx="200" cy="200" r="28" stroke="#b87333" stroke-width="1.5"/>
+        <path d="M200 228 L200 380" stroke="#b87333" stroke-width="2"/>
+        <path d="M172 200 H120" stroke="#b87333" stroke-width="1.5"/>
+        <path d="M228 200 H280" stroke="#b87333" stroke-width="1.5"/>
+        <rect x="188" y="380" width="24" height="48" rx="2" stroke="#b87333" stroke-width="1.5"/>
+        <path d="M160 428 H240" stroke="#b87333" stroke-width="1.5"/>
+        <path d="M300 80 C340 140 310 220 350 280" stroke="#f4f5f7" stroke-width="0.75" opacity="0.25"/>
+      </svg>
+    </div>
+    <div class="hero__content">
+      <p class="hero__brand" id="hero-brand">Copperline <em>Plumbing</em></p>
+      <h1>Water where it belongs.</h1>
+      <p class="hero__lede">Houston residential and light commercial plumbing — repair, install, and keep dry.</p>
+      <div class="cta-group">
+        <a class="btn btn--solid" href="tel:+17135550142">Call now</a>
+        <a class="btn btn--ghost" href="#contact">Book service</a>
+      </div>
+    </div>
+  </section>
+
+  <aside class="trust" aria-label="Business details">
+    <div class="trust__inner">
+      <div>
+        <p class="trust__name">Copperline Plumbing
+          <small>Houston, Texas · License M-38421</small>
+        </p>
+      </div>
+      <div>
+        <p><strong>Call</strong><br>
+          <a href="tel:+17135550142">(713) 555-0142</a>
+        </p>
+      </div>
+      <div>
+        <p><strong>Service area</strong><br>
+          The Heights, Montrose, Katy,<br>Sugar Land, Pearland
+        </p>
+      </div>
+    </div>
+  </aside>
+
+  <section class="section services" id="services">
+    <div class="wrap">
+      <p class="section__label reveal">What we handle</p>
+      <h2 class="section__title reveal">Work that stops the drip and starts the flow.</h2>
+      <p class="section__intro reveal">One crew for homes and small commercial spaces. We diagnose on site, explain options plainly, and leave the system quieter than we found it.</p>
+      <ol class="service-list">
+        <li class="reveal">
+          <span class="service-list__num" aria-hidden="true">01</span>
+          <h3 class="service-list__name">Leak find &amp; repair</h3>
+          <p class="service-list__copy">Slab leaks, supply lines, fixture seals. We locate the source before we open walls — and we close up clean.</p>
+        </li>
+        <li class="reveal">
+          <span class="service-list__num" aria-hidden="true">02</span>
+          <h3 class="service-list__name">Drain clearing</h3>
+          <p class="service-list__copy">Kitchen, bath, and main line. Camera when needed. No guesswork on a clog that keeps coming back.</p>
+        </li>
+        <li class="reveal">
+          <span class="service-list__num" aria-hidden="true">03</span>
+          <h3 class="service-list__name">Water heaters</h3>
+          <p class="service-list__copy">Tank and tankless install, flush, and replacement. Sized for your household — not a catalog default.</p>
+        </li>
+        <li class="reveal">
+          <span class="service-list__num" aria-hidden="true">04</span>
+          <h3 class="service-list__name">Fixture install</h3>
+          <p class="service-list__copy">Faucets, toilets, sinks, and disposals. Level, sealed, and tested before we pack up.</p>
+        </li>
+        <li class="reveal">
+          <span class="service-list__num" aria-hidden="true">05</span>
+          <h3 class="service-list__name">Light commercial</h3>
+          <p class="service-list__copy">Offices, shops, and small multi-unit. After-hours windows available when downtime costs you rent.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section proof" aria-labelledby="proof-quote">
+    <div class="wrap reveal">
+      <blockquote id="proof-quote">
+        “They found the slab leak under the kitchen in The Heights before it ruined the cabinets. Quoted once. Stuck to it.”
+      </blockquote>
+      <footer>— <cite>Elena R.</cite>, homeowner · The Heights</footer>
+    </div>
+  </section>
+
+  <section class="section pricing" id="pricing">
+    <div class="wrap">
+      <div class="pricing__grid">
+        <div class="reveal">
+          <p class="section__label">How we quote</p>
+          <h2 class="section__title">You see the price before the wrench turns.</h2>
+          <p class="section__intro">No trip fee games. Diagnostic visit credited toward approved work. Written range when the job has unknowns — then a firm number once we open it up.</p>
+        </div>
+        <ul class="pricing__points">
+          <li class="reveal">
+            <strong>Diagnostic first</strong>
+            <p>We inspect, explain what we found, and give options with prices. You choose before we start.</p>
+          </li>
+          <li class="reveal">
+            <strong>Parts on the invoice</strong>
+            <p>Line items for materials and labor. If a part changes mid-job, we call before we swap it.</p>
+          </li>
+          <li class="reveal">
+            <strong>Warranty in writing</strong>
+            <p>Labor warranty on repair work we perform. Manufacturer coverage on new equipment we install.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section credentials" id="credentials" aria-labelledby="cred-title">
+    <div class="wrap">
+      <p class="section__label reveal">License &amp; coverage</p>
+      <h2 class="section__title reveal" id="cred-title">Bonded, insured, and nearby.</h2>
+      <div class="cred-block">
+        <dl class="reveal">
+          <div>
+            <dt>Texas Master Plumber</dt>
+            <dd>License M-38421
+              <small>Displayed on every estimate and every invoice.</small>
+            </dd>
+          </div>
+          <div>
+            <dt>Insurance</dt>
+            <dd>General liability &amp; workers’ comp
+              <small>Certificate available on request for property managers.</small>
+            </dd>
+          </div>
+        </dl>
+        <div class="reveal">
+          <p class="areas-label">Neighborhoods we serve</p>
+          <div class="areas">
+            <span>The Heights</span>
+            <span>Montrose</span>
+            <span>Katy</span>
+            <span>Sugar Land</span>
+            <span>Pearland</span>
+          </div>
+          <p class="areas-note">Outside these areas? Call anyway — if we can get there same day, we will say so up front.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" id="contact">
+    <div class="wrap">
+      <div class="contact__layout">
+        <div class="reveal">
+          <p class="section__label">Contact</p>
+          <h2 class="section__title">Tell us what is wet, cold, or clogged.</h2>
+          <div class="contact__side">
+            <p>Prefer the phone? Tap below — we answer during business hours and return after-hours messages the same morning.</p>
+            <a class="phone" href="tel:+17135550142">(713) 555-0142</a>
+            <p class="hours">Mon–Fri 7:00–6:00 · Sat 8:00–2:00<br>Emergency line monitored nights &amp; Sundays</p>
+          </div>
+        </div>
+        <form class="reveal" id="callback-form" action="#" method="post" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required>
+            <p class="field__error" id="name-error" role="alert">Enter your name so we know who to call.</p>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(713) 555-0000">
+            <p class="field__error" id="phone-error" role="alert">Enter a phone number with at least 10 digits.</p>
+          </div>
+          <div class="field">
+            <label for="neighborhood">Neighborhood</label>
+            <select id="neighborhood" name="neighborhood" required>
+              <option value="">Select one</option>
+              <option>The Heights</option>
+              <option>Montrose</option>
+              <option>Katy</option>
+              <option>Sugar Land</option>
+              <option>Pearland</option>
+              <option>Other / nearby</option>
+            </select>
+            <p class="field__error" id="neighborhood-error" role="alert">Choose your neighborhood from the list.</p>
+          </div>
+          <div class="field">
+            <label for="message">What needs attention</label>
+            <textarea id="message" name="message" required placeholder="e.g. water heater making noise, slow kitchen drain…"></textarea>
+            <p class="field__error" id="message-error" role="alert">Describe the issue in a sentence or two.</p>
+          </div>
+          <button class="btn btn--dark" type="submit">Request a callback</button>
+          <p class="form-note">We call back within one business hour during open hours. This form does not charge your card.</p>
+          <p class="form-success" id="form-success" role="status">Thanks — we have your request and will call shortly.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>Copperline Plumbing</strong> · License M-38421</p>
+    <p><a href="tel:+17135550142">(713) 555-0142</a> · Houston, TX</p>
   </div>
-  <div>© 2026 AquaGuard Plumbing Services</div>
 </footer>
 
 <script>
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
+(function () {
+  var form = document.getElementById("callback-form");
+  if (!form) return;
+  var fields = [
+    { el: form.name, error: document.getElementById("name-error"), check: function (v) { return v.trim().length >= 2; } },
+    { el: form.phone, error: document.getElementById("phone-error"), check: function (v) { return v.replace(/\D/g, "").length >= 10; } },
+    { el: form.neighborhood, error: document.getElementById("neighborhood-error"), check: function (v) { return v !== ""; } },
+    { el: form.message, error: document.getElementById("message-error"), check: function (v) { return v.trim().length >= 8; } }
+  ];
+  function clearState(f) { f.el.classList.remove("is-invalid"); f.error.classList.remove("is-visible"); }
+  function showError(f) { f.el.classList.add("is-invalid"); f.error.classList.add("is-visible"); }
+  fields.forEach(function (f) {
+    f.el.addEventListener("input", function () { clearState(f); });
+    f.el.addEventListener("change", function () { clearState(f); });
   });
-}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// Testimonial carousel
-const testimonials = [
-  { quote: '"They showed up 20 minutes after I called, fixed a pipe that two other companies couldn\'t figure out, and left the kitchen cleaner than they found it. I\'ve recommended them to everyone on my street."', author: 'Maria Gonzalez — Heights, Houston' },
-  { quote: '"We had a slab leak that was destroying our foundation. AquaGuard found it with their camera, repaired it minimally, and coordinated with our insurance. Saved us thousands."', author: 'James Whitfield — Memorial, Houston' },
-  { quote: '"Third year running they\'ve done our annual maintenance check. Always on time, always thorough, always honest about what needs fixing now vs. what can wait."', author: 'Patricia Nguyen — Katy, Houston' },
-];
-let current = 0;
-const quoteEl = document.querySelector('.testimonial-quote');
-const authorEl = document.querySelector('.testimonial-author');
-const dots = document.querySelectorAll('.testimonial-dot');
-
-dots.forEach((dot, i) => {
-  dot.addEventListener('click', () => {
-    current = i;
-    quoteEl.textContent = testimonials[i].quote;
-    authorEl.textContent = testimonials[i].author;
-    dots.forEach(d => d.classList.remove('active'));
-    dot.classList.add('active');
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var ok = true, firstBad = null;
+    fields.forEach(function (f) {
+      clearState(f);
+      if (!f.check(f.el.value)) { showError(f); ok = false; if (!firstBad) firstBad = f.el; }
+    });
+    if (!ok) { if (firstBad) firstBad.focus(); return; }
+    document.getElementById("form-success").classList.add("is-visible");
+    form.querySelector('button[type="submit"]').disabled = true;
   });
-});
-
-setInterval(() => {
-  current = (current + 1) % testimonials.length;
-  quoteEl.style.opacity = 0;
-  authorEl.style.opacity = 0;
-  setTimeout(() => {
-    quoteEl.textContent = testimonials[current].quote;
-    authorEl.textContent = testimonials[current].author;
-    dots.forEach(d => d.classList.remove('active'));
-    dots[current].classList.add('active');
-    quoteEl.style.opacity = 1;
-    authorEl.style.opacity = 1;
-  }, 400);
-}, 6000);
+})();
 </script>
-
 </body>
 </html>
