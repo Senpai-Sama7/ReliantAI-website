@@ -1,10 +1,34 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
+import { defineConfig, type Plugin } from "vite"
+
+const PLACEHOLDER_KEYS = new Set(["", "your_key_here", "undefined", "null"])
+
+/** Fail hosted production builds when the contact form key was never provided. */
+function requireWeb3FormsKey(): Plugin {
+  return {
+    name: "require-web3forms-key",
+    configResolved(config) {
+      if (config.command !== "build") return
+      const enforce =
+        process.env.VERCEL === "1" ||
+        process.env.CI === "true" ||
+        process.env.ENFORCE_WEB3FORMS === "1"
+      if (!enforce) return
+
+      const key = process.env.VITE_WEB3FORMS_KEY?.trim() ?? ""
+      if (PLACEHOLDER_KEYS.has(key)) {
+        throw new Error(
+          "VITE_WEB3FORMS_KEY must be set for production CI builds (contact form is dead without it)."
+        )
+      }
+    },
+  }
+}
 
 export default defineConfig({
-  base: './',
-  plugins: [react()],
+  base: '/',
+  plugins: [react(), requireWeb3FormsKey()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

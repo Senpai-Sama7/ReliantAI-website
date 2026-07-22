@@ -4,9 +4,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, ChevronDown, Loader2, Code2, FileCode2 } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { submitToWeb3Forms } from '../lib/web3forms';
+import { submitToWeb3Forms, Web3FormsConfigError, isWeb3FormsConfigured } from '../lib/web3forms';
 import { revealFrom } from '@/lib/reveal';
 import { useIntroAnimations } from '@/hooks/useIntroAnimations';
+
+const FORM_CONFIGURED = isWeb3FormsConfigured();
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -123,8 +125,12 @@ const Contact = ({ introComplete = true }: ContactProps) => {
         setIsSubmitted(false);
         setFormData({ name: '', email: '', company: '', industry: '', message: '' });
       }, 3000);
-    } catch {
-      toast.error('Something went wrong. Please try again.');
+    } catch (error) {
+      if (error instanceof Web3FormsConfigError) {
+        toast.error('Form is temporarily unavailable. Call (832) 947-7028 or use the email link.');
+      } else {
+        toast.error('Something went wrong. Please try again or call (832) 947-7028.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -195,6 +201,18 @@ const Contact = ({ introComplete = true }: ContactProps) => {
             onSubmit={handleSubmit}
             className="p-8 lg:p-10 bg-white dark:bg-dark-100/50 border border-gray-200 dark:border-white/10 rounded-2xl backdrop-blur-sm shadow-lg dark:shadow-none transition-all duration-500 hover:shadow-xl hover:shadow-orange/5 hover:border-orange/20"
           >
+            {!FORM_CONFIGURED && (
+              <div
+                role="status"
+                className="mb-6 rounded-lg border border-orange/30 bg-orange/10 px-4 py-3 font-opensans text-sm text-gray-800 dark:text-white/80"
+              >
+                Online form delivery is being configured. Call{' '}
+                <a href="tel:+18329477028" className="text-orange font-semibold underline underline-offset-2">
+                  (832) 947-7028
+                </a>{' '}
+                or use the email link — we still respond within one business day.
+              </div>
+            )}
             {isSubmitted ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <div className="w-20 h-20 bg-orange/20 rounded-full flex items-center justify-center mb-6">
