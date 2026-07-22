@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/Navigation';
 import IntroOverlay from './components/IntroOverlay';
@@ -70,23 +71,48 @@ function App() {
   }, [isStandalonePage, introComplete]);
 
   if (isPrivacyPolicy) {
-    return <PrivacyPolicy />;
+    return (
+      <>
+        <PrivacyPolicy />
+        <Analytics />
+      </>
+    );
   }
 
   if (isTermsOfService) {
-    return <TermsOfService />;
+    return (
+      <>
+        <TermsOfService />
+        <Analytics />
+      </>
+    );
   }
 
   if (isShowcase) {
-    return <VideoShowcase />;
+    return (
+      <>
+        <VideoShowcase />
+        <Analytics />
+      </>
+    );
   }
 
   if (isPortfolio) {
-    return <PortfolioShowcase />;
+    return (
+      <>
+        <PortfolioShowcase />
+        <Analytics />
+      </>
+    );
   }
 
   if (!isKnownPath) {
-    return <NotFound />;
+    return (
+      <>
+        <NotFound />
+        <Analytics />
+      </>
+    );
   }
 
   return (
@@ -126,6 +152,7 @@ function App() {
           </main>
         </ErrorBoundary>
       </div>
+      <Analytics />
     </SmoothScrollProvider>
   );
 }
