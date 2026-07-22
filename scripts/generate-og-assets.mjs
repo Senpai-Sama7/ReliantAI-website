@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 /**
- * Generates brand image assets (Open Graph card, logo, favicons, apple-touch-icon)
- * deterministically from inline SVG using sharp. No external image model required.
+ * Generates brand image assets (Open Graph card, logo) deterministically from
+ * inline SVG using sharp. No external image model required.
+ *
+ * Favicons (favicon.svg, favicon-*.png, apple-touch-icon.png, mask-icon.svg)
+ * are generated separately by scripts/generate-favicons.mjs.
  *
  * Run: node scripts/generate-og-assets.mjs
  */
@@ -90,9 +93,6 @@ async function run() {
     { name: 'og-image.png', svg: ogSvg, w: 1200, h: 630 },
     { name: 'og-image.jpg', svg: ogSvg, w: 1200, h: 630, jpeg: true },
     { name: 'logo.png', svg: logoSvg(512), w: 512, h: 512 },
-    { name: 'apple-touch-icon.png', svg: logoSvg(180), w: 180, h: 180 },
-    { name: 'favicon-32.png', svg: logoSvg(32), w: 32, h: 32 },
-    { name: 'favicon-16.png', svg: logoSvg(16), w: 16, h: 16 },
   ];
 
   for (const t of tasks) {
@@ -104,11 +104,6 @@ async function run() {
     await pipeline.toFile(resolve(PUBLIC_DIR, t.name));
     console.log(`generated public/${t.name} (${t.w}x${t.h})`);
   }
-
-  // Crisp scalable favicon (modern browsers + AI crawlers).
-  const { writeFile } = await import('node:fs/promises');
-  await writeFile(resolve(PUBLIC_DIR, 'favicon.svg'), logoSvg(64).trim() + '\n', 'utf8');
-  console.log('generated public/favicon.svg');
 }
 
 run().catch((err) => {

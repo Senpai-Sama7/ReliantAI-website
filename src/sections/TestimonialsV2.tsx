@@ -168,8 +168,8 @@ export default function TestimonialsV2({ introComplete = true }: TestimonialsV2P
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange/5 rounded-full blur-3xl" />
       </div>
 
-      <div ref={pinRef} className="relative z-10 h-screen flex flex-col justify-center">
-        <div ref={headerRef} className="text-center mb-12 px-6 pt-16">
+      <div ref={pinRef} className="relative z-10 h-auto py-20 lg:py-0 lg:h-screen-dvh flex flex-col justify-center">
+        <div ref={headerRef} className="text-center mb-12 px-6 pt-0 lg:pt-16">
           <span className="reveal-item text-xs uppercase tracking-[0.3em] text-white/40 font-opensans block mb-4">
             Client Results
           </span>
@@ -181,13 +181,13 @@ export default function TestimonialsV2({ introComplete = true }: TestimonialsV2P
 
         <div
           ref={trackRef}
-          className="flex items-center gap-8 px-[10vw] will-change-transform"
+          className="flex flex-col lg:flex-row items-stretch lg:items-center gap-10 lg:gap-8 px-6 sm:px-10 lg:px-[10vw] will-change-transform"
           style={{ transformStyle: 'preserve-3d' }}
         >
           {testimonials.map((t) => (
             <div
               key={t.id}
-              className="testi-card flex-shrink-0 w-[85vw] sm:w-[70vw] lg:w-[55vw] bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 lg:p-12 relative"
+              className="testi-card flex-shrink-0 w-full lg:w-[55vw] bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 lg:p-12 relative"
             >
               <div className="parallax-quote absolute -top-6 left-8 lg:left-12">
                 <div className="w-12 h-12 bg-orange rounded-xl flex items-center justify-center shadow-lg shadow-orange/30">

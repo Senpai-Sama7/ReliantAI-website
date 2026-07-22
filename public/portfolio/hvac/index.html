@@ -20,7 +20,7 @@
   --body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --max: 72rem; --pad: clamp(1.25rem, 4vw, 3rem);
 }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
 body {
   font-family: var(--body); font-size: 1.0625rem; line-height: 1.65;
   background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased;
@@ -272,9 +272,11 @@ h3 { font-size: 1.35rem; }
 }
 .form input::placeholder, .form textarea::placeholder { color: var(--steel); }
 .form textarea { min-height: 7rem; resize: vertical; }
-.form input:invalid:not(:placeholder-shown):not(:focus),
-.form select:invalid:not(:focus),
-.form textarea:invalid:not(:placeholder-shown):not(:focus) {
+/* Only flag invalid fields after a submit attempt (.is-invalid is added by JS),
+   so pristine fields never show error styling. */
+.form.is-invalid input:invalid:not(:placeholder-shown):not(:focus),
+.form.is-invalid select:invalid:not(:focus),
+.form.is-invalid textarea:invalid:not(:placeholder-shown):not(:focus) {
   border-color: var(--error); background: var(--error-bg);
 }
 .form__error {

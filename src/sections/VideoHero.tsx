@@ -197,8 +197,9 @@ export default function VideoHero() {
     });
   }, []);
 
-  // ── Auto-advance timer ──
+  // ── Auto-advance timer (disabled under reduced motion; manual dots still work) ──
   useEffect(() => {
+    if (reducedMotion.current) return;
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(
       () => goToAct((actIndex + 1) % ACTS.length),
@@ -217,10 +218,14 @@ export default function VideoHero() {
     );
   }, [actIndex]);
 
-  // ── Progress bar ──
+  // ── Progress bar (static under reduced motion since acts don't auto-advance) ──
   useEffect(() => {
     if (!progressRef.current) return;
     progressTweenRef.current?.kill();
+    if (reducedMotion.current) {
+      gsap.set(progressRef.current, { scaleX: 1 });
+      return;
+    }
     gsap.set(progressRef.current, { scaleX: 0 });
     progressTweenRef.current = gsap.to(progressRef.current, {
       scaleX: 1,
@@ -400,18 +405,22 @@ export default function VideoHero() {
       </div>
 
       {/* ── Act indicators + progress ─────────────────────────────────────────── */}
-      <div className="absolute bottom-14 left-8 sm:left-14 md:left-20 lg:left-28 z-[10] flex items-center gap-5">
+      <div className="absolute bottom-14 left-8 sm:left-14 md:left-20 lg:left-28 z-[10] flex items-center gap-2">
         {ACTS.map((a, i) => (
           <button
             key={a.id}
             onClick={() => goToAct(i)}
             aria-label={`Scene ${i + 1}: ${a.eyebrow}`}
-            className={`rounded-full transition-all duration-300 ${
-              i === actIndex
-                ? 'w-7 h-[3px] bg-orange'
-                : 'w-[6px] h-[6px] bg-white/25 hover:bg-white/55'
-            }`}
-          />
+            className="indicator-dot group/dot relative flex items-center justify-center w-8 h-8"
+          >
+            <span
+              className={`rounded-full transition-all duration-300 ${
+                i === actIndex
+                  ? 'w-7 h-[3px] bg-orange'
+                  : 'w-[6px] h-[6px] bg-white/25 group-hover/dot:bg-white/55'
+              }`}
+            />
+          </button>
         ))}
         {/* Progress bar */}
         <div className="relative w-20 h-px bg-white/15 overflow-hidden ml-1">

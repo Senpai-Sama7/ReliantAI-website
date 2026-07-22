@@ -1,8 +1,17 @@
 <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  
-    <rect x="0" y="0" width="64" height="64" rx="12.8" fill="#ff6e00"/>
-    <path d="M 16.64 47.36 L 16.64 16.64 L 47.36 47.36 L 47.36 16.64"
-      fill="none" stroke="#ffffff" stroke-width="10.24"
-      stroke-linecap="round" stroke-linejoin="round"/>
-  
+  <defs>
+        <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff8324"/>
+          <stop offset="55%" stop-color="#ff6e00"/>
+          <stop offset="100%" stop-color="#f06000"/>
+        </linearGradient>
+      </defs>
+      <path d="M10 0 H54 L64 10 V54 L54 64 H10 L0 54 V10 Z" fill="url(#plate)"/>
+  <path d="M11.2 3 H52.8 L61 11.2 V52.8 L52.8 61 H11.2 L3 52.8 V11.2 Z"
+        fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="1.25"/>
+  <g fill="#141414">
+    <path d="M16.5 13 H25.5 V51 H16.5 Z"/>
+    <path fill-rule="evenodd" d="M25.5 13 H40.5 L47.5 20 V28 L40.5 35 H25.5 Z M25.5 21 H36 L39 24 L36 27 H25.5 Z"/>
+    <path d="M31 35 H40 L47.5 51 H38.5 Z"/>
+  </g>
 </svg>

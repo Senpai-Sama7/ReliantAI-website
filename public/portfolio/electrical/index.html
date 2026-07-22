@@ -16,7 +16,7 @@
   --display:'Syne',sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;
   --pad:clamp(1.25rem,4vw,3.5rem);--max:1100px;
 }
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:4.5rem}
 body{
   font-family:var(--mono);background:var(--bg);color:var(--text);
   font-size:.9375rem;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
@@ -63,8 +63,13 @@ h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.95;letter-spaci
 .topbar-meta a:hover{text-decoration:underline}
 
 .hero{
-  min-height:calc(100vh - 52px);display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:calc(100vh - 52px);min-height:calc(100dvh - 52px);
+  display:flex;flex-direction:column;justify-content:flex-end;
   padding:4rem var(--pad) 5rem;border-bottom:1px solid var(--rule);
+}
+/* Narrow screens: the flex-wrap topbar stacks to 2-3 rows, so leave more room */
+@media(max-width:719px){
+  .hero{min-height:calc(100vh - 128px);min-height:calc(100dvh - 128px)}
 }
 .hero-brand{
   font-family:var(--display);font-weight:800;font-size:clamp(3.5rem,14vw,9.5rem);

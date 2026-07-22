@@ -166,7 +166,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
       aria-label="Immersive industry worlds scroll story"
       aria-roledescription="scroll story"
     >
-      <div ref={pinRef} className="relative h-screen overflow-hidden">
+      <div ref={pinRef} className="relative h-screen-dvh overflow-hidden">
         <div className="scene-portal-ambient absolute inset-0 pointer-events-none" aria-hidden="true">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_120%,rgba(255,110,0,0.18),transparent_65%)]" />
         </div>

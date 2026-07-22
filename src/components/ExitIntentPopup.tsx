@@ -81,12 +81,12 @@ const ExitIntentPopup = () => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-white dark:bg-dark-100 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+      <div className="relative w-full max-w-lg max-h-[90dvh] overflow-y-auto bg-white dark:bg-dark-100 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300">
         {/* Close button */}
         <button
           onClick={handleClose}
           aria-label="Close popup"
-          className="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors z-10"
+          className="absolute top-2 right-2 p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-white/80 hover:text-white transition-colors z-10"
         >
           <X size={20} />
         </button>

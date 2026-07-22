@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { scrollToSection } from '@/lib/scroll';
+import { getLenisInstance } from '@/lib/lenis';
 import { onZoneChange } from '@/lib/experienceBus';
 import type { ExperienceZoneId } from '@/data/experienceZones';
 
@@ -13,10 +14,27 @@ const NAV_ITEMS: { label: string; id: ExperienceZoneId }[] = [
   { label: 'Contact', id: 'contact' },
 ];
 
-const Navigation = () => {
+// Routes whose hero is always dark, regardless of theme — the unscrolled
+// transparent nav needs light-colored links there.
+const DARK_HERO_PATHS = ['/portfolio', '/showcase'];
+
+interface NavigationProps {
+  /** Force light-on-dark nav colors while unscrolled (dark hero pages). */
+  darkHero?: boolean;
+}
+
+const Navigation = ({ darkHero }: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<ExperienceZoneId>('hero');
+
+  const isDarkHeroPage =
+    darkHero ??
+    (typeof window !== 'undefined' &&
+      DARK_HERO_PATHS.includes(window.location.pathname.replace(/\/+$/, '') || '/'));
+  // While the mobile menu is open its own light/dark backdrop sits behind the
+  // nav, so fall back to theme-driven colors.
+  const onDarkSurface = isDarkHeroPage && !isScrolled && !isMobileMenuOpen;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,9 +50,36 @@ const Navigation = () => {
     };
   }, []);
 
+  // Lock page scroll while the mobile menu is open (body/html overflow + Lenis).
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+
+    const lenis = getLenisInstance();
+    lenis?.stop();
+
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+      lenis?.start();
+    };
+  }, [isMobileMenuOpen]);
+
   const handleSectionScroll = (sectionId: string, offsetY = 80) => {
-    scrollToSection(sectionId, offsetY);
     setIsMobileMenuOpen(false);
+    // Sections live on the home page; from other routes, navigate there
+    // instead of silently doing nothing.
+    if (!document.getElementById(sectionId) && window.location.pathname !== '/') {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    scrollToSection(sectionId, offsetY);
   };
 
   return (
@@ -57,7 +102,9 @@ const Navigation = () => {
               <div className="w-10 h-10 bg-orange rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-lg group-hover:shadow-orange/30">
                 <span className="font-teko text-2xl font-bold text-white">R</span>
               </div>
-              <span className="font-teko text-2xl font-semibold tracking-wide hidden sm:block text-gray-900 dark:text-white transition-colors duration-300">
+              <span className={`font-teko text-2xl font-semibold tracking-wide hidden sm:block transition-colors duration-300 ${
+                onDarkSurface ? 'text-white' : 'text-gray-900 dark:text-white'
+              }`}>
                 RELIANT AI
               </span>
             </button>
@@ -71,7 +118,9 @@ const Navigation = () => {
                   className={`relative font-opensans text-sm transition-colors duration-300 group ${
                     activeSection === item.id
                       ? 'text-orange'
-                      : 'text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white'
+                      : onDarkSurface
+                        ? 'text-white/80 hover:text-white'
+                        : 'text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -106,7 +155,9 @@ const Navigation = () => {
               <ThemeToggle />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 text-gray-900 dark:text-white transition-transform duration-300 hover:scale-110"
+                className={`p-2 transition-transform duration-300 hover:scale-110 ${
+                  onDarkSurface ? 'text-white' : 'text-gray-900 dark:text-white'
+                }`}
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
               >
@@ -119,11 +170,11 @@ const Navigation = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 z-40 bg-white/98 dark:bg-black/98 backdrop-blur-xl transition-all duration-500 lg:hidden ${
+        className={`fixed inset-0 z-[95] bg-white/98 dark:bg-black/98 backdrop-blur-xl transition-all duration-500 lg:hidden overflow-y-auto ${
           isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
       >
-        <div className="flex flex-col items-center justify-center h-full gap-8">
+        <div className="flex flex-col items-center justify-center min-h-full gap-8 [@media(max-height:700px)]:gap-4 py-24">
           {NAV_ITEMS.map((item, index) => (
             <button
               key={item.id}
