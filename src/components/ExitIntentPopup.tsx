@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { X, Gift, Check, Shield, Clock, Zap, Loader2 } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { X, Check, Loader2 } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { usePopupTrigger } from '../hooks/usePopupTrigger';
@@ -7,51 +7,82 @@ import { submitToWeb3Forms } from '../lib/web3forms';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 
+const AUDIT_BENEFITS = [
+  '100% free — no credit card required.',
+  'A prioritized list of what to fix first.',
+  'Includes 3 quick fixes you can do today.',
+];
+
 const ExitIntentPopup = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const { canShow, markDismissed } = usePopupTrigger({ popupType: 'exit' });
 
   useEffect(() => {
     if (!canShow) return;
 
-    // Exit intent (mouse leaves viewport)
+    // Only real exit intent: the mouse leaving through the top of the
+    // viewport. No timers, no scroll-depth auto-open (touch devices never
+    // see this popup).
     const handleMouseLeave = (e: MouseEvent) => {
       if (e.clientY < 10) setShow(true);
     };
 
-    // 10s timer
-    const timer = setTimeout(() => setShow(true), 10000);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    return () => document.removeEventListener('mouseleave', handleMouseLeave);
+  }, [canShow]);
 
-    // Scroll past halfway of case studies section
-    const handleScroll = () => {
-      const stories = document.querySelector('[aria-label="Pinned case studies"]');
-      if (!stories) return;
-      const rect = stories.getBoundingClientRect();
-      const halfway = rect.top + rect.height / 2;
-      if (halfway < 0) {
-        setShow(true);
-        window.removeEventListener('scroll', handleScroll);
+  const handleClose = useCallback(() => {
+    setShow(false);
+    markDismissed();
+  }, [markDismissed]);
+
+  // Escape to close + basic focus trap while the dialog is open.
+  useEffect(() => {
+    if (!show) return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const getFocusable = () =>
+      Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => !el.hasAttribute('disabled'));
+
+    getFocusable()[0]?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        handleClose();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusable = getFocusable();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     };
 
-    document.addEventListener('mouseleave', handleMouseLeave);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      clearTimeout(timer);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('keydown', handleKeyDown);
+      previouslyFocused?.focus();
     };
-  }, [canShow]);
-
-  const handleClose = () => {
-    setShow(false);
-    markDismissed();
-  };
+  }, [show, handleClose]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +112,13 @@ const ExitIntentPopup = () => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg max-h-[90dvh] overflow-y-auto bg-white dark:bg-dark-100 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="exit-popup-title"
+        className="relative w-full max-w-lg max-h-[90dvh] overflow-y-auto bg-white dark:bg-dark-100 rounded-2xl shadow-2xl animate-in zoom-in-95 duration-300"
+      >
         {/* Close button */}
         <button
           onClick={handleClose}
@@ -97,9 +134,11 @@ const ExitIntentPopup = () => {
             <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-1/2 -translate-x-1/2" />
           </div>
-          <Gift className="w-12 h-12 text-white mx-auto mb-3 relative z-10" />
-          <h3 className="font-teko text-3xl font-bold text-white relative z-10">
-            WAIT! BEFORE YOU GO...
+          <span className="relative z-10 inline-block font-opensans text-white/90 text-xs uppercase tracking-[0.35em] mb-2">
+            Free Website Audit
+          </span>
+          <h3 id="exit-popup-title" className="font-teko text-3xl font-bold text-white relative z-10">
+            BEFORE YOU GO...
           </h3>
         </div>
 
@@ -114,7 +153,7 @@ const ExitIntentPopup = () => {
                 Check Your Email!
               </h4>
               <p className="font-opensans text-gray-600 dark:text-white/70">
-                Your free audit report is on its way. (Check spam if you don't see it in 5 minutes)
+                Thanks — we'll be in touch with your audit results soon. (Check spam if you don't hear from us.)
               </p>
             </div>
           ) : (
@@ -123,29 +162,26 @@ const ExitIntentPopup = () => {
                 Get Your Free Website Audit
               </h4>
               <p className="font-opensans text-gray-600 dark:text-white/70 text-sm mb-4">
-                We'll analyze your current site and show you exactly how many leads you're losing—and how to fix it.
+                We'll review your current site and show you where it's costing you leads — and how to fix it.
               </p>
 
-              {/* Risk Reversal Stack */}
-              <div className="space-y-2 mb-5">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/70">
-                  <Shield size={16} className="text-green-500 flex-shrink-0" />
-                  <span>100% Free. No credit card required.</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/70">
-                  <Clock size={16} className="text-green-500 flex-shrink-0" />
-                  <span>Results delivered in 24 hours.</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-white/70">
-                  <Zap size={16} className="text-green-500 flex-shrink-0" />
-                  <span>Includes 3 quick fixes you can do today.</span>
-                </div>
-              </div>
+              <ul className="space-y-2 mb-5">
+                {AUDIT_BENEFITS.map((benefit) => (
+                  <li key={benefit} className="flex items-center gap-3 text-sm text-gray-600 dark:text-white/70 font-opensans">
+                    <span className="w-4 h-px bg-orange flex-shrink-0" aria-hidden="true" />
+                    <span>{benefit}</span>
+                  </li>
+                ))}
+              </ul>
 
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div>
+                  <label htmlFor="exit-popup-email" className="sr-only">
+                    Email address
+                  </label>
                   <input
                     type="email"
+                    id="exit-popup-email"
                     placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => {
@@ -153,12 +189,14 @@ const ExitIntentPopup = () => {
                       if (emailError) setEmailError('');
                     }}
                     required
+                    aria-invalid={emailError ? true : undefined}
+                    aria-describedby={emailError ? 'exit-popup-email-error' : undefined}
                     className={`w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:outline-none transition-colors ${
                       emailError ? 'border-red-500 focus:border-red-500' : 'border-gray-200 dark:border-white/10 focus:border-orange'
                     }`}
                   />
                   {emailError && (
-                    <p className="mt-1 text-xs text-red-500 font-opensans">{emailError}</p>
+                    <p id="exit-popup-email-error" className="mt-1 text-xs text-red-500 font-opensans" role="alert">{emailError}</p>
                   )}
                 </div>
                 <button
@@ -174,12 +212,11 @@ const ExitIntentPopup = () => {
                 </button>
               </form>
 
-              {/* Secondary CTA with Loss Aversion */}
               <button
                 onClick={handleClose}
                 className="w-full mt-3 font-opensans text-sm text-gray-400 hover:text-gray-600 dark:hover:text-white/60 transition-colors"
               >
-                No thanks, I'll keep losing leads
+                No thanks
               </button>
             </>
           )}

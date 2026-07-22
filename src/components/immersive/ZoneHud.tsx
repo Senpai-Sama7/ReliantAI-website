@@ -26,14 +26,14 @@ export default function ZoneHud() {
           pulse ? 'scale-[1.03] border-orange/40 shadow-lg shadow-orange/10' : ''
         }`}
       >
-        <p className="font-opensans text-[9px] uppercase tracking-[0.45em] text-white/40 mb-1">
-          Active sector
+        <p className="font-opensans text-[9px] uppercase tracking-[0.45em] text-white/60 mb-1">
+          Now viewing
         </p>
         <p className="font-teko text-2xl text-white leading-none">
           {zone.sector}
           <span className="text-orange ml-2">{zone.label}</span>
         </p>
-        <p className="font-opensans text-[10px] text-white/45 mt-1 tracking-wide">{zone.tagline}</p>
+        <p className="font-opensans text-[10px] text-white/60 mt-1 tracking-wide">{zone.tagline}</p>
         <div className="mt-3 h-px bg-white/10 overflow-hidden rounded-full">
           <div
             className="h-full bg-orange transition-all duration-700 ease-out"

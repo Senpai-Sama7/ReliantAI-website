@@ -12,7 +12,7 @@ export interface PortalWorld {
 export const portalWorlds: PortalWorld[] = [
   {
     id: 'forge',
-    eyebrow: 'World 01 — Industrial',
+    eyebrow: '01 — Metal Fabrication',
     title: 'FORGE',
     accent: 'THE FUTURE',
     image: '/project-metalforge.webp',
@@ -21,7 +21,7 @@ export const portalWorlds: PortalWorld[] = [
   },
   {
     id: 'field',
-    eyebrow: 'World 02 — Energy',
+    eyebrow: '02 — Oilfield Services',
     title: 'FIELD',
     accent: 'OPERATIONS',
     image: '/project-oilfield.webp',
@@ -30,7 +30,7 @@ export const portalWorlds: PortalWorld[] = [
   },
   {
     id: 'home',
-    eyebrow: 'World 03 — Services',
+    eyebrow: '03 — Home Services',
     title: 'HOME',
     accent: 'EXCELLENCE',
     image: '/project-homeservices.webp',
@@ -39,7 +39,7 @@ export const portalWorlds: PortalWorld[] = [
   },
   {
     id: 'care',
-    eyebrow: 'World 04 — Medical',
+    eyebrow: '04 — Medical Practices',
     title: 'CARE',
     accent: 'REDEFINED',
     image: '/project-medical.webp',

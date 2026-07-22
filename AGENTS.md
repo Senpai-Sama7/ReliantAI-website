@@ -54,7 +54,7 @@ Notes:
 │   │   ├── IntroOverlay.tsx
 │   │   ├── FloatingCTA.tsx
 │   │   ├── ExitIntentPopup.tsx
-│   │   ├── SocialProofToast.tsx
+│   │   ├── CookieConsent.tsx
 │   │   ├── ThemeToggle.tsx
 │   │   └── TorusKnot3D.tsx      # Hero 3D visual (Canvas)
 │   ├── sections/                # Scroll sections (some have V2 variants)
@@ -104,15 +104,7 @@ npm run lint
 
 ## Current Lint Status
 
-As of 2026-02-07, `npm run lint` reports existing errors/warnings (primarily React hook rules and a few TypeScript lint rules). Treat lint as informative until these are addressed.
-
-Hotspots flagged by ESLint:
-- `src/App.tsx` (conditional hook due to early returns for path-based routing)
-- `src/components/Navigation.tsx` (const used before declaration + deps warnings)
-- `src/components/ParticleField.tsx` (`Math.random()` during render; purity rule)
-- `src/hooks/useTheme.ts`, `src/components/CountUp.tsx` (setState-in-effect rule)
-- `src/components/LogoReveal.tsx` (`any`)
-- `src/sections/Testimonials.tsx` (function used before declaration)
+As of 2026-07-22, `npm run lint` and `npx tsc -b` both pass with zero errors/warnings. Keep them clean: run both before considering a change complete. (The previously flagged hotspots have been resolved or the offending files deleted.)
 
 ---
 

@@ -1,18 +1,13 @@
 import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Brain, Shield, GitBranch, Building2, BookOpen, Cpu } from 'lucide-react';
+import { Building2, BookOpen, Cpu } from 'lucide-react';
 import { revealFrom } from '@/lib/reveal';
 import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const credentials = [
-  { icon: Brain, label: 'AI Architect' },
-  { icon: Shield, label: 'Cybersecurity' },
-  { icon: GitBranch, label: 'Full-Stack Dev' },
-  { icon: Building2, label: 'Operations' },
-];
+const credentials = ['AI Architect', 'Cybersecurity', 'Full-Stack Dev', 'Operations'];
 
 const projects = [
   {
@@ -32,6 +27,11 @@ interface AboutProps {
 }
 
 const About = ({ introComplete = true }: AboutProps) => {
+  // Assembled at runtime to keep the address out of static HTML (matches Contact).
+  const emailUser = ['Douglas', 'Mitchell'].join('');
+  const emailDomain = ['Reliant', 'AI.org'].join('');
+  const emailAddress = `${emailUser}@${emailDomain}`;
+
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
@@ -154,15 +154,14 @@ const About = ({ introComplete = true }: AboutProps) => {
                   </div>
                 </div>
 
-                {/* Credentials Grid */}
+                {/* Credentials */}
                 <div className="grid grid-cols-2 gap-3 mb-8">
-                  {credentials.map((item, i) => (
+                  {credentials.map((label, i) => (
                     <div 
                       key={i} 
-                      className="flex items-center gap-2 p-3 bg-white dark:bg-black/40 rounded-xl border border-gray-100 dark:border-white/5 transition-all duration-300 hover:border-orange/30 hover:bg-orange/5"
+                      className="p-3 bg-white dark:bg-black/40 rounded-xl border border-gray-100 dark:border-white/5 transition-all duration-300 hover:border-orange/30 hover:bg-orange/5"
                     >
-                      <item.icon size={18} className="text-orange flex-shrink-0" />
-                      <span className="font-opensans text-sm text-gray-700 dark:text-white/80">{item.label}</span>
+                      <span className="font-opensans text-sm text-gray-700 dark:text-white/80">{label}</span>
                     </div>
                   ))}
                 </div>
@@ -181,7 +180,7 @@ const About = ({ introComplete = true }: AboutProps) => {
                 {/* CTA Buttons - subtle hover effects */}
                 <div className="space-y-3">
                   <a
-                    href="mailto:DouglasMitchell@ReliantAI.org"
+                    href={`mailto:${emailAddress}`}
                     className="group flex items-center justify-center gap-2 w-full px-6 py-3 bg-orange text-white font-opensans font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-orange/25 hover:scale-[1.02]"
                   >
                     Get in Touch
@@ -266,17 +265,6 @@ const About = ({ introComplete = true }: AboutProps) => {
                     </span>
                   ))}
                 </div>
-              </div>
-
-              {/* Author Note */}
-              <div className="section-reveal p-6 bg-gradient-to-r from-orange/10 to-transparent border-l-4 border-orange rounded-r-2xl transition-all duration-300 hover:from-orange/15">
-                <p className="font-opensans text-sm text-gray-600 dark:text-white/70 italic">
-                  "Confidence isn't about luck, genetics, or pretending you have it together. 
-                  It's a skill your brain can learn, strengthen, and sustain."
-                </p>
-                <p className="font-opensans text-xs text-gray-500 dark:text-white/50 mt-2">
-                  — From "The Confident Mind" (2025)
-                </p>
               </div>
             </div>
           </div>

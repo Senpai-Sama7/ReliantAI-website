@@ -87,7 +87,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
               progressRef.current.style.width = `${self.progress * 100}%`;
             }
             if (beatIndexRef.current) {
-              beatIndexRef.current.textContent = `Beat ${String(index + 1).padStart(2, '0')} / ${String(beatCount).padStart(2, '0')}`;
+              beatIndexRef.current.textContent = `${String(index + 1).padStart(2, '0')} / ${String(beatCount).padStart(2, '0')}`;
             }
             if (beatTitleRef.current) {
               beatTitleRef.current.textContent = portalWorlds[index]?.title ?? '';
@@ -126,7 +126,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
         id={id}
         ref={rootRef}
         className="scene-portal relative bg-[#050505]"
-        aria-label="Industry worlds scroll story"
+        aria-label="Industries we serve"
       >
         {portalWorlds.map((world) => (
           <article
@@ -163,7 +163,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
       id={id}
       ref={rootRef}
       className="scene-portal relative bg-[#050505]"
-      aria-label="Immersive industry worlds scroll story"
+      aria-label="Industries we serve"
       aria-roledescription="scroll story"
     >
       <div ref={pinRef} className="relative h-screen-dvh overflow-hidden">
@@ -172,17 +172,18 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
         </div>
 
         <div className="absolute top-24 left-6 lg:left-12 z-30 pointer-events-none">
-          <p className="font-opensans text-[10px] uppercase tracking-[0.45em] text-white/50 mb-1">
-            Sector 02 · Transit
+          <p className="font-opensans text-[10px] uppercase tracking-[0.45em] text-white/60 mb-1">
+            Industries we serve
           </p>
           <p className="font-teko text-xl sm:text-2xl lg:text-3xl text-white/80 tracking-wide leading-none">
-            RELIANT<span className="text-orange"> WORLDS</span>
+            BUILT FOR<span className="text-orange"> HOUSTON</span>
           </p>
         </div>
 
-        <div className="absolute top-24 right-6 lg:right-12 z-30 pointer-events-none text-right" aria-live="polite">
-          <p ref={beatIndexRef} className="font-opensans text-[10px] uppercase tracking-[0.4em] text-white/40">
-            Beat 01 / 04
+        {/* Decorative progress readout — kept out of the accessibility tree */}
+        <div className="absolute top-24 right-6 lg:right-12 z-30 pointer-events-none text-right" aria-hidden="true">
+          <p ref={beatIndexRef} className="font-opensans text-[10px] uppercase tracking-[0.4em] text-white/60">
+            01 / 04
           </p>
           <p ref={beatTitleRef} className="font-teko text-xl text-orange">
             {portalWorlds[0]?.title}
@@ -190,7 +191,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
         </div>
 
         <div ref={stageRef} className="absolute inset-0">
-          {portalWorlds.map((world) => (
+          {portalWorlds.map((world, index) => (
             <article
               key={world.id}
               className="story-beat absolute inset-0 overflow-hidden"
@@ -199,7 +200,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
                 src={world.image}
                 alt={world.imageAlt}
                 className="story-beat-image absolute inset-0 w-full h-full object-cover"
-                loading="eager"
+                loading={index === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 draggable={false}
               />
@@ -232,8 +233,8 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
         </div>
 
         <div className="absolute bottom-10 left-6 lg:left-12 z-30 pointer-events-none">
-          <p className="font-opensans text-[10px] uppercase tracking-[0.4em] text-white/35 mb-3">
-            Scroll the corridor · Houston metro
+          <p className="font-opensans text-[10px] uppercase tracking-[0.4em] text-white/60 mb-3">
+            Scroll to explore · Houston metro
           </p>
           <div className="h-px bg-white/10 overflow-hidden rounded-full max-w-xs">
             <div ref={progressRef} className="story-beat-progress h-full bg-orange w-0" />

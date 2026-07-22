@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowDown } from 'lucide-react';
@@ -19,6 +19,16 @@ interface HeroV2Props {
 
 export default function HeroV2({ introComplete = true }: HeroV2Props) {
   const sectionRef = useRef<HTMLElement>(null);
+  // Only mount (and download) the Three.js scene on desktop viewports.
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
   const crownRef = useRef<HTMLElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -158,8 +168,9 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
     scrollToSection('worlds', 0);
   };
 
+  // Keep these aligned with the published claims in index.html meta/FAQ (150+, 98%).
   const stats = [
-    { value: 100, prefix: '', suffix: '+', label: 'Projects Delivered' },
+    { value: 150, prefix: '', suffix: '+', label: 'Projects Delivered' },
     { value: 98, prefix: '', suffix: '%', label: 'Client Satisfaction' },
     { value: 1.5, prefix: '$', suffix: 'M+', label: 'Revenue Generated', decimals: 1 },
   ];
@@ -178,10 +189,12 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
         <div className="absolute bottom-0 right-0 w-[55%] h-[85%] bg-gradient-to-l from-orange/10 via-orange/5 to-transparent dark:from-orange/20 dark:via-orange/10 rounded-full blur-3xl" />
       </div>
 
-      {/* 3D TorusKnot - Lazy loaded to reduce TBT */}
-      <Suspense fallback={<div className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[80%] hidden lg:block" />}>
-        <TorusKnot3D />
-      </Suspense>
+      {/* 3D TorusKnot - desktop only, lazy loaded to reduce TBT */}
+      {isDesktop && (
+        <Suspense fallback={<div className="absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[80%] hidden lg:block" />}>
+          <TorusKnot3D />
+        </Suspense>
+      )}
 
       {/* Spinning Double Orbit Rings */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
@@ -302,7 +315,7 @@ export default function HeroV2({ introComplete = true }: HeroV2Props) {
             {/* Glow effect */}
             <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-orange/0 via-orange/5 to-orange/0" />
             
-            <span className="relative transform group-hover:scale-[1.02] transition-transform duration-300">Enter The Worlds</span>
+            <span className="relative transform group-hover:scale-[1.02] transition-transform duration-300">See Our Work</span>
             <ArrowDown 
               size={18} 
               className="relative transform group-hover:translate-y-0.5 transition-transform duration-300" 

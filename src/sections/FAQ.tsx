@@ -89,8 +89,6 @@ const FAQ = ({ introComplete = true }: FAQProps) => {
       id="faq"
       ref={sectionRef}
       className="relative w-full py-24 lg:py-32 bg-gray-50 dark:bg-dark-100/30 transition-colors duration-500"
-      itemScope
-      itemType="https://schema.org/FAQPage"
     >
       <div className="relative z-10 w-full px-6 lg:px-12 xl:px-24 max-w-4xl mx-auto">
         <div ref={headerRef} className="text-center mb-12">
@@ -106,9 +104,6 @@ const FAQ = ({ introComplete = true }: FAQProps) => {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              itemScope
-              itemProp="mainEntity"
-              itemType="https://schema.org/Question"
               className="faq-item border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden bg-white dark:bg-dark-100/50 transition-all duration-300 hover:border-orange/20 hover:shadow-lg hover:shadow-orange/5"
             >
               <button
@@ -117,10 +112,7 @@ const FAQ = ({ introComplete = true }: FAQProps) => {
                 aria-controls={`faq-answer-${index}`}
                 className="w-full px-6 py-5 flex items-center justify-between text-left group"
               >
-                <span
-                  itemProp="name"
-                  className="font-opensans font-semibold text-gray-900 dark:text-white pr-4 transition-colors duration-300 group-hover:text-orange"
-                >
+                <span className="font-opensans font-semibold text-gray-900 dark:text-white pr-4 transition-colors duration-300 group-hover:text-orange">
                   {faq.question}
                 </span>
                 <ChevronDown
@@ -132,9 +124,6 @@ const FAQ = ({ introComplete = true }: FAQProps) => {
               </button>
               <div
                 id={`faq-answer-${index}`}
-                itemScope
-                itemProp="acceptedAnswer"
-                itemType="https://schema.org/Answer"
                 className="overflow-hidden transition-all duration-500 ease-in-out"
                 style={{
                   display: 'grid',
@@ -143,10 +132,7 @@ const FAQ = ({ introComplete = true }: FAQProps) => {
                 }}
               >
                 <div className="min-h-0">
-                  <p
-                    itemProp="text"
-                    className="px-6 pb-5 text-gray-600 dark:text-white/70 font-opensans leading-relaxed"
-                  >
+                  <p className="px-6 pb-5 text-gray-600 dark:text-white/70 font-opensans leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>

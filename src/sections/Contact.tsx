@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, ChevronDown, Loader2, Shield, Award, Building2 } from 'lucide-react';
+import { Send, Mail, Phone, MapPin, ArrowRight, CheckCircle, ChevronDown, Loader2, Code2, FileCode2 } from 'lucide-react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { submitToWeb3Forms } from '../lib/web3forms';
@@ -37,6 +37,7 @@ const Contact = ({ introComplete = true }: ContactProps) => {
     industry: '',
     message: '',
   });
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof typeof formData, string>>>({});
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
   const ctxRef = useRef<ReturnType<typeof gsap.context> | null>(null);
@@ -99,9 +100,17 @@ const Contact = ({ introComplete = true }: ContactProps) => {
     e.preventDefault();
     const result = contactSchema.safeParse(formData);
     if (!result.success) {
+      const errors: Partial<Record<keyof typeof formData, string>> = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] as keyof typeof formData;
+        if (!errors[key]) errors[key] = issue.message;
+      }
+      setFieldErrors(errors);
+      // Secondary announcement; inline errors are the primary feedback.
       toast.error(result.error.issues[0].message);
       return;
     }
+    setFieldErrors({});
     setIsSubmitting(true);
     try {
       await submitToWeb3Forms({
@@ -124,7 +133,11 @@ const Contact = ({ introComplete = true }: ContactProps) => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const field = e.target.name as keyof typeof formData;
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
   };
 
   const emailUser = ['Douglas', 'Mitchell'].join('');
@@ -132,15 +145,15 @@ const Contact = ({ introComplete = true }: ContactProps) => {
   const emailAddress = `${emailUser}@${emailDomain}`;
 
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: emailAddress, href: `mailto:${emailAddress}` },
-    { icon: Phone, label: 'Phone', value: '(832) 947-7028', href: 'tel:+18329477028' },
-    { icon: MapPin, label: 'Location', value: 'Houston, TX', href: '#' },
+    { icon: Mail, label: 'Email', value: emailAddress, href: `mailto:${emailAddress}`, external: false },
+    { icon: Phone, label: 'Phone', value: '(832) 947-7028', href: 'tel:+18329477028', external: false },
+    { icon: MapPin, label: 'Location', value: 'Houston, TX', href: 'https://www.google.com/maps/place/Houston,+TX', external: true },
   ];
 
   const trustBadges = [
-    { icon: Shield, label: 'BBB Accredited', href: 'https://www.bbb.org' },
-    { icon: Award, label: 'Clutch Top Agency', href: 'https://clutch.co' },
-    { icon: Building2, label: 'Houston Chamber', href: 'https://www.houston.org' },
+    { icon: MapPin, label: 'Houston-Based' },
+    { icon: Code2, label: 'Custom React & TypeScript' },
+    { icon: FileCode2, label: 'Hand-Coded, No Templates' },
   ];
 
   return (
@@ -194,30 +207,44 @@ const Contact = ({ introComplete = true }: ContactProps) => {
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <label className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Your Name *</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all duration-300"
+                    <label htmlFor="contact-name" className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Your Name *</label>
+                    <input type="text" id="contact-name" name="name" value={formData.name} onChange={handleChange} required
+                      aria-invalid={fieldErrors.name ? true : undefined}
+                      aria-describedby={fieldErrors.name ? 'contact-name-error' : undefined}
+                      className={`w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:ring-1 transition-all duration-300 ${
+                        fieldErrors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-200 dark:border-white/10 focus:border-orange focus:ring-orange/20'
+                      }`}
                       placeholder="John Smith" />
+                    {fieldErrors.name && (
+                      <p id="contact-name-error" className="mt-1.5 font-opensans text-xs text-red-500" role="alert">{fieldErrors.name}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Email Address *</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required
-                      className="w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all duration-300"
+                    <label htmlFor="contact-email" className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Email Address *</label>
+                    <input type="email" id="contact-email" name="email" value={formData.email} onChange={handleChange} required
+                      aria-invalid={fieldErrors.email ? true : undefined}
+                      aria-describedby={fieldErrors.email ? 'contact-email-error' : undefined}
+                      className={`w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:ring-1 transition-all duration-300 ${
+                        fieldErrors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-200 dark:border-white/10 focus:border-orange focus:ring-orange/20'
+                      }`}
                       placeholder="john@company.com" />
+                    {fieldErrors.email && (
+                      <p id="contact-email-error" className="mt-1.5 font-opensans text-xs text-red-500" role="alert">{fieldErrors.email}</p>
+                    )}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <label className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Company Name</label>
-                    <input type="text" name="company" value={formData.company} onChange={handleChange}
+                    <label htmlFor="contact-company" className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Company Name</label>
+                    <input type="text" id="contact-company" name="company" value={formData.company} onChange={handleChange}
                       className="w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all duration-300"
                       placeholder="Your Company" />
                   </div>
                   <div>
-                    <label className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Industry</label>
+                    <label htmlFor="contact-industry" className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Industry</label>
                     <div className="relative">
-                      <select name="industry" value={formData.industry} onChange={handleChange}
+                      <select id="contact-industry" name="industry" value={formData.industry} onChange={handleChange}
                         className="w-full pl-4 pr-10 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all duration-300 appearance-none cursor-pointer">
                         <option value="" className="bg-white dark:bg-dark-100">Select Industry</option>
                         <option value="metal" className="bg-white dark:bg-dark-100">Metal Fabrication</option>
@@ -236,10 +263,17 @@ const Contact = ({ introComplete = true }: ContactProps) => {
                 </div>
 
                 <div className="mb-6">
-                  <label className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Tell Us About Your Project *</label>
-                  <textarea name="message" value={formData.message} onChange={handleChange} required rows={5}
-                    className="w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:border-orange focus:ring-1 focus:ring-orange/20 transition-all duration-300 resize-none"
+                  <label htmlFor="contact-message" className="block font-opensans text-sm text-gray-600 dark:text-white/70 mb-2">Tell Us About Your Project *</label>
+                  <textarea id="contact-message" name="message" value={formData.message} onChange={handleChange} required rows={5}
+                    aria-invalid={fieldErrors.message ? true : undefined}
+                    aria-describedby={fieldErrors.message ? 'contact-message-error' : undefined}
+                    className={`w-full px-4 py-3 bg-gray-50 dark:bg-black/50 border rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 focus:ring-1 transition-all duration-300 resize-none ${
+                      fieldErrors.message ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-200 dark:border-white/10 focus:border-orange focus:ring-orange/20'
+                    }`}
                     placeholder="What are your goals? What challenges are you facing?" />
+                  {fieldErrors.message && (
+                    <p id="contact-message-error" className="mt-1.5 font-opensans text-xs text-red-500" role="alert">{fieldErrors.message}</p>
+                  )}
                 </div>
 
                 <button type="submit" disabled={isSubmitting}
@@ -261,7 +295,13 @@ const Contact = ({ introComplete = true }: ContactProps) => {
                 {contactInfo.map((item, index) => {
                   const Icon = item.icon;
                   return (
-                    <a key={index} href={item.href} className="info-reveal flex items-center gap-4 group">
+                    <a
+                      key={index}
+                      href={item.href}
+                      target={item.external ? '_blank' : undefined}
+                      rel={item.external ? 'noopener noreferrer' : undefined}
+                      className="info-reveal flex items-center gap-4 group"
+                    >
                       <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:bg-orange/20 group-hover:scale-105">
                         <Icon size={20} className="text-orange" />
                       </div>
@@ -301,16 +341,13 @@ const Contact = ({ introComplete = true }: ContactProps) => {
             {trustBadges.map((badge, index) => {
               const Icon = badge.icon;
               return (
-                <a
+                <span
                   key={index}
-                  href={badge.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full transition-all duration-300 hover:border-orange/50 hover:shadow-md hover:shadow-orange/10"
+                  className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full"
                 >
-                  <Icon size={16} className="text-orange" />
+                  <Icon size={16} className="text-orange" aria-hidden="true" />
                   <span className="font-opensans text-sm text-gray-600 dark:text-white/70">{badge.label}</span>
-                </a>
+                </span>
               );
             })}
           </div>
