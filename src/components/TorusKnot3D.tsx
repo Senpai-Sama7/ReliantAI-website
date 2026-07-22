@@ -84,7 +84,7 @@ const TorusKnot3D = () => {
       <Canvas
         camera={{ position: [0.35, 0, 7], fov: 42 }}
         dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
         frameloop={isVisible ? 'always' : 'demand'}
         style={{ background: 'transparent' }}
       >

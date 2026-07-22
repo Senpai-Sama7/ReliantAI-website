@@ -81,6 +81,12 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     description:
       "Houston's custom web design agency for small businesses — hand-coded React & TypeScript sites for metal fabrication, oilfield, home services & medical practices. 150+ sites built, 98% client satisfaction.",
   },
+  '/portfolio': {
+    path: '/portfolio',
+    title: 'Portfolio | Reliant AI — Houston Web Design Work',
+    description:
+      'Explore live Reliant AI demo sites for Houston trades: Copperline Plumbing, Linework Electric, and Stillair Comfort HVAC. Custom React & TypeScript builds — three sites, zero templates.',
+  },
   '/showcase': {
     path: '/showcase',
     title: 'Video Showcase | Reliant AI — Houston Web Design',

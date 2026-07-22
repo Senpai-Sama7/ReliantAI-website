@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Shield, Award, Zap, Users, TrendingUp, Clock } from 'lucide-react';
+import { ArrowRight, Award, Users, TrendingUp, Clock, MapPin, Code2, FileCode2 } from 'lucide-react';
 import { Toaster } from 'sonner';
 import Navigation from '../components/Navigation';
 import VideoHero from '../sections/VideoHero';
@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ─── Stats bar ────────────────────────────────────────────────────────────────
 const STATS = [
-  { value: '100+', label: 'Projects Delivered', icon: Award },
+  { value: '150+', label: 'Projects Delivered', icon: Award },
   { value: '98%',  label: 'Client Satisfaction', icon: Users },
   { value: '5×',   label: 'Average Lead Increase', icon: TrendingUp },
   { value: '24h',  label: 'Response Guarantee', icon: Clock },
@@ -24,7 +24,7 @@ const CAPABILITIES = [
   {
     number: '01',
     title: 'Custom Web Development',
-    body: 'Hand-coded in React & TypeScript. Zero templates. Blazing-fast Core Web Vitals.',
+    body: 'Hand-coded in React and TypeScript. Zero templates. Built for Core Web Vitals budgets.',
     tags: ['React', 'TypeScript', 'Vite', 'Tailwind'],
   },
   {
@@ -218,9 +218,9 @@ function TrustBar() {
     <div ref={ref} className="bg-[#0a0a0a] border-t border-white/[0.06] py-12">
       <div className="max-w-4xl mx-auto px-8 flex flex-wrap justify-center gap-10">
         {[
-          { icon: Shield, label: 'BBB Accredited Business' },
-          { icon: Award,  label: 'Clutch Top Agency 2025' },
-          { icon: Zap,    label: 'Google Verified Partner' },
+          { icon: MapPin,    label: 'Houston-Based' },
+          { icon: Code2,     label: 'Custom React & TypeScript' },
+          { icon: FileCode2, label: 'Hand-Coded, No Templates' },
         ].map(({ icon: Icon, label }) => (
           <div key={label} className="trust-item flex items-center gap-3 text-white/30 hover:text-white/60 transition-colors duration-300">
             <Icon size={16} className="text-orange opacity-70" />

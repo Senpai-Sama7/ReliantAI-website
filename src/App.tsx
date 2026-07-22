@@ -5,7 +5,6 @@ import IntroOverlay from './components/IntroOverlay';
 import CookieConsent from './components/CookieConsent';
 import FloatingCTA from './components/FloatingCTA';
 import ExitIntentPopup from './components/ExitIntentPopup';
-import SocialProofToast from './components/SocialProofToast';
 import SmoothScrollProvider from './components/SmoothScrollProvider';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
@@ -98,13 +97,11 @@ function App() {
       {!introComplete && <IntroOverlay onComplete={handleIntroComplete} />}
       <FloatingCTA />
       <ExitIntentPopup />
-      <SocialProofToast />
       <CookieConsent ready={introComplete} />
       <Toaster position="top-right" richColors />
 
       {introComplete && <ImmersiveAtmosphere />}
       {introComplete && <ZoneHud />}
-      <div id="zone-announcer" className="sr-only" aria-live="polite" aria-atomic="true" />
       <ExperienceZoneTracker enabled={introComplete} />
 
       <div className="relative min-h-screen bg-[#f7f7f7] dark:bg-[#0a0a0a] text-gray-900 dark:text-white overflow-x-hidden">

@@ -26,30 +26,6 @@ html.lenis {
   background: radial-gradient(circle at center, var(--tw-gradient-from), var(--tw-gradient-to));
 }
 
-/* Custom cursor styles */
-.custom-cursor {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ff6e00;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.1s ease-out, opacity 0.2s ease;
-  mix-blend-mode: difference;
-}
-
-.custom-cursor.hover {
-  transform: scale(2);
-  background: rgba(255, 110, 0, 0.1);
-}
-
-@supports not (mix-blend-mode: difference) {
-  .custom-cursor {
-    border-color: var(--orange);
-  }
-}
-
 /* Magnetic button effect */
 .magnetic-wrap {
   position: relative;
@@ -371,19 +347,6 @@ html.lenis {
 
 .cta-shine:hover::after {
   transform: translateX(100%);
-}
-
-/* Smooth scrollbar for Lenis */
-html.lenis {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
 }
 
 /* Stage visual transitions */

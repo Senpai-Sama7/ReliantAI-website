@@ -1,5 +1,16 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { prefersReducedMotion } from '@/lib/motion';
+
+const DESKTOP_FINE_POINTER_QUERY = '(min-width: 1024px) and (pointer: fine)';
+
+function isDesktopFinePointer(): boolean {
+  return (
+    typeof window !== 'undefined' && window.matchMedia(DESKTOP_FINE_POINTER_QUERY).matches
+  );
+}
+
+/** Only this many particles participate in the O(n²) mesh-line pass. */
+const MAX_LINE_PARTICLES = 110;
 
 interface Particle {
   x: number;
@@ -22,6 +33,8 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
   const lastScrollRef = useRef(0);
   const densityRef = useRef(density);
   const glowRef = useRef(moodGlow);
+  // Ambient particle field is a desktop garnish — phones/tablets skip it entirely.
+  const [enabled, setEnabled] = useState(() => isDesktopFinePointer());
 
   useEffect(() => {
     densityRef.current = density;
@@ -32,6 +45,14 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
   }, [moodGlow]);
 
   useEffect(() => {
+    const media = window.matchMedia(DESKTOP_FINE_POINTER_QUERY);
+    const update = () => setEnabled(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
     const canvas = canvasRef.current;
     if (!canvas || prefersReducedMotion()) return;
 
@@ -113,11 +134,12 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
         ctx.fill();
       }
 
-      // Neural mesh lines — metaverse fabric
+      // Connective mesh lines — capped subset keeps the pair count bounded
       ctx.lineWidth = 0.5;
-      for (let i = 0; i < particles.length; i++) {
+      const lineCount = Math.min(particles.length, MAX_LINE_PARTICLES);
+      for (let i = 0; i < lineCount; i++) {
         const a = particles[i];
-        for (let j = i + 1; j < particles.length; j++) {
+        for (let j = i + 1; j < lineCount; j++) {
           const b = particles[j];
           const d = Math.hypot(a.x - b.x, a.y - b.y);
           if (d < 90) {
@@ -146,9 +168,9 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('scroll', onScroll);
     };
-  }, []);
+  }, [enabled]);
 
-  if (prefersReducedMotion()) return null;
+  if (!enabled || prefersReducedMotion()) return null;
 
   return (
     <canvas

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Linework Electric — Houston Licensed Electricians | TECL-28441</title>
 <meta name="description" content="Houston electrical contractor. Panel upgrades, service calls, and new construction that pass inspection. Licensed TECL-28441. Serving Houston, Bellaire, West U, Memorial, Cypress.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -370,22 +372,22 @@ h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.95;letter-spaci
         <div class="form-row" id="row-name">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" autocomplete="name" required>
-          <p class="form-error">Enter your full name.</p>
+          <p class="form-error" role="alert">Enter your full name.</p>
         </div>
         <div class="form-row" id="row-phone">
           <label for="phone">Phone</label>
           <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" required>
-          <p class="form-error">Enter a phone number we can reach (10 digits).</p>
+          <p class="form-error" role="alert">Enter a phone number we can reach (10 digits).</p>
         </div>
         <div class="form-row" id="row-email">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" autocomplete="email" required>
-          <p class="form-error">Enter a valid email address.</p>
+          <p class="form-error" role="alert">Enter a valid email address.</p>
         </div>
         <div class="form-row" id="row-zip">
           <label for="zip">Job ZIP</label>
           <input type="text" id="zip" name="zip" inputmode="numeric" maxlength="5" pattern="[0-9]{5}" required>
-          <p class="form-error">Enter a 5-digit Houston-area ZIP.</p>
+          <p class="form-error" role="alert">Enter a 5-digit Houston-area ZIP.</p>
         </div>
         <div class="form-row" id="row-service">
           <label for="service">Work needed</label>
@@ -397,12 +399,12 @@ h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.95;letter-spaci
             <option value="ev">EV charger</option>
             <option value="other">Other / not sure</option>
           </select>
-          <p class="form-error">Choose the type of work needed.</p>
+          <p class="form-error" role="alert">Choose the type of work needed.</p>
         </div>
         <div class="form-row" id="row-details">
           <label for="details">Job details</label>
           <textarea id="details" name="details" required placeholder="Address, symptoms, preferred visit window…"></textarea>
-          <p class="form-error">Describe the job in at least a short sentence.</p>
+          <p class="form-error" role="alert">Describe the job in at least a short sentence.</p>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">Send estimate request</button>

@@ -2,65 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { prefersReducedMotion } from '@/lib/motion';
 
-// Different complete design styles for RELIANT AI
-const designStyles = [
-  {
-    name: 'Bold Industrial',
-    fontClass: 'font-teko',
-    fontSize: 'text-5xl sm:text-7xl md:text-8xl lg:text-[10rem]',
-    letterSpacing: '-0.03em',
-    textTransform: 'uppercase',
-    colorReliant: 'text-gray-900 dark:text-white',
-    colorAI: 'text-orange',
-    weight: 'font-bold',
-    extras: '',
-  },
-  {
-    name: 'Elegant Modern',
-    fontClass: 'font-opensans',
-    fontSize: 'text-4xl sm:text-6xl md:text-7xl lg:text-[8rem]',
-    letterSpacing: '0.15em',
-    textTransform: 'uppercase',
-    colorReliant: 'text-orange',
-    colorAI: 'text-gray-700 dark:text-gray-300',
-    weight: 'font-light',
-    extras: 'tracking-[0.2em]',
-  },
+const FULL_TEXT = 'RELIANT AI';
 
-  {
-    name: 'Minimal Outline',
-    fontClass: 'font-teko',
-    fontSize: 'text-5xl sm:text-7xl md:text-8xl lg:text-[10rem]',
-    letterSpacing: '0.05em',
-    textTransform: 'uppercase',
-    colorReliant: 'text-transparent dark:text-transparent',
-    colorAI: 'text-transparent dark:text-transparent',
-    weight: 'font-bold',
-    extras: 'style-text-outline',
-  },
-  {
-    name: 'Neon Glow',
-    fontClass: 'font-teko',
-    fontSize: 'text-5xl sm:text-7xl md:text-8xl lg:text-[10rem]',
-    letterSpacing: '-0.02em',
-    textTransform: 'uppercase',
-    colorReliant: 'text-white',
-    colorAI: 'text-orange',
-    weight: 'font-bold',
-    extras: 'style-neon-glow',
-  },
-];
-
+/** Types the wordmark once, then settles into the Bold Industrial lockup. */
 const LogoReveal = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
   const [reducedMotion] = useState(() => prefersReducedMotion());
   const [displayText, setDisplayText] = useState(() =>
-    prefersReducedMotion() ? 'RELIANT AI' : ''
+    prefersReducedMotion() ? FULL_TEXT : ''
   );
-  const [currentStyleIndex, setCurrentStyleIndex] = useState(0);
-  const fullText = 'RELIANT AI';
+  const [settled, setSettled] = useState(() => prefersReducedMotion());
 
   useEffect(() => {
     if (reducedMotion) {
@@ -73,45 +26,24 @@ const LogoReveal = () => {
 
     let timeout: ReturnType<typeof setTimeout>;
     let currentIndex = 0;
-    let isDeleting = false;
-    let isTypingActive = false;
-
-    const startTyping = () => {
-      isTypingActive = true;
-      typeEffect();
-    };
+    let active = true;
 
     const typeEffect = () => {
-      if (!isTypingActive) return;
-      if (!isDeleting) {
-        // Typing
-        if (currentIndex < fullText.length) {
-          setDisplayText(fullText.slice(0, currentIndex + 1));
-          currentIndex++;
-          timeout = setTimeout(typeEffect, 150);
-        } else {
-          // Finished typing - pause then delete
-          timeout = setTimeout(() => {
-            isDeleting = true;
-            typeEffect();
-          }, 3000);
-        }
+      if (!active) return;
+      if (currentIndex < FULL_TEXT.length) {
+        setDisplayText(FULL_TEXT.slice(0, currentIndex + 1));
+        currentIndex++;
+        timeout = setTimeout(typeEffect, 150);
       } else {
-        // Deleting
-        if (currentIndex > 0) {
-          setDisplayText(fullText.slice(0, currentIndex - 1));
-          currentIndex--;
-          timeout = setTimeout(typeEffect, 80);
-        } else {
-          // Finished deleting - switch to completely different style
-          isDeleting = false;
-          setCurrentStyleIndex((prev) => (prev + 1) % designStyles.length);
-          timeout = setTimeout(typeEffect, 500);
-        }
+        // Finished typing — hold briefly, then retire the cursor.
+        timeout = setTimeout(() => {
+          if (!active) return;
+          setSettled(true);
+        }, 1200);
       }
     };
 
-    timeout = setTimeout(startTyping, 400);
+    timeout = setTimeout(typeEffect, 400);
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -130,63 +62,51 @@ const LogoReveal = () => {
     }, containerRef);
 
     return () => {
-      isTypingActive = false;
+      active = false;
       clearTimeout(timeout);
       ctx.revert();
     };
   }, [reducedMotion]);
 
-  const currentStyle = designStyles[currentStyleIndex];
   const reliantPart = displayText.slice(0, 7);
   const aiPart = displayText.slice(7);
 
   return (
     <div className="flex flex-col items-center gap-3">
       {/* Logo Container - explicit height to prevent CLS */}
-      <div 
+      <div
         ref={containerRef}
         className="relative inline-block max-w-full h-[80px] sm:h-[120px] md:h-[150px] lg:h-[180px]"
       >
-        {/* Main text with typewriter effect and changing styles */}
         <div className="relative flex items-center justify-center h-full">
           <span
-            className={`${currentStyle.fontClass} ${currentStyle.fontSize} ${currentStyle.weight} ${currentStyle.extras} transition-all duration-300`}
-            style={{ 
-              letterSpacing: currentStyle.letterSpacing,
-              lineHeight: 0.85,
-              textTransform: currentStyle.textTransform as React.CSSProperties['textTransform'],
-            }}
+            className="font-teko font-bold uppercase text-5xl sm:text-7xl md:text-8xl lg:text-[10rem]"
+            style={{ letterSpacing: '-0.03em', lineHeight: 0.85 }}
           >
             {reliantPart && (
-              <span className={currentStyle.colorReliant}>
-                {reliantPart}
-              </span>
+              <span className="text-gray-900 dark:text-white">{reliantPart}</span>
             )}
-            {aiPart && (
-              <span className={currentStyle.colorAI}>
-                {aiPart}
-              </span>
-            )}
+            {aiPart && <span className="text-orange">{aiPart}</span>}
           </span>
-          {/* Blinking cursor (hidden for reduced motion) */}
-          {!reducedMotion && (
-            <span 
+          {/* Blinking cursor — retired once typing settles */}
+          {!reducedMotion && !settled && (
+            <span
               ref={cursorRef}
-              className="text-orange text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-light ml-1"
+              className="text-orange text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-normal ml-1"
               style={{ lineHeight: 0.85 }}
             >
               |
             </span>
           )}
         </div>
-        
+
         {/* Animated underline */}
-        <div 
+        <div
           ref={lineRef}
           className="absolute -bottom-2 left-0 right-0 h-[3px] origin-left"
           style={{
-            background: 'linear-gradient(90deg, transparent 0%, #f97316 20%, #f97316 80%, transparent 100%)',
-            opacity: 0
+            background: 'linear-gradient(90deg, transparent 0%, #ff6e00 20%, #ff6e00 80%, transparent 100%)',
+            opacity: 0,
           }}
         />
       </div>
@@ -199,20 +119,6 @@ const LogoReveal = () => {
         </span>
         <div className="h-px w-8 bg-orange/50" />
       </div>
-
-      <style>{`
-        .style-text-outline {
-          -webkit-text-stroke: 2px #f97316;
-        }
-        
-        .style-neon-glow {
-          text-shadow: 
-            0 0 10px rgba(249, 115, 22, 0.8),
-            0 0 20px rgba(249, 115, 22, 0.6),
-            0 0 40px rgba(249, 115, 22, 0.4),
-            0 0 80px rgba(249, 115, 22, 0.2);
-        }
-      `}</style>
     </div>
   );
 };

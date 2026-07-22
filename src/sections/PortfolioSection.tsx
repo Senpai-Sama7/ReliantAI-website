@@ -129,7 +129,7 @@ export default function PortfolioSection() {
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
               </div>
               <div className="flex-1 text-center">
-                <span className="text-[10px] font-opensans text-white/20">reliantai.org{active.previewUrl}</span>
+                <span className="text-[10px] font-opensans text-white/55">reliantai.org{active.previewUrl}</span>
               </div>
               <ExternalLink size={12} className="text-white/20" />
             </div>
@@ -167,6 +167,17 @@ export default function PortfolioSection() {
           </div>
         </div>
 
+        {/* Link to the full portfolio page */}
+        <div className="port-fade mt-6 flex justify-end">
+          <a
+            href="/portfolio"
+            className="group inline-flex items-center gap-2 px-5 py-3 border border-white/15 text-white/80 font-opensans text-sm font-semibold hover:border-orange hover:text-white transition-colors duration-150"
+          >
+            See the full portfolio breakdown
+            <ArrowUpRight size={14} className="text-orange transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        </div>
+
         {/* Info cards below preview */}
         <div className="port-fade mt-8 grid grid-cols-1 lg:grid-cols-3 gap-px bg-white/[0.06]">
           {SITES.map(site => (
@@ -190,13 +201,13 @@ export default function PortfolioSection() {
                 </span>
                 <div className="min-w-0">
                   <div className="font-teko text-sm font-bold text-white">{site.title}</div>
-                  <div className="font-opensans text-[10px] text-white/35 mt-0.5">{site.tagline}</div>
+                  <div className="font-opensans text-[10px] text-white/60 mt-0.5">{site.tagline}</div>
                 </div>
                 <ArrowUpRight size={14} className="ml-auto text-white/20 group-hover:text-orange transition-colors shrink-0" />
               </div>
               <ul className="space-y-1.5">
                 {site.highlights.map(h => (
-                  <li key={h} className="font-opensans text-[11px] text-white/40 leading-snug pl-3 border-l border-white/10">
+                  <li key={h} className="font-opensans text-[11px] text-white/60 leading-snug pl-3 border-l border-white/10">
                     {h}
                   </li>
                 ))}

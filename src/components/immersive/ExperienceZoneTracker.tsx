@@ -43,11 +43,8 @@ export default function ExperienceZoneTracker({ enabled = true }: ExperienceZone
       document.documentElement.setAttribute('data-experience-zone', id);
       emitZoneChange(zone);
       telegraphZone(prev || 'none', `${zone.sector} ${zone.label}`, 'scroll-trigger');
-
-      const announcer = document.getElementById('zone-announcer');
-      if (announcer) {
-        announcer.textContent = `Sector ${zone.sector} ${zone.label}. ${zone.tagline}`;
-      }
+      // Zone changes are decorative; no live-region announcements — screen
+      // readers already get section landmarks/headings while scrolling.
     }
 
     function setup() {

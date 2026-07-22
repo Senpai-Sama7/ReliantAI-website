@@ -1,16 +1,53 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import gsap from 'gsap';
+import { prefersReducedMotion } from '@/lib/motion';
+
+const INTRO_SEEN_KEY = 'reliant-intro-seen';
+
+function hasSeenIntro(): boolean {
+  try {
+    return window.sessionStorage.getItem(INTRO_SEEN_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function markIntroSeen(): void {
+  try {
+    window.sessionStorage.setItem(INTRO_SEEN_KEY, '1');
+  } catch {
+    // Storage unavailable (private mode) — intro just plays again next visit.
+  }
+}
 
 const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
-  const [show, setShow] = useState(true);
+  // Bypass entirely for reduced motion and repeat visits in the same session.
+  const [show, setShow] = useState(() => !prefersReducedMotion() && !hasSeenIntro());
   const pathsRef = useRef<SVGGElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const completedRef = useRef(false);
+
+  const finish = useCallback(() => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onComplete();
+    setShow(false);
+  }, [onComplete]);
+
+  const handleSkip = useCallback(() => {
+    tlRef.current?.kill();
+    finish();
+  }, [finish]);
 
   useEffect(() => {
-    const failsafe = setTimeout(() => {
-      setShow(false);
-      onComplete();
-    }, 5000);
+    if (!show) {
+      finish();
+      return;
+    }
+
+    markIntroSeen();
+
+    const failsafe = setTimeout(finish, 5000);
 
     // Set up stroke dash for drawing effect
     if (pathsRef.current) {
@@ -25,9 +62,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
     const tl = gsap.timeline({
       onComplete: () => {
         clearTimeout(failsafe);
-        // Ensure state is updated before unmounting
-        onComplete();
-        setShow(false);
+        finish();
       },
     });
     tlRef.current = tl;
@@ -44,7 +79,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
       clearTimeout(failsafe);
       tlRef.current?.kill();
     };
-  }, [onComplete]);
+  }, [show, finish]);
 
   if (!show) return null;
 
@@ -53,7 +88,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
       {/* Grid overlay */}
       <div className="absolute inset-0 opacity-10">
         <div className="w-full h-full" style={{
-          backgroundImage: 'linear-gradient(#f9731620 1px, transparent 1px), linear-gradient(90deg, #f9731620 1px, transparent 1px)',
+          backgroundImage: 'linear-gradient(#ff6e0020 1px, transparent 1px), linear-gradient(90deg, #ff6e0020 1px, transparent 1px)',
           backgroundSize: '40px 40px'
         }} />
       </div>
@@ -81,8 +116,8 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
             <svg className="absolute inset-0 w-full h-full" viewBox="0 0 480 240" preserveAspectRatio="xMidYMax slice">
               <defs>
                 <linearGradient id="skylineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#f97316" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#f97316" stopOpacity="0.3" />
+                  <stop offset="0%" stopColor="#ff6e00" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#ff6e00" stopOpacity="0.3" />
                 </linearGradient>
               </defs>
               <g ref={pathsRef} fill="none" stroke="url(#skylineGrad)" strokeWidth="1.5" strokeLinecap="round">
@@ -130,6 +165,15 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
           </div>
         </div>
       </div>
+
+      {/* Skip intro */}
+      <button
+        type="button"
+        onClick={handleSkip}
+        className="absolute bottom-6 right-6 z-10 px-4 py-2 font-opensans text-xs uppercase tracking-[0.2em] text-white/60 border border-white/20 rounded-full transition-colors duration-200 hover:text-white hover:border-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange"
+      >
+        Skip intro
+      </button>
     </div>
   );
 };

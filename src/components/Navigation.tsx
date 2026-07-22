@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { scrollToSection } from '@/lib/scroll';
@@ -6,8 +6,13 @@ import { getLenisInstance } from '@/lib/lenis';
 import { onZoneChange } from '@/lib/experienceBus';
 import type { ExperienceZoneId } from '@/data/experienceZones';
 
-const NAV_ITEMS: { label: string; id: ExperienceZoneId }[] = [
+// 'portfolio' is a home-page section but not an experience zone, so it never
+// receives zone-driven active highlighting.
+type NavSectionId = ExperienceZoneId | 'portfolio';
+
+const NAV_ITEMS: { label: string; id: NavSectionId }[] = [
   { label: 'Work', id: 'work' },
+  { label: 'Portfolio', id: 'portfolio' },
   { label: 'Services', id: 'services' },
   { label: 'About', id: 'about' },
   { label: 'FAQ', id: 'faq' },
@@ -27,6 +32,8 @@ const Navigation = ({ darkHero }: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<ExperienceZoneId>('hero');
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
 
   const isDarkHeroPage =
     darkHero ??
@@ -68,6 +75,52 @@ const Navigation = ({ darkHero }: NavigationProps) => {
       html.style.overflow = prevHtmlOverflow;
       body.style.overflow = prevBodyOverflow;
       lenis?.start();
+    };
+  }, [isMobileMenuOpen]);
+
+  // Keyboard handling while the mobile menu is open: Escape closes, Tab is
+  // trapped inside the overlay. Focus moves into the menu on open and back to
+  // the toggle button on close.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const menu = mobileMenuRef.current;
+    const toggleButton = menuToggleRef.current;
+    const getFocusable = () =>
+      Array.from(
+        menu?.querySelectorAll<HTMLElement>('button, [href]') ?? []
+      ).filter((el) => !el.hasAttribute('disabled'));
+
+    getFocusable()[0]?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+
+      const focusable = getFocusable();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+
+      if (e.shiftKey) {
+        if (active === first || !menu?.contains(active)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else if (active === last || !menu?.contains(active)) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      toggleButton?.focus();
     };
   }, [isMobileMenuOpen]);
 
@@ -154,6 +207,7 @@ const Navigation = ({ darkHero }: NavigationProps) => {
               </a>
               <ThemeToggle />
               <button
+                ref={menuToggleRef}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className={`p-2 transition-transform duration-300 hover:scale-110 ${
                   onDarkSurface ? 'text-white' : 'text-gray-900 dark:text-white'
@@ -170,6 +224,10 @@ const Navigation = ({ darkHero }: NavigationProps) => {
 
       {/* Mobile Menu */}
       <div
+        ref={mobileMenuRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site navigation"
         className={`fixed inset-0 z-[95] bg-white/98 dark:bg-black/98 backdrop-blur-xl transition-all duration-500 lg:hidden overflow-y-auto ${
           isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}

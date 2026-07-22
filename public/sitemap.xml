@@ -13,6 +13,12 @@
     </image:image>
   </url>
   <url>
+    <loc>https://www.reliantai.org/portfolio</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.reliantai.org/showcase</loc>
     <lastmod>2026-06-08</lastmod>
     <changefreq>monthly</changefreq>

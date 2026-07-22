@@ -22,7 +22,7 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'hero',
     sector: '01',
-    label: 'ORIGIN',
+    label: 'HOME',
     tagline: 'Reliant AI · Houston',
     mood: 'dawn',
     glow: 'rgba(255, 110, 0, 0.22)',
@@ -31,8 +31,8 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'worlds',
     sector: '02',
-    label: 'TRANSIT',
-    tagline: 'Industry corridors',
+    label: 'INDUSTRIES',
+    tagline: 'Who we build for',
     mood: 'void',
     glow: 'rgba(255, 110, 0, 0.35)',
     particleDensity: 1.4,
@@ -40,8 +40,8 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'work',
     sector: '03',
-    label: 'PROOF',
-    tagline: 'Case study chambers',
+    label: 'WORK',
+    tagline: 'Case studies',
     mood: 'forge',
     glow: 'rgba(255, 140, 40, 0.28)',
     particleDensity: 1.1,
@@ -49,7 +49,7 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'services',
     sector: '04',
-    label: 'CAPABILITIES',
+    label: 'SERVICES',
     tagline: 'What we build',
     mood: 'lab',
     glow: 'rgba(255, 110, 0, 0.18)',
@@ -58,8 +58,8 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'testimonials',
     sector: '05',
-    label: 'SIGNAL',
-    tagline: 'Client resonance',
+    label: 'RESULTS',
+    tagline: 'Client outcomes',
     mood: 'signal',
     glow: 'rgba(255, 110, 0, 0.3)',
     particleDensity: 1.2,
@@ -67,8 +67,8 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'about',
     sector: '06',
-    label: 'CREW',
-    tagline: 'The architect',
+    label: 'ABOUT',
+    tagline: 'Who you work with',
     mood: 'archive',
     glow: 'rgba(200, 200, 220, 0.12)',
     particleDensity: 0.7,
@@ -76,8 +76,8 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'faq',
     sector: '07',
-    label: 'INTEL',
-    tagline: 'Mission briefing',
+    label: 'FAQ',
+    tagline: 'Common questions',
     mood: 'intel',
     glow: 'rgba(255, 110, 0, 0.14)',
     particleDensity: 0.65,
@@ -85,8 +85,8 @@ export const experienceZones: ExperienceZone[] = [
   {
     id: 'contact',
     sector: '08',
-    label: 'DOCK',
-    tagline: 'Initiate project',
+    label: 'CONTACT',
+    tagline: 'Start your project',
     mood: 'beacon',
     glow: 'rgba(255, 110, 0, 0.42)',
     particleDensity: 1.3,
