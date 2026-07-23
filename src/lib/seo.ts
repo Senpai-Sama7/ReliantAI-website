@@ -117,5 +117,11 @@ const NOT_FOUND_SEO: RouteSeo = {
 /** Resolves and applies SEO for a given pathname. Unknown paths are treated as 404. */
 export function applyRouteSeo(pathname: string): void {
   const known = ROUTE_SEO[pathname];
-  setPageSeo(known ?? NOT_FOUND_SEO);
+  if (known) {
+    setPageSeo(known);
+    return;
+  }
+  // Keep the real unknown path in the URL/meta (noindex) instead of canonicalizing to /404,
+  // which would create a soft-404 signal for crawlers that execute JS.
+  setPageSeo({ ...NOT_FOUND_SEO, path: pathname || '/404' });
 }

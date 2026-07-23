@@ -24,6 +24,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
   // Bypass entirely for reduced motion and repeat visits in the same session.
   const [show, setShow] = useState(() => !prefersReducedMotion() && !hasSeenIntro());
   const pathsRef = useRef<SVGGElement>(null);
+  const skipButtonRef = useRef<HTMLButtonElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const completedRef = useRef(false);
 
@@ -46,8 +47,22 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
     }
 
     markIntroSeen();
+    skipButtonRef.current?.focus();
 
     const failsafe = setTimeout(finish, 5000);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        handleSkip();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      // Only the skip control is focusable — keep Tab from escaping under the overlay.
+      e.preventDefault();
+      skipButtonRef.current?.focus();
+    };
+    document.addEventListener('keydown', handleKeyDown);
 
     // Set up stroke dash for drawing effect
     if (pathsRef.current) {
@@ -77,16 +92,22 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
 
     return () => {
       clearTimeout(failsafe);
+      document.removeEventListener('keydown', handleKeyDown);
       tlRef.current?.kill();
     };
-  }, [show, finish]);
+  }, [show, finish, handleSkip]);
 
   if (!show) return null;
 
   return (
-    <div className="intro-overlay fixed inset-0 z-[9999] bg-[#0a0a0a] overflow-hidden">
+    <div
+      className="intro-overlay fixed inset-0 z-[9999] bg-[#0a0a0a] overflow-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Site introduction"
+    >
       {/* Grid overlay */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-10" aria-hidden="true">
         <div className="w-full h-full" style={{
           backgroundImage: 'linear-gradient(#ff6e0020 1px, transparent 1px), linear-gradient(90deg, #ff6e0020 1px, transparent 1px)',
           backgroundSize: '40px 40px'
@@ -101,7 +122,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
         </div>
 
         {/* Website wireframe with Houston skyline being sketched */}
-        <div className="intro-wireframe w-[min(320px,calc(100vw-2rem))] sm:w-[480px] aspect-[16/10] border border-orange/30 rounded-lg overflow-hidden bg-black/60">
+        <div className="intro-wireframe w-[min(320px,calc(100vw-2rem))] sm:w-[480px] aspect-[16/10] border border-orange/30 rounded-lg overflow-hidden bg-black/60" aria-hidden="true">
           {/* Browser chrome */}
           <div className="h-6 bg-white/5 border-b border-orange/20 flex items-center px-2 gap-1.5">
             <div className="w-2 h-2 rounded-full bg-red-500/60" />
@@ -168,6 +189,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
 
       {/* Skip intro */}
       <button
+        ref={skipButtonRef}
         type="button"
         onClick={handleSkip}
         className="absolute z-10 safe-bottom safe-right px-4 py-2 min-h-11 font-opensans text-xs uppercase tracking-[0.2em] text-white/60 border border-white/20 rounded-full transition-colors duration-200 hover:text-white hover:border-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange"

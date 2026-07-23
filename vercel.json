@@ -2,6 +2,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm ci",
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -84,6 +85,28 @@
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://api.web3forms.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://raw.githack.com; worker-src blob: 'self'; frame-src 'self'; frame-ancestors 'self';"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/privacy-policy/",
+      "destination": "/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/terms-of-service/",
+      "destination": "/terms-of-service",
+      "permanent": true
+    },
+    {
+      "source": "/showcase/",
+      "destination": "/showcase",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/",
+      "destination": "/portfolio",
+      "permanent": true
     }
   ],
   "rewrites": [
