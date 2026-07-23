@@ -12,6 +12,7 @@ import { markScrollLayoutReady } from './lib/scrollLayout';
 import { scrollToSection } from './lib/scroll';
 import { INTRO_LAYOUT_SETTLE_MS } from './hooks/useIntroAnimations';
 import { Toaster } from 'sonner';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 import HeroV2 from './sections/HeroV2';
@@ -176,6 +177,7 @@ function App() {
           </main>
         </ErrorBoundary>
       </div>
+      <Analytics />
     </SmoothScrollProvider>
   );
 }
