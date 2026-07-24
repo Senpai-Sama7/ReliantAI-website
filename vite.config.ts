@@ -48,7 +48,10 @@ function requireWeb3FormsKey(): Plugin {
 }
 
 export default defineConfig({
-  base: '/',
+  // Use a relative base by default so the production build is portable
+  // (works for GitHub Pages / subpath deployments). You can override
+  // with VITE_BASE if you need an absolute root path.
+  base: process.env.VITE_BASE || './',
   plugins: [react(), requireWeb3FormsKey()],
   resolve: {
     alias: {
