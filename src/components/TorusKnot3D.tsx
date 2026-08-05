@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import type { Mesh } from 'three';
 import { useTheme } from '@/hooks/useTheme';
+import { loadVendorThree } from '@/lib/load-three';
 
 const MetallicObject = ({ isDark }: { isDark: boolean }) => {
   const meshRef = useRef<Mesh>(null);
@@ -47,7 +48,8 @@ const SceneLights = ({ isDark }: { isDark: boolean }) => {
 const TorusKnot3D = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDark } = useTheme();
-  const [isVisible, setIsVisible] = useState(true);
+  // start hidden to avoid mounting heavy canvas on first paint
+  const [isVisible, setIsVisible] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -67,7 +69,24 @@ const TorusKnot3D = () => {
       { threshold: 0.08 }
     );
     observer.observe(node);
-    return () => observer.disconnect();
+
+    // Pre-request the vendor-three chunk when the container is near the viewport
+    const preloader = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // fire-and-forget the vendor chunk loader; loader is idempotent
+          loadVendorThree().catch(() => {});
+          preloader.disconnect();
+        }
+      });
+    }, { rootMargin: '400px' });
+
+    preloader.observe(node);
+
+    return () => {
+      observer.disconnect();
+      preloader.disconnect();
+    };
   }, []);
 
   if (prefersReducedMotion) {
@@ -81,15 +100,17 @@ const TorusKnot3D = () => {
       aria-hidden="true"
     >
       <div className="absolute inset-0 bg-gradient-to-l from-orange/15 via-orange/5 to-transparent dark:from-orange/25 dark:via-orange/10 rounded-full blur-2xl" />
-      <Canvas
-        camera={{ position: [0.35, 0, 7], fov: 42 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
-        frameloop={isVisible ? 'always' : 'demand'}
-        style={{ background: 'transparent' }}
-      >
-        <SceneLights isDark={isDark} />
-      </Canvas>
+      {isVisible && (
+        <Canvas
+          camera={{ position: [0.35, 0, 7], fov: 42 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
+          frameloop="always"
+          style={{ background: 'transparent' }}
+        >
+          <SceneLights isDark={isDark} />
+        </Canvas>
+      )}
     </div>
   );
 };
