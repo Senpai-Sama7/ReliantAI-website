@@ -59,42 +59,52 @@ const CountUp = ({
     if (!element || hasAnimatedRef.current) return;
 
     // Reserve current size to avoid layout shift
-    const rect = element.getBoundingClientRect();
+    // Use a stable placeholder text measuring to avoid measuring before DOM ready
+    const placeholder = document.createElement('span');
+    placeholder.style.visibility = 'hidden';
+    placeholder.style.position = 'absolute';
+    placeholder.style.whiteSpace = 'nowrap';
+    placeholder.innerText = initialDisplay;
+    document.body.appendChild(placeholder);
+    const rect = placeholder.getBoundingClientRect();
     if (rect && rect.width > 0) {
       element.style.minWidth = `${Math.ceil(rect.width)}px`;
       element.style.minHeight = `${Math.ceil(rect.height)}px`;
       element.style.display = element.style.display || 'inline-block';
     }
+    document.body.removeChild(placeholder);
 
     const obj = { value: 0 };
+
+    const onEnter = () => {
+      if (hasAnimatedRef.current) return;
+      hasAnimatedRef.current = true;
+
+      gsap.to(obj, {
+        value: numericValue,
+        duration,
+        ease: 'power2.out',
+        onUpdate: () => {
+          const formatted = decimals > 0 ? obj.value.toFixed(decimals) : Math.round(obj.value).toString();
+          setDisplayValue(`${displayPrefix}${formatted}${displaySuffix}`);
+        },
+      });
+    };
 
     const trigger = ScrollTrigger.create({
       trigger: element,
       start: 'top 90%',
       once: true,
-      onEnter: () => {
-        if (hasAnimatedRef.current) return;
-        hasAnimatedRef.current = true;
-
-        gsap.to(obj, {
-          value: numericValue,
-          duration,
-          ease: 'power2.out',
-          onUpdate: () => {
-            const formatted = decimals > 0 ? obj.value.toFixed(decimals) : Math.round(obj.value).toString();
-            setDisplayValue(`${displayPrefix}${formatted}${displaySuffix}`);
-          },
-        });
-      },
+      onEnter,
     });
 
     return () => {
       try { trigger.kill(); } catch {}
     };
-  }, [numericValue, displayPrefix, displaySuffix, duration, decimals]);
+  }, [initialDisplay, numericValue, displayPrefix, displaySuffix, duration, decimals]);
 
   return (
-    <span ref={elementRef} className={className}>
+    <span ref={elementRef} className={className} aria-hidden="false">
       {displayValue || `${displayPrefix}${numericValue}${displaySuffix}`}
     </span>
   );
