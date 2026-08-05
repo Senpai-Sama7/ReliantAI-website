@@ -32,17 +32,13 @@ const CountUp = ({
 
     if (typeof end === 'string') {
       const match = end.match(/[-+]?[\d.]+/);
-      if (match) {
-        numericValue = parseFloat(match[0]);
-      }
+      if (match) numericValue = parseFloat(match[0]);
       if (end.startsWith('+')) displayPrefix = '+';
       else if (end.startsWith('-')) displayPrefix = '-';
       else if (end.startsWith('$')) displayPrefix = '$';
-      
+
       const suffixMatch = end.match(/[^-+\d.\s]+$/);
-      if (suffixMatch && !suffix) {
-        displaySuffix = suffixMatch[0];
-      }
+      if (suffixMatch && !suffix) displaySuffix = suffixMatch[0];
     } else {
       numericValue = end;
     }
@@ -52,9 +48,7 @@ const CountUp = ({
 
   // Compute initial display value (start at 0)
   const initialDisplay = useMemo(() => {
-    const formatted = decimals > 0
-      ? (0).toFixed(decimals)
-      : "0";
+    const formatted = decimals > 0 ? (0).toFixed(decimals) : '0';
     return `${displayPrefix}${formatted}${displaySuffix}`;
   }, [displayPrefix, displaySuffix, decimals]);
 
@@ -63,6 +57,14 @@ const CountUp = ({
   useEffect(() => {
     const element = elementRef.current;
     if (!element || hasAnimatedRef.current) return;
+
+    // Reserve current size to avoid layout shift
+    const rect = element.getBoundingClientRect();
+    if (rect && rect.width > 0) {
+      element.style.minWidth = `${Math.ceil(rect.width)}px`;
+      element.style.minHeight = `${Math.ceil(rect.height)}px`;
+      element.style.display = element.style.display || 'inline-block';
+    }
 
     const obj = { value: 0 };
 
@@ -76,12 +78,10 @@ const CountUp = ({
 
         gsap.to(obj, {
           value: numericValue,
-          duration: duration,
+          duration,
           ease: 'power2.out',
           onUpdate: () => {
-            const formatted = decimals > 0 
-              ? obj.value.toFixed(decimals)
-              : Math.round(obj.value).toString();
+            const formatted = decimals > 0 ? obj.value.toFixed(decimals) : Math.round(obj.value).toString();
             setDisplayValue(`${displayPrefix}${formatted}${displaySuffix}`);
           },
         });
@@ -89,7 +89,7 @@ const CountUp = ({
     });
 
     return () => {
-      trigger.kill();
+      try { trigger.kill(); } catch {}
     };
   }, [numericValue, displayPrefix, displaySuffix, duration, decimals]);
 
