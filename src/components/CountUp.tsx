@@ -99,7 +99,13 @@ const CountUp = ({
     });
 
     return () => {
-      try { trigger.kill(); } catch {}
+      try {
+        trigger.kill();
+      } catch {
+        // ScrollTrigger.kill() is safe to call but is defensive against
+        // being invoked after the trigger has already been torn down by
+        // ScrollTrigger.refresh() or another unmount path.
+      }
     };
   }, [initialDisplay, numericValue, displayPrefix, displaySuffix, duration, decimals]);
 

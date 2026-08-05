@@ -19,7 +19,10 @@
     "smoke:immersive": "node ./scripts/smoke-immersive.mjs",
     "validate:credentials": "node --experimental-strip-types ./scripts/validate_credentials.ts",
     "quality:check": "bash ./scripts/quality-loop.sh",
-    "quality:fix": "eslint . --fix"
+    "quality:fix": "eslint . --fix",
+    "images:compress": "node ./scripts/compress-images.mjs",
+    "images:responsive": "node ./scripts/generate-responsive.mjs",
+    "images:optimize": "npm run images:compress && npm run images:responsive"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

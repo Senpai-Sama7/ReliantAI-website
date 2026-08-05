@@ -6,6 +6,7 @@ import CountUp from '../components/CountUp';
 import { scrollToSection } from '@/lib/scroll';
 import { revealFrom } from '@/lib/reveal';
 import { isMobileViewport, prefersReducedMotion } from '@/lib/motion';
+import { responsiveSrcSet, DEFAULT_IMAGE_SIZES } from '@/lib/responsiveImage';
 import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 // Interactive SVG overlays per industry (SMIL loops disabled when `reduced`)
@@ -325,6 +326,8 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
               >
                 <img
                   src={chapter.visualSrc}
+                  srcSet={responsiveSrcSet(chapter.visualSrc)}
+                  sizes={DEFAULT_IMAGE_SIZES}
                   alt={chapter.visualAlt}
                   width={512}
                   height={384}
@@ -456,6 +459,8 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
               >
                 <img
                   src={chapter.visualSrc}
+                  srcSet={responsiveSrcSet(chapter.visualSrc)}
+                  sizes={DEFAULT_IMAGE_SIZES}
                   alt={chapter.visualAlt}
                   width={512}
                   height={384}

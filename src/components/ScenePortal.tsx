@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { portalWorlds } from '@/data/worlds';
 import { isMobileViewport, onMotionPreferenceChange, prefersReducedMotion } from '@/lib/motion';
+import { responsiveSrcSet, DEFAULT_IMAGE_SIZES } from '@/lib/responsiveImage';
 import { useIntroAnimations } from '@/hooks/useIntroAnimations';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -129,6 +130,8 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
           >
             <img
               src={world.image}
+              srcSet={responsiveSrcSet(world.image)}
+              sizes={DEFAULT_IMAGE_SIZES}
               alt={world.imageAlt}
               className="absolute inset-0 w-full h-full object-cover opacity-40"
               loading="lazy"
@@ -193,6 +196,8 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
             >
               <img
                 src={world.image}
+                srcSet={responsiveSrcSet(world.image)}
+                sizes={DEFAULT_IMAGE_SIZES}
                 alt={world.imageAlt}
                 className="story-beat-image absolute inset-0 w-full h-full object-cover"
                 loading={index === 0 ? 'eager' : 'lazy'}

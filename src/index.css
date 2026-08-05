@@ -1,10 +1,465 @@
-/* Hero stability tweaks to prevent CLS from preserve-3d and reserve 3D canvas space */
+/* Fonts are loaded once via the non-blocking preload in index.html. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode (default) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 24 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 24 100% 50%;
+    --radius: 0.5rem;
+    
+    --orange: #ff6e00;
+    --black: #1a1a1a;
+    --white: #ffffff;
+    --gray-1: #f5f5f5;
+    --gray-2: #e5e5e5;
+    --gray-3: #d4d4d4;
+  }
+
+  .dark {
+    /* Dark mode */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 24 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 24 100% 50%;
+    --radius: 0.5rem;
+    
+    --orange: #ff6e00;
+    --black: #000000;
+    --white: #ffffff;
+    --gray-1: #191919;
+    --gray-2: #222222;
+    --gray-3: #333333;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Teko', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 110, 0, 0.95);
+  color: #fff;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  z-index: 9999;
+  transform: translateY(-150%);
+  transition: transform 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  .font-teko {
+    font-family: 'Teko', sans-serif;
+  }
+  
+  .font-opensans {
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .text-orange {
+    color: var(--orange);
+  }
+  
+  .bg-orange {
+    background-color: var(--orange);
+  }
+  
+  .border-orange {
+    border-color: var(--orange);
+  }
+
+  .dark .text-gray-600 {
+    color: #aaaaaa;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, var(--orange) 0%, #ff8c00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .glass {
+    background: rgba(25, 25, 25, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .noise-overlay {
+    position: relative;
+  }
+  
+  .noise-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.02;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .glow-orange {
+    box-shadow: 0 0 40px rgba(255, 110, 0, 0.3), 0 0 80px rgba(255, 110, 0, 0.1);
+  }
+  
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 110, 0, 0.5), 0 0 40px rgba(255, 110, 0, 0.3);
+  }
+  
+  .industrial-precision {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .fluid-motion {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--orange);
+}
+
+/* Selection */
+::selection {
+  background: var(--orange);
+  color: #fff;
+}
+
+/* Canvas container */
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.canvas-container canvas {
+  pointer-events: auto;
+}
+
+/* Magnetic button effect */
+.magnetic-btn {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Section styling */
+.section-pinned {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 40px rgba(255, 110, 0, 0.1);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 110, 0, 0.1);
+}
+
+/* Input focus states */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px rgba(255, 110, 0, 0.2);
+}
+
+/* Animation keyframes */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 110, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 110, 0, 0.6);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+/* GPU acceleration for animated elements */
+.will-change-transform {
+  will-change: transform, opacity;
+}
+
+/* Dynamic-viewport heights for pinned sections (vh fallback for old browsers).
+   Declared in @layer utilities so Tailwind variants (lg:, etc.) apply. */
+@layer utilities {
+  .h-screen-dvh {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .h-half-dvh {
+    height: 50vh;
+    height: 50dvh;
+  }
+
+  /* Notch / home-indicator insets for fixed chrome */
+  .safe-pb {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .safe-pt {
+    padding-top: max(0px, env(safe-area-inset-top, 0px));
+  }
+
+  .safe-bottom {
+    bottom: max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0px)));
+  }
+
+  .safe-right {
+    right: max(1.5rem, calc(1.5rem + env(safe-area-inset-right, 0px)));
+  }
+
+  /* Portfolio iframe: render at desktop width, scale to the frame on phones */
+  .portfolio-preview-frame {
+    container-type: inline-size;
+    aspect-ratio: 1280 / 800;
+    overflow: hidden;
+  }
+
+  .portfolio-preview-iframe {
+    width: 1280px;
+    height: 800px;
+    max-width: none;
+    transform-origin: top left;
+    transform: scale(calc(100cqw / 1280));
+    border: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .portfolio-preview-frame {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+
+    .portfolio-preview-iframe {
+      width: 100%;
+      height: 100%;
+      transform: none;
+    }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  button,
+  .magnetic-btn,
+  .floating-cta button,
+  a.touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Carousel indicator dots keep their compact 32px hit box (the visual dot
+     is an inner span), instead of being inflated to 44px. */
+  button.indicator-dot {
+    min-width: 32px;
+    min-height: 32px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Hero 3D CLS protection
+ * `transform-style: preserve-3d` on a containing element can promote fixed-
+ * positioned descendants into a new containing block, which causes layout
+ * shifts when the 3D scene mounts. We default to `flat` and add a `loaded`
+ * class on `window.load` (see src/main.tsx) once the page has settled.
+ * ------------------------------------------------------------------------- */
 .hero-section {
   min-height: 100vh;
   width: 100%;
   position: relative;
   contain: layout style paint;
-  /* Don't enable preserve-3d until the page has settled */
   transform-style: flat;
 }
 
@@ -12,12 +467,14 @@
   transform-style: preserve-3d;
 }
 
-/* Reserve explicit space for hero 3D container */
+/* Reserve explicit space for the hero 3D canvas so the layout doesn't jump
+   when the canvas mounts. */
 .hero-3d-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  min-height: 600px; /* explicit height reduces CLS */
+  min-height: 600px;
 }
+

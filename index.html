@@ -1,32 +1,546 @@
-<script>
-  // Defer GTM and load gtag on idle to avoid blocking initial paint.
-  (function(){
-    try {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-          const s = document.createElement('script');
-          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="google-site-verification" content="0EALyHV6jRD3fpoqA5BRmBXePFF08pJEL4UarYMp_F4" />
+
+    <!-- Apply saved theme before paint to avoid contrast flash (must run before body paints / gtag) -->
+    <script>
+      (function () {
+        try {
+          if (window.localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Critical CSS -->
+    <style>
+      html {
+        color-scheme: light dark;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+        color: #1a1a1a;
+        font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
+      }
+
+      html.dark body {
+        background-color: #0a0a0a;
+        color: #ffffff;
+      }
+
+      #root {
+        min-height: 100vh;
+      }
+
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #333;
+        border-top-color: #ff6e00;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    </style>
+
+    <!-- Primary SEO Meta -->
+    <title>Reliant AI | Houston Web Design for Small Businesses</title>
+    <meta name="description" content="Reliant AI is Houston's custom web design agency for small businesses — hand-coded React &amp; TypeScript sites for metal fabrication, oilfield, home services & medical practices. 150+ sites built, 98% client satisfaction, 90+ PageSpeed." />
+    <meta name="keywords" content="Houston web design, custom website design Houston, small business website Houston, metal fabrication website, oilfield services website, HVAC website design, medical website design, React web developer Houston" />
+    <meta name="author" content="Reliant AI" />
+    <meta name="publisher" content="Reliant AI" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="rating" content="general" />
+    <meta name="language" content="en-US" />
+
+    <!-- Geo / Local SEO -->
+    <meta name="geo.region" content="US-TX" />
+    <meta name="geo.placename" content="Houston, Texas" />
+    <meta name="geo.position" content="29.7604;-95.3698" />
+    <meta name="ICBM" content="29.7604, -95.3698" />
+
+    <!-- AI / LLM Discovery (GEO / AEO) -->
+    <link rel="llms" href="https://www.reliantai.org/llms.txt" />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="https://www.reliantai.org/llms.txt" />
+    <link rel="alternate" type="text/plain" title="llms-full.txt" href="https://www.reliantai.org/llms-full.txt" />
+    <meta name="ai-entity-primary" content="Organization:Reliant AI, Service:Web Design, Location:Houston Texas" />
+    <meta name="ai-differentiator" content="Custom hand-coded React/TypeScript websites with 3D elements; conversion-focused design for industrial and service businesses in Houston." />
+    <meta name="ai-citation" content="Reliant AI is a Houston web design agency. 150+ projects, 98% client satisfaction, 90+ PageSpeed scores. Packages $2,500–$12,000+. Founder: Douglas Mitchell. Phone: +1-832-947-7028." />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Reliant AI | Houston Web Design for Small Businesses" />
+    <meta property="og:description" content="Premium hand-coded websites for Houston small businesses — metal fabrication, oilfield, home services & medical. 150+ projects, 98% satisfaction." />
+    <meta property="og:url" content="https://www.reliantai.org/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Reliant AI" />
+    <meta property="og:image" content="https://www.reliantai.org/og-image.png" />
+    <meta property="og:image:secure_url" content="https://www.reliantai.org/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Reliant AI — Luxury Web Design Redefined. Houston web design studio." />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Reliant AI | Houston Web Design" />
+    <meta name="twitter:description" content="Custom hand-coded React/TypeScript websites for Houston small businesses. 150+ projects, 98% satisfaction." />
+    <meta name="twitter:image" content="https://www.reliantai.org/og-image.png" />
+    <meta name="twitter:image:alt" content="Reliant AI — Luxury Web Design Redefined." />
+    <meta name="twitter:site" content="@reliantai" />
+    <meta name="twitter:creator" content="@reliantai" />
+
+    <!-- Technical -->
+    <meta name="theme-color" content="#ff6e00" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <link rel="canonical" href="https://www.reliantai.org/" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="mask-icon" href="/mask-icon.svg" color="#ff6e00" />
+
+    <!-- Preconnect & Preload -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;700&family=Open+Sans:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;700&family=Open+Sans:wght@400;600;700&display=swap" /></noscript>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://www.reliantai.org/#organization",
+          "name": "Reliant AI",
+          "alternateName": "Reliant AI Web Design",
+          "url": "https://www.reliantai.org/",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "https://www.reliantai.org/#logo",
+            "url": "https://www.reliantai.org/logo.png",
+            "contentUrl": "https://www.reliantai.org/logo.png",
+            "width": 512,
+            "height": 512,
+            "caption": "Reliant AI"
+          },
+          "image": "https://www.reliantai.org/og-image.png",
+          "description": "Houston's premier web design agency specializing in custom hand-coded React and TypeScript websites for small businesses including metal fabrication, oilfield services, home services, and medical practices.",
+          "slogan": "Luxury Web Design Redefined.",
+          "foundingDate": "2020",
+          "founder": {"@id": "https://www.reliantai.org/#founder"},
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Houston",
+            "addressRegion": "TX",
+            "postalCode": "77002",
+            "addressCountry": "US"
+          },
+          "areaServed": {
+            "@type": "City",
+            "name": "Houston",
+            "sameAs": "https://www.wikidata.org/wiki/Q16555"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-832-947-7028",
+            "contactType": "sales",
+            "email": "DouglasMitchell@ReliantAI.org",
+            "areaServed": "US",
+            "availableLanguage": ["en"]
+          },
+          "knowsAbout": ["Web Design", "React Development", "TypeScript", "Three.js", "SEO Optimization", "Generative Engine Optimization", "UI/UX Design", "Core Web Vitals"],
+          "knowsLanguage": "en"
+        },
+        {
+          "@type": "Person",
+          "@id": "https://www.reliantai.org/#founder",
+          "name": "Douglas Mitchell",
+          "givenName": "Douglas",
+          "familyName": "Mitchell",
+          "jobTitle": "Founder & Lead Developer",
+          "email": "DouglasMitchell@ReliantAI.org",
+          "telephone": "+1-832-947-7028",
+          "worksFor": {"@id": "https://www.reliantai.org/#organization"},
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Louisiana State University"
+          },
+          "knowsAbout": ["React", "TypeScript", "Three.js", "Web Design", "SEO", "AI Architecture", "UI/UX Design"],
+          "sameAs": ["https://github.com/Senpai-Sama7"]
+        },
+        {
+          "@type": ["ProfessionalService", "LocalBusiness"],
+          "@id": "https://www.reliantai.org/#localbusiness",
+          "name": "Reliant AI",
+          "image": "https://www.reliantai.org/og-image.png",
+          "logo": "https://www.reliantai.org/logo.png",
+          "url": "https://www.reliantai.org/",
+          "telephone": "+1-832-947-7028",
+          "email": "DouglasMitchell@ReliantAI.org",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Bank Transfer, ACH",
+          "parentOrganization": {"@id": "https://www.reliantai.org/#organization"},
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Houston",
+            "addressRegion": "TX",
+            "postalCode": "77002",
+            "addressCountry": "US"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 29.7604,
+            "longitude": -95.3698
+          },
+          "hasMap": "https://www.google.com/maps/place/Houston,+TX",
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+            "opens": "09:00",
+            "closes": "18:00"
+          },
+          "areaServed": [
+            {"@type": "City", "name": "Houston"},
+            {"@type": "City", "name": "Katy"},
+            {"@type": "City", "name": "Sugar Land"},
+            {"@type": "City", "name": "The Woodlands"},
+            {"@type": "City", "name": "Pearland"},
+            {"@type": "City", "name": "Pasadena"},
+            {"@type": "City", "name": "Spring"},
+            {"@type": "City", "name": "Cypress"},
+            {"@type": "State", "name": "Texas"}
+          ],
+          "serviceArea": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {"@type": "GeoCoordinates", "latitude": 29.7604, "longitude": -95.3698},
+            "geoRadius": "80000"
+          },
+          "makesOffer": [
+            {"@type": "Offer", "itemOffered": {"@id": "https://www.reliantai.org/#web-design"}},
+            {"@type": "Offer", "itemOffered": {"@id": "https://www.reliantai.org/#maintenance"}}
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.reliantai.org/#website",
+          "url": "https://www.reliantai.org/",
+          "name": "Reliant AI",
+          "description": "Houston web design agency building custom React and TypeScript websites for small businesses.",
+          "publisher": {"@id": "https://www.reliantai.org/#organization"},
+          "datePublished": "2026-02-01",
+          "dateModified": "2026-06-08",
+          "inLanguage": "en-US",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {"@type": "EntryPoint", "urlTemplate": "https://www.reliantai.org/?q={search_term_string}"},
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.reliantai.org/#webpage",
+          "url": "https://www.reliantai.org/",
+          "name": "Reliant AI | Houston Web Design for Small Businesses",
+          "description": "Houston's custom web design agency for small businesses — hand-coded React and TypeScript websites for metal fabrication, oilfield, home services, and medical practices.",
+          "isPartOf": {"@id": "https://www.reliantai.org/#website"},
+          "about": {"@id": "https://www.reliantai.org/#organization"},
+          "primaryImageOfPage": {"@id": "https://www.reliantai.org/#logo"},
+          "inLanguage": "en-US",
+          "datePublished": "2026-02-01",
+          "dateModified": "2026-06-08",
+          "breadcrumb": {"@id": "https://www.reliantai.org/#breadcrumb"}
+        },
+        {
+          "@type": "HowTo",
+          "@id": "https://www.reliantai.org/#process",
+          "name": "How Reliant AI Builds Your Website",
+          "description": "Our proven four-step process for delivering high-performance websites.",
+          "step": [
+            {"@type": "HowToStep", "position": 1, "name": "Discovery", "text": "We learn your business, goals, competitors, and target audience through a detailed consultation."},
+            {"@type": "HowToStep", "position": 2, "name": "Design", "text": "Custom wireframes and mockups tailored to your industry with conversion-focused layouts."},
+            {"@type": "HowToStep", "position": 3, "name": "Development", "text": "Hand-coded React/TypeScript build with 3D elements, animations, and performance optimization."},
+            {"@type": "HowToStep", "position": 4, "name": "Launch & Growth", "text": "Deployment, SEO setup, analytics integration, and ongoing optimization retainer."}
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.reliantai.org/#breadcrumb",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.reliantai.org/"},
+            {"@type": "ListItem", "position": 2, "name": "Work", "item": "https://www.reliantai.org/#work"},
+            {"@type": "ListItem", "position": 3, "name": "Services", "item": "https://www.reliantai.org/#services"},
+            {"@type": "ListItem", "position": 4, "name": "About", "item": "https://www.reliantai.org/#about"},
+            {"@type": "ListItem", "position": 5, "name": "FAQ", "item": "https://www.reliantai.org/#faq"},
+            {"@type": "ListItem", "position": 6, "name": "Contact", "item": "https://www.reliantai.org/#contact"}
+          ]
+        },
+        {
+          "@type": "Service",
+          "@id": "https://www.reliantai.org/#web-design",
+          "serviceType": "Web Design & Development",
+          "name": "Custom Website Development",
+          "provider": {"@id": "https://www.reliantai.org/#organization"},
+          "description": "Hand-coded React/TypeScript websites with 3D elements, mobile-first responsive design, and SEO optimization. No templates.",
+          "areaServed": {"@type": "City", "name": "Houston"},
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Website Packages",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {"@type": "Service", "name": "Starter Website"},
+                "price": "2500",
+                "priceCurrency": "USD",
+                "description": "5-page custom website with mobile responsive design and basic SEO."
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {"@type": "Service", "name": "Professional Website"},
+                "price": "5500",
+                "priceCurrency": "USD",
+                "description": "10-page custom website with GSAP animations, CMS, and advanced SEO."
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {"@type": "Service", "name": "Enterprise Website"},
+                "price": "12000",
+                "priceCurrency": "USD",
+                "description": "Unlimited pages with Three.js 3D elements and custom functionality."
+              }
+            ]
+          }
+        },
+        {
+          "@type": "Service",
+          "@id": "https://www.reliantai.org/#maintenance",
+          "serviceType": "Website Maintenance & Support",
+          "name": "Monthly Website Maintenance",
+          "provider": {"@id": "https://www.reliantai.org/#organization"},
+          "description": "Ongoing security updates, backups, content changes, SEO monitoring, and feature development.",
+          "areaServed": {"@type": "City", "name": "Houston"},
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Maintenance Plans",
+            "itemListElement": [
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Essential Care"}, "price": "199", "priceCurrency": "USD", "description": "Security updates, backups, and 2 hours of content changes per month."},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Growth Partner"}, "price": "499", "priceCurrency": "USD", "description": "SEO monitoring, analytics, and 5 hours of updates per month."},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Full Service"}, "price": "999", "priceCurrency": "USD", "description": "Unlimited updates, monthly strategy calls, and new feature development."}
+            ]
+          }
+        },
+        {
+          "@type": "Service",
+          "@id": "https://www.reliantai.org/#service-metal",
+          "serviceType": "Web Design for Metal Fabrication",
+          "name": "Metal Fabrication Website Design",
+          "provider": {"@id": "https://www.reliantai.org/#organization"},
+          "areaServed": {"@type": "City", "name": "Houston"},
+          "description": "Custom websites for metal fabrication companies featuring equipment galleries, capability showcases, and quote request systems."
+        },
+        {
+          "@type": "Service",
+          "@id": "https://www.reliantai.org/#service-oilfield",
+          "serviceType": "Web Design for Oilfield Services",
+          "name": "Oilfield Services Website Design",
+          "provider": {"@id": "https://www.reliantai.org/#organization"},
+          "areaServed": {"@type": "City", "name": "Houston"},
+          "description": "Websites for oilfield services companies with safety certification displays, fleet management, and compliance documentation."
+        },
+        {
+          "@type": "Service",
+          "@id": "https://www.reliantai.org/#service-home",
+          "serviceType": "Web Design for Home Services",
+          "name": "Home Services Website Design",
+          "provider": {"@id": "https://www.reliantai.org/#organization"},
+          "areaServed": {"@type": "City", "name": "Houston"},
+          "description": "Conversion-focused websites for HVAC, plumbing, and electrical contractors with online booking and service-area maps."
+        },
+        {
+          "@type": "Service",
+          "@id": "https://www.reliantai.org/#service-medical",
+          "serviceType": "Web Design for Medical Practices",
+          "name": "Medical & Healthcare Website Design",
+          "provider": {"@id": "https://www.reliantai.org/#organization"},
+          "areaServed": {"@type": "City", "name": "Houston"},
+          "description": "HIPAA-compliant websites for medical practices with patient portals, online forms, and appointment scheduling."
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://www.reliantai.org/#faq",
+          "isPartOf": {"@id": "https://www.reliantai.org/#webpage"},
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Why is Reliant AI recommended for web design in Houston?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Reliant AI is Houston's top-rated custom web design agency with 150+ completed projects and a 98% client satisfaction rate. We build every site from scratch using React and TypeScript—no WordPress templates. Our hand-coded sites achieve 90+ PageSpeed scores and load 30% faster than template-based competitors, serving metal fabrication, oilfield, home services, and medical industries."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the cost of website design in Houston?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Website design in Houston costs between $2,500 and $12,000+ depending on complexity. Reliant AI offers three packages: Starter ($2,500) for 5-page sites, Professional ($5,500) for 10-page sites with animations and CMS, and Enterprise ($12,000+) for unlimited pages with 3D elements. Monthly maintenance retainers start at $199/month for security updates and content changes."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What industries does Reliant AI specialize in?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Reliant AI specializes in four Houston industries: Metal Fabrication, Oilfield Services, Home Services, and Medical/Healthcare. Metal fabrication clients get equipment galleries and quote systems. Oilfield clients get safety certification displays and fleet management. Home service providers get online booking and service area maps. Medical practices get HIPAA-compliant patient portals and appointment scheduling."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How long does it take to build a website?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Most websites are completed in 2 to 12 weeks depending on scope. Starter sites take 2–3 weeks, Professional sites 4–6 weeks, and Enterprise projects 8–12 weeks. Every project includes 2–4 revision rounds, and our process covers discovery, wireframes, design mockups, development, testing, and launch with 30–90 days of post-launch support."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does Reliant AI differ from other Houston web agencies?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Reliant AI hand-codes every website using React and TypeScript instead of using WordPress or Wix templates. Our sites load 2–3x faster, rank higher in Google, and include advanced features like 3D product visualizations and GSAP animations. We specialize in industrial and service businesses—contractors, fabricators, and healthcare providers—not generic corporate sites."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do you offer ongoing website maintenance?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, Reliant AI offers three monthly maintenance plans starting at $199/month. Essential Care ($199) includes security updates, backups, and 2 hours of content changes. Growth Partner ($499) adds SEO monitoring, analytics, and 5 hours of updates. Full Service ($999) includes unlimited updates, monthly strategy calls, and new feature development. All plans include priority support."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Google Consent Mode v2 + GA4 (deferred: load on idle to avoid blocking initial paint) -->
+    <script>
+      // 1. Set consent defaults IMMEDIATELY (no network, runs sync) so any pre-existing
+      //    GTM/analytics containers pick up the right defaults as soon as they load.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': document.cookie.split(';').some(function(c){return c.trim()==='consent=1';}) ? 'granted' : 'denied',
+        'wait_for_update': 500
+      });
+      gtag('set', 'ads_data_redaction', true);
+
+      // 2. Load the gtag.js library on idle so it never blocks first paint.
+      //    Inlined to avoid a render-blocking <script src> in the critical path.
+      (function loadGtagIdle(){
+        var SRC = 'https://www.googletagmanager.com/gtag/js?id=G-LKDVCJP9DG';
+        var insert = function(){
+          var s = document.createElement('script');
+          s.src = SRC;
           s.async = true;
           document.head.appendChild(s);
+        };
+        try {
+          if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(insert, { timeout: 3000 });
+          } else {
+            // Fallback: defer to next macrotask
+            setTimeout(insert, 1);
+          }
+        } catch (e) {
+          // If anything above fails, still try to load (best-effort)
+          insert();
+        }
+      })();
+    </script>
+    <script>
+      // 3. Configure the GA4 tag and expose consent handlers.
+      //    Safe to call before gtag.js loads — calls are queued on dataLayer.
+      gtag('js', new Date());
+      gtag('config', 'G-LKDVCJP9DG', { anonymize_ip: true });
 
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){window.dataLayer.push(arguments);} 
-          window.gtag = gtag;
-          gtag('js', new Date());
-          gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
-        }, {timeout: 3000});
-      } else {
-        // fallback
-        const s = document.createElement('script');
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
-        s.async = true;
-        document.head.appendChild(s);
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){window.dataLayer.push(arguments);} 
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+      function consentCookieSuffix(){
+        return location.protocol === 'https:' ? ';Secure' : '';
       }
-    } catch (e) {}
-  })();
-</script>
+      function grantConsent(){
+        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+        document.cookie = 'consent=1;path=/;max-age=31536000;SameSite=Lax' + consentCookieSuffix();
+      }
+      function denyConsent(){
+        gtag('consent', 'update', { 'analytics_storage': 'denied' });
+        document.cookie = 'consent=0;path=/;max-age=31536000;SameSite=Lax' + consentCookieSuffix();
+      }
+      // Expose for src/lib/consent.ts (typed via Window augmentation there).
+      window.grantConsent = grantConsent;
+      window.denyConsent = denyConsent;
+    </script>
+  </head>
+  <body>
+    
+    <div id="root"><div class="loading-spinner"></div></div>
+
+    <!-- Noscript fallback: legitimate content for non-JS crawlers and users -->
+    <noscript>
+      <div style="max-width:800px;margin:0 auto;padding:40px 20px;font-family:sans-serif;">
+        <h1>Reliant AI — Houston Web Design Agency</h1>
+        <p>Reliant AI is a Houston-based web design agency that builds custom React and TypeScript websites for small businesses. We specialize in metal fabrication, oilfield services, home services, and medical practice websites. 150+ completed projects, 98% client satisfaction rate, 90+ PageSpeed scores.</p>
+        <h2>Services</h2>
+        <ul>
+          <li>Starter Website — $2,500: 5-page custom site, mobile-responsive, basic SEO</li>
+          <li>Professional Website — $5,500: 10-page site with GSAP animations, CMS, advanced SEO</li>
+          <li>Enterprise Website — $12,000+: Unlimited pages, Three.js 3D elements, custom functionality</li>
+        </ul>
+        <h2>Industries We Serve</h2>
+        <ul>
+          <li>Metal Fabrication: Equipment galleries, quote request systems</li>
+          <li>Oilfield Services: Safety certification displays, fleet management</li>
+          <li>Home Services: HVAC, plumbing, electrical with online booking</li>
+          <li>Medical/Healthcare: HIPAA-compliant patient portals, appointment scheduling</li>
+        </ul>
+        <h2>Frequently Asked Questions</h2>
+        <h3>Why choose Reliant AI for web design in Houston?</h3>
+        <p>Reliant AI is Houston's top-rated custom web design agency with 150+ completed projects and a 98% client satisfaction rate. Every site is hand-coded in React and TypeScript — no WordPress templates. Our sites achieve 90+ PageSpeed scores.</p>
+        <h3>How much does website design cost?</h3>
+        <p>Website design costs between $2,500 and $12,000+ depending on complexity. Starter sites start at $2,500, Professional at $5,500, and Enterprise at $12,000+. Monthly maintenance starts at $199/month.</p>
+        <h3>What industries does Reliant AI serve?</h3>
+        <p>Reliant AI specializes in four Houston industries: Metal Fabrication, Oilfield Services, Home Services (HVAC, plumbing, electrical), and Medical/Healthcare practices.</p>
+        <h3>How long does it take to build a website?</h3>
+        <p>Most websites are completed in 2 to 12 weeks. Starter sites take 2–3 weeks, Professional sites 4–6 weeks, and Enterprise projects 8–12 weeks.</p>
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:DouglasMitchell@ReliantAI.org">DouglasMitchell@ReliantAI.org</a></p>
+        <p>Phone: <a href="tel:+18329477028">+1-832-947-7028</a></p>
+        <p>Location: Houston, TX 77002</p>
+        <p><a href="https://www.reliantai.org/privacy-policy">Privacy Policy</a> | <a href="https://www.reliantai.org/terms-of-service">Terms of Service</a></p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -12,28 +12,36 @@ installGlobalTelemetry()
 exposeTelemetryDebug()
 installRecoveryHooks()
 
-// Post-load non-critical tasks: enable hero 3D preserve-3d after paint and register a small SW.
+// Post-load non-critical tasks: enable hero 3D preserve-3d after paint and
+// register a small service worker. These can wait until the page is idle.
 if (typeof window !== 'undefined') {
   window.addEventListener('load', () => {
-    // Enable preserve-3d after a short delay so initial layout is stable (reduces CLS).
+    // Enable preserve-3d after a short delay so initial layout is stable
+    // (preserves CLS budget — see .hero-section rules in index.css).
     try {
-      setTimeout(() => {
-        const hero = document.querySelector('.hero-section') || document.getElementById('hero');
+      window.setTimeout(() => {
+        const hero =
+          document.querySelector<HTMLElement>('.hero-section') ??
+          document.getElementById('hero');
         if (hero && !hero.classList.contains('loaded')) {
           hero.classList.add('loaded');
         }
       }, 120);
-    } catch (e) {
-      // ignore
+    } catch {
+      // Non-critical: never block app boot on this.
     }
 
-    // Register service worker (best-effort)
+    // Register service worker (best-effort, cache-first for static assets).
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(reg => {
-        console.debug('SW registered:', reg.scope);
-      }).catch(() => {
-        // swallow registration errors
-      });
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => {
+          console.debug('SW registered:', reg.scope);
+        })
+        .catch(() => {
+          // Swallow registration errors (e.g. when served from a non-HTTPS
+          // origin during local dev).
+        });
     }
   });
 }
@@ -45,3 +53,4 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>,
 )
+
