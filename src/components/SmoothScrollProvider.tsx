@@ -62,6 +62,7 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     const handleMotionChange = () => {
       if (motionQuery.matches) {
         gsap.ticker.remove(tickerCallback);
+        lenis.off('scroll', ScrollTrigger.update);
         lenis.destroy();
         setLenisInstance(null);
       }
@@ -73,6 +74,7 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
       motionQuery.removeEventListener('change', handleMotionChange);
       window.removeEventListener('resize', handleResize);
       gsap.ticker.remove(tickerCallback);
+      lenis.off('scroll', ScrollTrigger.update);
       lenis.destroy();
       setLenisInstance(null);
     };
