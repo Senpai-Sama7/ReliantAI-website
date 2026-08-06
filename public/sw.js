@@ -1,20 +1,12 @@
 // Minimal service worker: cache-first for static assets, network fallback.
-// Bumped to v2 to evict previously cached broken responsive variants.
-const CACHE_NAME = 'reliant-ai-v2';
+// v3 fixes corrupted image cache where -1200 variants were cached as HTML fallback
+const CACHE_NAME = 'reliant-ai-v3';
 const PRECACHE_URLS = [
   '/',
   '/project-metalforge.webp',
   '/project-oilfield.webp',
   '/project-homeservices.webp',
   '/project-medical.webp',
-  '/project-metalforge-1200.webp',
-  '/project-oilfield-1200.webp',
-  '/project-homeservices-1200.webp',
-  '/project-medical-1200.webp',
-  '/project-homeservices-400.webp',
-  '/project-medical-400.webp',
-  '/project-homeservices-800.webp',
-  '/project-medical-800.webp',
 ];
 
 self.addEventListener('install', (event) => {
@@ -39,27 +31,42 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-  // Only handle GET requests
   if (request.method !== 'GET') return;
-
   const url = new URL(request.url);
-  // Only handle same-origin requests
   if (url.origin !== location.origin) return;
 
-  // Simple cache-first for static extensions
-  if (request.destination === 'image' || /\.(?:js|css|webp|png|jpg|jpeg|svg|woff2?)$/.test(url.pathname)) {
-    event.respondWith(
-      caches.match(request).then((cached) => {
-        if (cached) return cached;
-        return fetch(request)
-          .then((res) => {
-            // Put a copy in cache
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+  const isStatic =
+    request.destination === 'image' ||
+    /\.(?:js|css|webp|png|jpg|jpeg|svg|woff2?)$/.test(url.pathname);
+
+  if (!isStatic) return;
+
+  event.respondWith(
+    caches.match(request).then((cached) => {
+      // If cached response is HTML but request is for image/js/css, treat as corrupt
+      if (cached) {
+        const ct = cached.headers.get('content-type') || '';
+        const isHtml = ct.includes('text/html');
+        const expectsImage = request.destination === 'image' || /\.(?:webp|png|jpg|jpeg|avif)$/.test(url.pathname);
+        if (isHtml && expectsImage) {
+          // Evict corrupt entry and fall through to network
+          caches.open(CACHE_NAME).then((c) => c.delete(request));
+        } else {
+          return cached;
+        }
+      }
+      return fetch(request)
+        .then((res) => {
+          // Don't cache HTML responses for static asset requests
+          const ct = res.headers.get('content-type') || '';
+          if (ct.includes('text/html') && /\.(?:webp|png|jpg|jpeg|avif|js|css)$/.test(url.pathname)) {
             return res;
-          })
-          .catch(() => cached || fetch(request));
-      })
-    );
-  }
+          }
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          return res;
+        })
+        .catch(() => cached || fetch(request));
+    })
+  );
 });
