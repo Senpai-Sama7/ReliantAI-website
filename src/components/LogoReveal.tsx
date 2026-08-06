@@ -3,7 +3,12 @@ import gsap from 'gsap';
 import { prefersReducedMotion } from '@/lib/motion';
 
 const FULL_TEXT = 'RELIANT AI';
-const STYLE_CYCLES = ['RELIANT AI', 'RELIANT // AI', 'RELIANT.AI', 'RELIANT AI'];
+const STYLE_CYCLES = [
+  { text: 'RELIANT AI', font: 'font-teko' },
+  { text: 'RELIANT AI', font: 'font-opensans' },
+  { text: 'RELIANT AI', font: 'font-mono' },
+  { text: 'RELIANT AI', font: 'font-teko' },
+];
 
 /** Types the wordmark, then cycles through alternate lockups. */
 const LogoReveal = () => {
@@ -15,6 +20,7 @@ const LogoReveal = () => {
   const [displayText, setDisplayText] = useState(() =>
     prefersReducedMotion() ? FULL_TEXT : ''
   );
+  const [fontClass, setFontClass] = useState('font-teko');
   const [settled, setSettled] = useState(() => prefersReducedMotion());
 
   useEffect(() => {
@@ -47,6 +53,7 @@ const LogoReveal = () => {
             if (!active) return;
             styleIndex = (styleIndex + 1) % STYLE_CYCLES.length;
             const next = STYLE_CYCLES[styleIndex];
+            setFontClass(next.font);
             let visible = displayTextRef.current;
             const erase = () => {
               if (!active) return;
@@ -58,10 +65,10 @@ const LogoReveal = () => {
             };
             const typeNext = () => {
               if (!active) return;
-              visible += next[visible.length];
+              visible += next.text[visible.length];
               displayTextRef.current = visible;
               setDisplayText(visible);
-              if (visible.length < next.length) timeout = setTimeout(typeNext, 90);
+              if (visible.length < next.text.length) timeout = setTimeout(typeNext, 90);
               else timeout = setTimeout(cycle, 1800);
             };
             timeout = setTimeout(erase, 200);
@@ -108,7 +115,7 @@ const LogoReveal = () => {
       >
         <div className="relative flex items-center justify-center h-full">
           <span
-            className="font-teko font-bold uppercase text-[2.65rem] sm:text-7xl md:text-8xl lg:text-[10rem]"
+            className={`${fontClass} font-bold uppercase text-[2.65rem] sm:text-7xl md:text-8xl lg:text-[10rem]`}
             style={{ letterSpacing: '-0.03em', lineHeight: 0.85 }}
           >
             {reliantPart && (
