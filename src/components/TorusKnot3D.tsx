@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import type { Mesh } from 'three';
 import { useTheme } from '@/hooks/useTheme';
-import { loadVendorThree } from '@/lib/load-three';
 
 const MetallicObject = ({ isDark }: { isDark: boolean }) => {
   const meshRef = useRef<Mesh>(null);
@@ -70,22 +69,8 @@ const TorusKnot3D = () => {
     );
     observer.observe(node);
 
-    // Pre-request the vendor-three chunk when the container is near the viewport
-    const preloader = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // fire-and-forget the vendor chunk loader; loader is idempotent
-          loadVendorThree().catch(() => {});
-          preloader.disconnect();
-        }
-      });
-    }, { rootMargin: '400px' });
-
-    preloader.observe(node);
-
     return () => {
       observer.disconnect();
-      preloader.disconnect();
     };
   }, []);
 
