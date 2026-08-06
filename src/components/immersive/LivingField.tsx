@@ -10,7 +10,7 @@ function isDesktopFinePointer(): boolean {
 }
 
 /** Only this many particles participate in the O(n²) mesh-line pass. */
-const MAX_LINE_PARTICLES = 110;
+const MAX_LINE_PARTICLES = 70;
 
 interface Particle {
   x: number;
@@ -74,8 +74,8 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.floor((w * h) / 14000) * densityRef.current;
-      particles = Array.from({ length: Math.min(220, Math.max(60, count)) }, () => ({
+      const count = Math.floor((w * h) / 18000) * densityRef.current;
+      particles = Array.from({ length: Math.min(160, Math.max(40, count)) }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
         z: Math.random(),
@@ -95,11 +95,14 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
       lastScrollRef.current = y;
     };
 
+    let lastDraw = 0;
+    const DRAW_INTERVAL = 33; // ~30fps — enough for ambient particles, halves main-thread cost
+
     const draw = (time: number) => {
-      if (document.hidden) {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
+      raf = requestAnimationFrame(draw);
+      if (document.hidden) return;
+      if (time - lastDraw < DRAW_INTERVAL) return;
+      lastDraw = time;
 
       const breath = 0.5 + Math.sin(time * 0.0008) * 0.5;
       const wind = scrollVelRef.current * 0.08;
@@ -153,7 +156,7 @@ export default function LivingField({ density = 1, moodGlow = 'rgba(255,110,0,0.
         }
       }
 
-      raf = requestAnimationFrame(draw);
+      // raf is scheduled at the top of draw()
     };
 
     resize();

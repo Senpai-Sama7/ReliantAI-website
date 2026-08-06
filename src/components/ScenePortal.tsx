@@ -70,7 +70,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
           start: 'top top',
           end: () => `+=${window.innerHeight * segVh * beatCount}`,
           pin,
-          scrub: 0.85,
+          scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -189,7 +189,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
         </div>
 
         <div ref={stageRef} className="absolute inset-0">
-          {portalWorlds.map((world, index) => (
+          {portalWorlds.map((world) => (
             <article
               key={world.id}
               className="story-beat absolute inset-0 overflow-hidden"
@@ -200,7 +200,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
                 sizes={DEFAULT_IMAGE_SIZES}
                 alt={world.imageAlt}
                 className="story-beat-image absolute inset-0 w-full h-full object-cover"
-                loading={index === 0 ? 'eager' : 'lazy'}
+                loading="eager"
                 decoding="async"
                 draggable={false}
               />

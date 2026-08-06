@@ -28,8 +28,8 @@ export function useIntroAnimations(
     const timer = window.setTimeout(() => {
       if (disposed) return;
       cleanup = setupRef.current();
-      ScrollTrigger.refresh();
-      flushVisibleReveals();
+      // Single deferred refresh — the double refresh causes a layout
+      // flash during the intro→content transition.
       window.requestAnimationFrame(() => {
         if (disposed) return;
         ScrollTrigger.refresh();

@@ -207,7 +207,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
             },
             pin: stage,
             pinSpacing: false,
-            scrub: 0.5,
+            scrub: 1,
             invalidateOnRefresh: true,
           });
           triggersRef.current.push(pinTrigger);
@@ -332,7 +332,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
                   width={512}
                   height={384}
                   className="w-full h-full object-cover"
-                  loading={i === 0 ? 'eager' : 'lazy'}
+                  loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                 <IndustryAnimation index={i} mousePos={{ x: 0, y: 0 }} reduced />
@@ -465,7 +465,7 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
                   width={512}
                   height={384}
                   className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-[1.02]"
-                  loading={i === 0 ? 'eager' : 'lazy'}
+                  loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
