@@ -3,12 +3,14 @@ import gsap from 'gsap';
 import { prefersReducedMotion } from '@/lib/motion';
 
 const FULL_TEXT = 'RELIANT AI';
+const STYLE_CYCLES = ['RELIANT AI', 'RELIANT // AI', 'RELIANT.AI', 'RELIANT AI'];
 
-/** Types the wordmark once, then settles into the Bold Industrial lockup. */
+/** Types the wordmark, then cycles through alternate lockups. */
 const LogoReveal = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
+  const displayTextRef = useRef(FULL_TEXT);
   const [reducedMotion] = useState(() => prefersReducedMotion());
   const [displayText, setDisplayText] = useState(() =>
     prefersReducedMotion() ? FULL_TEXT : ''
@@ -31,14 +33,40 @@ const LogoReveal = () => {
     const typeEffect = () => {
       if (!active) return;
       if (currentIndex < FULL_TEXT.length) {
-        setDisplayText(FULL_TEXT.slice(0, currentIndex + 1));
+        const nextText = FULL_TEXT.slice(0, currentIndex + 1);
+        displayTextRef.current = nextText;
+        setDisplayText(nextText);
         currentIndex++;
         timeout = setTimeout(typeEffect, 150);
       } else {
-        // Finished typing — hold briefly, then retire the cursor.
         timeout = setTimeout(() => {
           if (!active) return;
           setSettled(true);
+          let styleIndex = 0;
+          const cycle = () => {
+            if (!active) return;
+            styleIndex = (styleIndex + 1) % STYLE_CYCLES.length;
+            const next = STYLE_CYCLES[styleIndex];
+            let visible = displayTextRef.current;
+            const erase = () => {
+              if (!active) return;
+              visible = visible.slice(0, -1);
+              displayTextRef.current = visible;
+              setDisplayText(visible);
+              if (visible) timeout = setTimeout(erase, 65);
+              else timeout = setTimeout(typeNext, 140);
+            };
+            const typeNext = () => {
+              if (!active) return;
+              visible += next[visible.length];
+              displayTextRef.current = visible;
+              setDisplayText(visible);
+              if (visible.length < next.length) timeout = setTimeout(typeNext, 90);
+              else timeout = setTimeout(cycle, 1800);
+            };
+            timeout = setTimeout(erase, 200);
+          };
+          timeout = setTimeout(cycle, 1200);
         }, 1200);
       }
     };

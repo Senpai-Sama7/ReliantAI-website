@@ -21,6 +21,7 @@ const RESPONSIVE_WIDTHS = [400, 800, 1200] as const;
 export function responsiveSrcSet(src: string): string | undefined {
   // Only project images have generated variants today.
   if (!src.startsWith('/project-') || !src.endsWith('.webp')) return undefined;
+  if (/-\d+\.webp$/.test(src)) return undefined;
 
   const base = src.slice(0, -'.webp'.length);
   return RESPONSIVE_WIDTHS.map((w) => `${base}-${w}.webp ${w}w`).join(', ');
