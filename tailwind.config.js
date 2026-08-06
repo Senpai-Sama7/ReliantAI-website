@@ -61,6 +61,8 @@ module.exports = {
       fontFamily: {
         teko: ['Teko', 'sans-serif'],
         opensans: ['Open Sans', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        serif: ['Georgia', 'serif'],
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { prefersReducedMotion } from '@/lib/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,10 @@ interface CountUpProps {
   duration?: number;
   className?: string;
   decimals?: number;
+}
+
+function formatValue(val: number, decimals: number): string {
+  return decimals > 0 ? val.toFixed(decimals) : Math.round(val).toString();
 }
 
 const CountUp = ({
@@ -24,7 +29,6 @@ const CountUp = ({
   const elementRef = useRef<HTMLSpanElement>(null);
   const hasAnimatedRef = useRef(false);
 
-  // Parse the end value
   const { numericValue, displayPrefix, displaySuffix } = useMemo(() => {
     let numericValue = 0;
     let displaySuffix = suffix;
@@ -46,33 +50,25 @@ const CountUp = ({
     return { numericValue, displayPrefix, displaySuffix };
   }, [end, prefix, suffix]);
 
-  // Compute initial display value (start at 0)
-  const initialDisplay = useMemo(() => {
-    const formatted = decimals > 0 ? (0).toFixed(decimals) : '0';
-    return `${displayPrefix}${formatted}${displaySuffix}`;
-  }, [displayPrefix, displaySuffix, decimals]);
-
-  const [displayValue, setDisplayValue] = useState<string>(initialDisplay);
+  const initialText = `${displayPrefix}${formatValue(0, decimals)}${displaySuffix}`;
+  const finalText = `${displayPrefix}${formatValue(numericValue, decimals)}${displaySuffix}`;
 
   useEffect(() => {
     const element = elementRef.current;
     if (!element || hasAnimatedRef.current) return;
 
-    // Reserve current size to avoid layout shift
-    // Use a stable placeholder text measuring to avoid measuring before DOM ready
-    const placeholder = document.createElement('span');
-    placeholder.style.visibility = 'hidden';
-    placeholder.style.position = 'absolute';
-    placeholder.style.whiteSpace = 'nowrap';
-    placeholder.innerText = initialDisplay;
-    document.body.appendChild(placeholder);
-    const rect = placeholder.getBoundingClientRect();
-    if (rect && rect.width > 0) {
-      element.style.minWidth = `${Math.ceil(rect.width)}px`;
-      element.style.minHeight = `${Math.ceil(rect.height)}px`;
-      element.style.display = element.style.display || 'inline-block';
+    if (prefersReducedMotion()) {
+      element.textContent = finalText;
+      hasAnimatedRef.current = true;
+      return;
     }
-    document.body.removeChild(placeholder);
+
+    // Avoid forced reflow: no getBoundingClientRect / offsetWidth here.
+    // Use content-visibility style to reserve space via ch units instead.
+    element.style.display = 'inline-block';
+    // Estimate min width to reduce CLS without measuring layout.
+    // 1ch ≈ width of "0", so reserve based on final string length.
+    element.style.minWidth = `${Math.max(2, finalText.length * 0.58)}ch`;
 
     const obj = { value: 0 };
 
@@ -80,20 +76,24 @@ const CountUp = ({
       if (hasAnimatedRef.current) return;
       hasAnimatedRef.current = true;
 
+      // Direct DOM update — avoids React setState per frame (main-thread / TBT killer)
       gsap.to(obj, {
         value: numericValue,
         duration,
         ease: 'power2.out',
         onUpdate: () => {
-          const formatted = decimals > 0 ? obj.value.toFixed(decimals) : Math.round(obj.value).toString();
-          setDisplayValue(`${displayPrefix}${formatted}${displaySuffix}`);
+          if (!elementRef.current) return;
+          elementRef.current.textContent = `${displayPrefix}${formatValue(
+            obj.value,
+            decimals
+          )}${displaySuffix}`;
         },
       });
     };
 
     const trigger = ScrollTrigger.create({
       trigger: element,
-      start: 'top 90%',
+      start: 'top 95%',
       once: true,
       onEnter,
     });
@@ -102,16 +102,14 @@ const CountUp = ({
       try {
         trigger.kill();
       } catch {
-        // ScrollTrigger.kill() is safe to call but is defensive against
-        // being invoked after the trigger has already been torn down by
-        // ScrollTrigger.refresh() or another unmount path.
+        // safe to ignore teardown races
       }
     };
-  }, [initialDisplay, numericValue, displayPrefix, displaySuffix, duration, decimals]);
+  }, [numericValue, displayPrefix, displaySuffix, duration, decimals, finalText]);
 
   return (
     <span ref={elementRef} className={className} aria-hidden="false">
-      {displayValue || `${displayPrefix}${numericValue}${displaySuffix}`}
+      {initialText}
     </span>
   );
 };

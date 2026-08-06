@@ -332,7 +332,8 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
                   width={512}
                   height={384}
                   className="w-full h-full object-cover"
-                  loading="eager"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                 <IndustryAnimation index={i} mousePos={{ x: 0, y: 0 }} reduced />

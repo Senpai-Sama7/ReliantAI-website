@@ -5,6 +5,8 @@ import path from 'path';
 const images = [
   { input: path.resolve(process.cwd(), 'public/project-oilfield.webp'), base: 'public/project-oilfield' },
   { input: path.resolve(process.cwd(), 'public/project-metalforge.webp'), base: 'public/project-metalforge' },
+  { input: path.resolve(process.cwd(), 'public/project-homeservices.webp'), base: 'public/project-homeservices' },
+  { input: path.resolve(process.cwd(), 'public/project-medical.webp'), base: 'public/project-medical' },
 ];
 
 const sizes = [400, 800, 1200];

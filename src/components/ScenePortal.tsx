@@ -123,7 +123,7 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
         className="scene-portal relative bg-[#050505]"
         aria-label="Industries we serve"
       >
-        {portalWorlds.map((world) => (
+        {portalWorlds.map((world, i) => (
           <article
             key={world.id}
             className="story-beat-static relative min-h-[70dvh] sm:min-h-screen flex flex-col justify-end sm:justify-center px-6 sm:px-14 lg:px-24 py-16 sm:py-0 border-b border-white/10"
@@ -134,8 +134,10 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
               sizes={DEFAULT_IMAGE_SIZES}
               alt={world.imageAlt}
               className="absolute inset-0 w-full h-full object-cover opacity-40"
-              loading="lazy"
+              loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
+              width={1200}
+              height={800}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/30" />
             <div className="relative z-10 max-w-3xl">
@@ -203,6 +205,8 @@ export default function ScenePortal({ id = 'worlds', introComplete = true }: Sce
                 loading="eager"
                 decoding="async"
                 draggable={false}
+                width={1200}
+                height={800}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/30" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40" />

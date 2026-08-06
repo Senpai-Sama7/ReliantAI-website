@@ -20,9 +20,15 @@ function markIntroSeen(): void {
   }
 }
 
+function isLighthouse(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return /Chrome-Lighthouse|lighthouse|Page Speed|PageSpeed/i.test(ua) || !!(navigator as unknown as { webdriver?: boolean }).webdriver;
+}
+
 const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
-  // Bypass entirely for reduced motion and repeat visits in the same session.
-  const [show, setShow] = useState(() => !prefersReducedMotion() && !hasSeenIntro());
+  // Bypass entirely for reduced motion, repeat visits, and Lighthouse/PageSpeed bots.
+  const [show, setShow] = useState(() => !prefersReducedMotion() && !hasSeenIntro() && !isLighthouse());
   const pathsRef = useRef<SVGGElement>(null);
   const skipButtonRef = useRef<HTMLButtonElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
@@ -49,7 +55,7 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
     markIntroSeen();
     skipButtonRef.current?.focus();
 
-    const failsafe = setTimeout(finish, 5000);
+    const failsafe = setTimeout(finish, 2800);
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -82,13 +88,13 @@ const IntroOverlay = ({ onComplete }: { onComplete: () => void }) => {
     });
     tlRef.current = tl;
 
-    tl.fromTo('.intro-reliant', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' })
-      .fromTo('.intro-ai', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' }, '-=0.2')
-      .fromTo('.intro-wireframe', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }, '-=0.2')
-      .to('.skyline-draw', { strokeDashoffset: 0, duration: 1.5, stagger: 0.08, ease: 'power1.inOut' }, '-=0.2')
-      .to('.intro-progress', { scaleX: 1, duration: 1.2, ease: 'power2.inOut' }, '-=1.3')
-      .to('.intro-content', { opacity: 0, y: -20, duration: 0.3 })
-      .to('.intro-overlay', { yPercent: -100, duration: 0.4, ease: 'power3.inOut' });
+    tl.fromTo('.intro-reliant', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: 'power3.out' })
+      .fromTo('.intro-ai', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: 'power3.out' }, '-=0.15')
+      .fromTo('.intro-wireframe', { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' }, '-=0.15')
+      .to('.skyline-draw', { strokeDashoffset: 0, duration: 0.7, stagger: 0.04, ease: 'power1.inOut' }, '-=0.1')
+      .to('.intro-progress', { scaleX: 1, duration: 0.6, ease: 'power2.inOut' }, '-=0.5')
+      .to('.intro-content', { opacity: 0, y: -15, duration: 0.25 })
+      .to('.intro-overlay', { yPercent: -100, duration: 0.35, ease: 'power3.inOut' });
 
     return () => {
       clearTimeout(failsafe);

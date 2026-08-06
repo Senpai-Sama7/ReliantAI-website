@@ -4,10 +4,10 @@ import { prefersReducedMotion } from '@/lib/motion';
 
 const FULL_TEXT = 'RELIANT AI';
 const STYLE_CYCLES = [
-  { text: 'RELIANT AI', font: 'font-teko' },
-  { text: 'RELIANT AI', font: 'font-opensans' },
-  { text: 'RELIANT AI', font: 'font-mono' },
-  { text: 'RELIANT AI', font: 'font-teko' },
+  { text: 'RELIANT AI', font: 'font-teko', extra: 'font-bold tracking-tighter' },
+  { text: 'RELIANT AI', font: 'font-opensans', extra: 'font-black tracking-tight' },
+  { text: 'RELIANT AI', font: 'font-mono', extra: 'font-bold tracking-[0.08em]' },
+  { text: 'RELIANT AI', font: 'font-teko', extra: 'font-light tracking-[0.18em]' },
 ];
 
 /** Types the wordmark, then cycles through alternate lockups. */
@@ -20,7 +20,7 @@ const LogoReveal = () => {
   const [displayText, setDisplayText] = useState(() =>
     prefersReducedMotion() ? FULL_TEXT : ''
   );
-  const [fontClass, setFontClass] = useState('font-teko');
+  const [fontClass, setFontClass] = useState('font-teko font-bold tracking-tighter');
   const [settled, setSettled] = useState(() => prefersReducedMotion());
 
   useEffect(() => {
@@ -53,7 +53,8 @@ const LogoReveal = () => {
             if (!active) return;
             styleIndex = (styleIndex + 1) % STYLE_CYCLES.length;
             const next = STYLE_CYCLES[styleIndex];
-            setFontClass(next.font);
+            setFontClass(`${next.font} ${next.extra}`);
+            setSettled(false);
             let visible = displayTextRef.current;
             const erase = () => {
               if (!active) return;
@@ -69,7 +70,13 @@ const LogoReveal = () => {
               displayTextRef.current = visible;
               setDisplayText(visible);
               if (visible.length < next.text.length) timeout = setTimeout(typeNext, 90);
-              else timeout = setTimeout(cycle, 1800);
+              else {
+                setSettled(true);
+                timeout = setTimeout(() => {
+                  setSettled(false);
+                  cycle();
+                }, 1800);
+              }
             };
             timeout = setTimeout(erase, 200);
           };
@@ -123,11 +130,11 @@ const LogoReveal = () => {
             )}
             {aiPart && <span className="text-orange">{aiPart}</span>}
           </span>
-          {/* Blinking cursor — retired once typing settles */}
-          {!reducedMotion && !settled && (
+          {/* Blinking cursor */}
+          {!reducedMotion && (
             <span
               ref={cursorRef}
-              className="text-orange text-[2.65rem] sm:text-7xl md:text-8xl lg:text-[10rem] font-normal ml-1"
+              className={`text-orange text-[2.65rem] sm:text-7xl md:text-8xl lg:text-[10rem] font-normal ml-1 ${settled ? 'opacity-50' : ''}`}
               style={{ lineHeight: 0.85 }}
             >
               |
