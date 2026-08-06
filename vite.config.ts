@@ -51,7 +51,7 @@ export default defineConfig({
   // Use a relative base by default so the production build is portable
   // (works for GitHub Pages / subpath deployments). You can override
   // with VITE_BASE if you need an absolute root path.
-  base: process.env.VITE_BASE || './',
+  base: process.env.VITE_BASE || (process.env.VERCEL ? '/' : './'),
   plugins: [react(), requireWeb3FormsKey()],
   resolve: {
     alias: {
