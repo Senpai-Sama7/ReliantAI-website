@@ -186,7 +186,6 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
           scale: prefersReduced ? 1 : 1.05,
           x: 0,
           rotateY: 0,
-          filter: 'blur(0px)',
           transformPerspective: 900,
         });
         gsap.set(stageVisuals[0], { opacity: 1, scale: 1 });
@@ -252,12 +251,11 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
             if (!outgoing || !incoming) return;
 
             gsap.to(outgoing, {
-              x: direction * -120,
-              rotateY: direction * -22,
+              x: direction * -80,
+              rotateY: direction * -12,
               opacity: 0,
-              scale: 0.92,
-              filter: 'blur(6px)',
-              duration: 0.55,
+              scale: 0.96,
+              duration: 0.45,
               ease: 'power3.in',
               overwrite: true,
             });
@@ -265,19 +263,17 @@ export default function PinnedStory({ chapters, introComplete = true }: PinnedSt
             gsap.fromTo(
               incoming,
               {
-                x: direction * 140,
-                rotateY: direction * 22,
+                x: direction * 80,
+                rotateY: direction * 12,
                 opacity: 0,
-                scale: 1.08,
-                filter: 'blur(8px)',
+                scale: 1.04,
               },
               {
                 x: 0,
                 rotateY: 0,
                 opacity: 1,
                 scale: 1,
-                filter: 'blur(0px)',
-                duration: 0.75,
+                duration: 0.6,
                 ease: 'power3.out',
                 delay: 0.05,
                 overwrite: true,
