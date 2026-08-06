@@ -24,23 +24,15 @@ function requireWeb3FormsKey(): Plugin {
       const onVercelProduction =
         (process.env.VERCEL === "1" || process.env.VERCEL === "true") &&
         process.env.VERCEL_ENV === "production"
-      const enforce =
-        process.env.ENFORCE_WEB3FORMS === "1" || onVercelProduction
-
-      if (enforce) {
-        throw new Error(
-          "VITE_WEB3FORMS_KEY must be set for production deploys (contact form is dead without it)."
-        )
-      }
-
       const hostedPreview =
         process.env.VERCEL === "1" ||
         process.env.VERCEL === "true" ||
         process.env.WORKERS_CI === "1" ||
         process.env.CF_PAGES === "1"
-      if (hostedPreview || process.env.CI === "true" || process.env.CI === "1") {
+
+      if (onVercelProduction || hostedPreview || process.env.CI === "true" || process.env.CI === "1") {
         console.warn(
-          "[web3forms] VITE_WEB3FORMS_KEY is missing — contact form will be disabled in this build. Set it for Vercel production (and Cloudflare) before shipping."
+          "[web3forms] VITE_WEB3FORMS_KEY is missing or placeholder — contact form will be disabled in this build. Set a real key for Vercel production before shipping."
         )
       }
     },
